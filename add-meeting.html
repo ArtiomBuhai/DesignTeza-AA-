@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add a meeting - Panel</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f8fbff;
+      color: #1e293b;
+      min-height: 100vh;
+    }
+
+    .dashboard-layout {
+      display: flex;
+      height: 100vh;
+    }
+
+    .sidebar {
+      width: 260px;
+      background: white;
+      border-right: 1px solid #e2e8f0;
+      padding: 30px 20px;
+      overflow-y: auto;
+      position: fixed;
+      height: 100%;
+    }
+
+    .sidebar-logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #2563eb;
+      margin-bottom: 50px;
+    }
+
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 20px;
+      color: #64748b;
+      text-decoration: none;
+      font-size: 1.05rem;
+      border-radius: 12px;
+      margin-bottom: 8px;
+      transition: all 0.2s;
+    }
+
+    .sidebar-nav a:hover, .sidebar-nav a.active {
+      background: #eff6ff;
+      color: #2563eb;
+    }
+
+    .main-content {
+      margin-left: 260px;
+      flex: 1;
+      padding: 30px 40px;
+      overflow-y: auto;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+
+    .header-left h2 {
+      font-size: 2.4rem;
+      margin-bottom: 8px;
+    }
+
+    .date {
+      color: #64748b;
+      font-size: 1.1rem;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 10px 16px;
+      width: 280px;
+    }
+
+    .search-bar input {
+      border: none;
+      outline: none;
+      flex: 1;
+      font-size: 1rem;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+      background: #2563eb;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+
+    /* Add meeting */
+    .add-section {
+      background: white;
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      display: flex;
+      gap: 40px;
+      max-width: 1200px;
+    }
+
+    .add-form {
+      flex: 3;
+    }
+
+    .calendar-mini {
+      flex: 1;
+      background: white;
+      border-radius: 24px;
+      padding: 30px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      height: fit-content;
+    }
+
+    .add-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+
+    .add-header h2 {
+      font-size: 2rem;
+      color: #1e293b;
+    }
+
+    .back-btn {
+      background: #f1f5f9;
+      color: #64748b;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .back-btn:hover {
+      background: #e2e8f0;
+    }
+
+    .form-group {
+      margin-bottom: 35px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      color: #334155;
+      font-size: 1.05rem;
+      font-weight: 500;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 16px 18px;
+      border: 1px solid #d1d5db;
+      border-radius: 14px;
+      font-size: 1.1rem;
+      transition: all 0.2s;
+    }
+
+    input:focus, textarea:focus {
+      border-color: #3b82f6;
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(59,130,246,0.15);
+    }
+
+    .form-row {
+      display: flex;
+      gap: 30px;
+      margin-bottom: 35px;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+    }
+
+    textarea {
+      min-height: 140px;
+      resize: vertical;
+    }
+
+    .add-meeting-btn {
+      width: 100%;
+      padding: 20px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 16px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(37,99,235,0.3);
+    }
+
+    .add-meeting-btn:hover {
+      background: #1d4ed8;
+      transform: translateY(-3px);
+    }
+
+    /* Calendar */
+    .calendar-mini h3 {
+      text-align: center;
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      text-align: center;
+    }
+
+    .day {
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .day:hover {
+      background: #f1f5f9;
+    }
+
+    .day.today {
+      background: #2563eb;
+      color: white;
+      font-weight: 600;
+    }
+
+    .day.selected {
+      background: #60a5fa;
+      color: white;
+    }
+
+    /* Responsive */
+    @media (max-width: 1100px) {
+      .add-section {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 80px;
+      }
+      .main-content {
+        margin-left: 80px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="dashboard-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      Panel
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="#">Tasks</a>
+      <a href="#">Calendar</a>
+      <a href="#">Team</a>
+      <a href="#">Chat</a>
+      <a href="#">Profile</a>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main-content">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <h2>Today</h2>
+        <p class="date">Wednesday, 10 November, 2025</p>
+      </div>
+
+      <div class="header-right">
+        <div class="search-bar">
+          <input type="text" placeholder="Search people">
+        </div>
+        <div class="user-info">
+          <div class="avatar">A</div>
+          <span>@AdeliUser</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Add meeting -->
+    <section class="add-meeting-section">
+      <div class="add-header">
+        <h2>Add a meeting</h2>
+        <button class="back-btn">Return to Dashboard</button>
+      </div>
+
+      <div class="form-calendar-wrapper">
+        <form class="add-form">
+          <div class="form-group">
+            <label>Title</label>
+            <input type="text" placeholder="e.g. Full company meeting" required>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Date</label>
+              <input type="date" required>
+            </div>
+            <div class="form-group">
+              <label>Time</label>
+              <input type="time" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Participants</label>
+            <input type="text" placeholder="Search or add people (e.g. Ana, Daniel, etc.)" required>
+          </div>
+
+          <div class="form-group">
+            <label>Description</label>
+            <textarea placeholder="Meeting details, agenda, location..."></textarea>
+          </div>
+
+          <button type="submit" class="add-meeting-btn">Add meeting</button>
+        </form>
+
+        <!-- Calendar în dreapta -->
+        <div class="calendar-mini">
+          <h3>November 2025</h3>
+          <div class="calendar-grid">
+            <div class="day empty"></div><div class="day empty"></div><div class="day">1</div><div class="day">2</div><div class="day">3</div><div class="day">4</div><div class="day">5</div>
+            <div class="day">6</div><div class="day">7</div><div class="day">8</div><div class="day">9</div><div class="day today">10</div><div class="day">11</div><div class="day">12</div>
+            <div class="day">13</div><div class="day">14</div><div class="day">15</div><div class="day">16</div><div class="day">17</div><div class="day">18</div><div class="day">19</div>
+            <div class="day">20</div><div class="day">21</div><div class="day">22</div><div class="day">23</div><div class="day">24</div><div class="day">25</div><div class="day">26</div>
+            <div class="day">27</div><div class="day">28</div><div class="day">29</div><div class="day">30</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profile - Worker</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --bg: #f8f9fc;
+      --card: white;
+      --text: #1e293b;
+      --gray: #64748b;
+      --light: #f1f5f9;
+    }
+    [data-theme="dark"] {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --text: #e2e8f0;
+      --gray: #94a3b8;
+      --light: #334155;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height:100vh;
+      transition: background 0.3s, color 0.3s;
+    }
+    .dashboard { display:flex; min-height:100vh; }
+    .sidebar {
+      width:260px;
+      background:var(--card);
+      border-right:1px solid #e2e8f0;
+      padding:32px 20px;
+      position:fixed;
+      height:100%;
+      overflow-y:auto;
+      transition: background 0.3s;
+    }
+    .sidebar-logo {
+      font-size:2rem;
+      font-weight:800;
+      color:var(--primary);
+      margin-bottom:48px;
+    }
+    .sidebar-nav a {
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:14px 18px;
+      color:var(--gray);
+      text-decoration:none;
+      font-size:1.05rem;
+      border-radius:10px;
+      margin-bottom:6px;
+      transition:all 0.2s;
+    }
+    .sidebar-nav a:hover,
+    .sidebar-nav a.active { background:var(--light); color:var(--primary); }
+    .main {
+      margin-left:260px;
+      flex:1;
+      padding:32px 40px;
+    }
+    .header {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:40px;
+    }
+    .header-left h1 { font-size:2.4rem; margin-bottom:8px; }
+    .header-right {
+      display:flex;
+      align-items:center;
+      gap:16px;
+    }
+    .theme-toggle {
+      background:none;
+      border:none;
+      font-size:1.5rem;
+      cursor:pointer;
+      color:var(--gray);
+    }
+    .profile-header {
+      display:flex;
+      align-items:center;
+      gap:32px;
+      margin-bottom:48px;
+      flex-wrap:wrap;
+    }
+    .profile-avatar {
+      width:140px;
+      height:140px;
+      border-radius:50%;
+      object-fit:cover;
+      border:4px solid white;
+      box-shadow:0 8px 32px rgba(0,0,0,0.15);
+    }
+    .profile-info h1 {
+      font-size:2.2rem;
+      margin-bottom:8px;
+    }
+    .profile-info .username {
+      font-size:1.2rem;
+      color:var(--gray);
+      margin-bottom:12px;
+    }
+    .profile-info .function {
+      font-size:1.1rem;
+      color:var(--primary);
+      font-weight:600;
+    }
+    .profile-card {
+      background:var(--card);
+      border-radius:16px;
+      padding:32px;
+      box-shadow:0 6px 24px rgba(0,0,0,0.08);
+      margin-bottom:32px;
+      position:relative;
+    }
+    .edit-btn {
+      position:absolute;
+      top:24px;
+      right:24px;
+      background:var(--primary);
+      color:white;
+      border:none;
+      padding:10px 20px;
+      border-radius:10px;
+      font-weight:600;
+      cursor:pointer;
+      transition:all 0.2s;
+    }
+    .edit-btn:hover { background:var(--primary-dark); transform:translateY(-2px); }
+    .section-title {
+      font-size:1.6rem;
+      font-weight:700;
+      margin:32px 0 16px;
+      color:var(--primary);
+    }
+    .about-text {
+      font-size:1.05rem;
+      color:#475569;
+      margin-bottom:24px;
+    }
+    .timeline-item {
+      position:relative;
+      padding-left:32px;
+      margin-bottom:32px;
+    }
+    .timeline-item::before {
+      content:'';
+      position:absolute;
+      left:8px;
+      top:0;
+      bottom:0;
+      width:3px;
+      background:#e2e8f0;
+    }
+    .timeline-dot {
+      position:absolute;
+      left:0;
+      top:6px;
+      width:20px;
+      height:20px;
+      background:var(--primary);
+      border-radius:50%;
+      border:4px solid white;
+      box-shadow:0 0 0 4px rgba(37,99,235,0.2);
+    }
+    .timeline-title {
+      font-size:1.3rem;
+      font-weight:600;
+      margin-bottom:6px;
+    }
+    .timeline-company, .timeline-period {
+      color:#64748b;
+      font-size:0.95rem;
+    }
+    .tag-list {
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:16px;
+    }
+    .tag {
+      background:#e0f2fe;
+      color:var(--primary);
+      padding:6px 14px;
+      border-radius:20px;
+      font-size:0.9rem;
+      font-weight:500;
+    }
+    /* Modal */
+    #editModal {
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,0.6);
+      z-index:1000;
+      justify-content:center;
+      align-items:center;
+    }
+    .modal-content {
+      background:var(--card);
+      border-radius:16px;
+      width:90%;
+      max-width:1000px;
+      max-height:90vh;
+      overflow-y:auto;
+      padding:32px;
+      box-shadow:0 20px 60px rgba(0,0,0,0.4);
+    }
+    .modal-header {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:32px;
+    }
+    .modal-title { font-size:1.8rem; font-weight:700; }
+    .modal-close {
+      background:none;
+      border:none;
+      font-size:2.2rem;
+      cursor:pointer;
+      color:#64748b;
+    }
+    .form-grid {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:32px;
+    }
+    @media (max-width:900px) { .form-grid { grid-template-columns:1fr; } }
+    .form-group {
+      margin-bottom:24px;
+    }
+    label {
+      display:block;
+      margin-bottom:8px;
+      font-weight:600;
+      font-size:0.95rem;
+      color:#475569;
+    }
+    input, textarea, select {
+      width:100%;
+      padding:12px 16px;
+      border:1px solid #d1d5db;
+      border-radius:10px;
+      font-size:1rem;
+      transition:border-color 0.2s;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline:none;
+      border-color:var(--primary);
+      box-shadow:0 0 0 3px rgba(37,99,235,0.15);
+    }
+    .photo-upload {
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:16px;
+      margin-bottom:32px;
+    }
+    .current-photo {
+      width:120px;
+      height:120px;
+      border-radius:50%;
+      object-fit:cover;
+      border:4px solid var(--light);
+    }
+    .file-input {
+      display:none;
+    }
+    .upload-btn {
+      background:var(--primary);
+      color:white;
+      padding:10px 24px;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:600;
+    }
+    .save-btn {
+      padding:14px 40px;
+      background:var(--primary);
+      color:white;
+      border:none;
+      border-radius:12px;
+      font-weight:600;
+      cursor:pointer;
+      margin-top:32px;
+    }
+    .save-btn:hover { background:var(--primary-dark); }
+  </style>
+</head>
+<body>
+
+<div class="dashboard">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">Panel</div>
+    <nav class="sidebar-nav">
+      <a href="#">Dashboard</a>
+      <a href="#">Tasks</a>
+      <a href="#">Calendar</a>
+      <a href="#">Team</a>
+      <a href="#">Chat</a>
+      <a href="#" class="active">Profile</a>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+
+    <header class="header">
+      <div class="header-left">
+        <h1>Profile</h1>
+      </div>
+      <div class="header-right">
+        <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+        <div class="user-info">
+          <div class="avatar">A</div>
+          <span>@AdeliUser</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="profile-header">
+      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop" alt="Profile" class="profile-avatar">
+      <div class="profile-info">
+        <h1>Adel</h1>
+        <p class="username">@AdeliUser</p>
+        <p class="function">Web Developer & UI/UX Designer</p>
+      </div>
+    </div>
+
+    <div class="profile-card">
+      <button class="edit-btn" onclick="openEditModal()">Edit Profile</button>
+
+      <h2 class="section-title">About</h2>
+      <p class="about-text">
+        Hi! My name is Adel. I am a hardworking person, responsible, honest and punctual. I am able to work under pressure and I can learn new things quickly. I am a team player and I get along well with others.
+      </p>
+
+      <h2 class="section-title">Experience</h2>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-title">Learning Visual Designer</div>
+        <div class="timeline-company">Avel – Remote</div>
+        <div class="timeline-period">Jan 2023 – Present</div>
+        <div class="tag-list">
+          <span class="tag">UI/UX Design</span>
+          <span class="tag">Figma</span>
+          <span class="tag">Product Design</span>
+        </div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-title">Graphic Designer</div>
+        <div class="timeline-company">Freelance</div>
+        <div class="timeline-period">May 2021 – Dec 2022</div>
+        <div class="tag-list">
+          <span class="tag">Branding</span>
+          <span class="tag">Adobe Suite</span>
+        </div>
+      </div>
+
+      <h2 class="section-title">Education</h2>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-title">Bachelor of Arts, Design Management</div>
+        <div class="timeline-company">Technical University of Moldova (TUM)</div>
+        <div class="timeline-period">2018 – 2022</div>
+      </div>
+
+      <h2 class="section-title">Skills & Languages</h2>
+      <div class="tag-list">
+        <span class="tag">Figma</span>
+        <span class="tag">Adobe XD</span>
+        <span class="tag">UI/UX Design</span>
+        <span class="tag">HTML/CSS</span>
+        <span class="tag">JavaScript</span>
+        <span class="tag">English – Upper-Intermediate</span>
+        <span class="tag">Russian – Native</span>
+        <span class="tag">Romanian – Native</span>
+      </div>
+    </div>
+
+  </main>
+
+</div>
+
+<!-- Modal Edit Profile -->
+<div id="editModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title">Edit Profile</h2>
+      <button class="modal-close" onclick="closeEditModal()">×</button>
+    </div>
+
+    <div class="photo-upload">
+      <img id="previewPhoto" class="current-photo" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop" alt="Current photo">
+      <label for="photoInput" class="upload-btn">Change Photo</label>
+      <input type="file" id="photoInput" class="file-input" accept="image/*" onchange="previewImage(event)">
+    </div>
+
+    <div class="form-grid">
+      <div>
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" value="Adel">
+        </div>
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" value="@AdeliUser">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" value="adeldesign@gmail.com">
+        </div>
+        <div class="form-group">
+          <label>Function / Position</label>
+          <input type="text" value="Web Developer & UI/UX Designer">
+        </div>
+        <div class="form-group">
+          <label>About Me</label>
+          <textarea rows="5">Hi! My name is Adel. I am a hardworking person, responsible, honest and punctual...</textarea>
+        </div>
+      </div>
+
+      <div>
+        <div class="form-group">
+          <label>Languages</label>
+          <textarea rows="3">English – Upper-Intermediate\nRussian – Native\nRomanian – Native</textarea>
+        </div>
+        <div class="form-group">
+          <label>Skills (comma separated)</label>
+          <textarea rows="3">Figma, Adobe XD, UI/UX Design, HTML/CSS, JavaScript</textarea>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin:32px 0 16px; font-size:1.4rem;">Experience</h3>
+    <div class="form-group">
+      <textarea rows="6">Learning Visual Designer\nAvel - Remote\nJan 2023 – Present\nUI/UX Design, Figma, Product Design\n\nGraphic Designer\nFreelance\nMay 2021 – Dec 2022\nBranding, Adobe Suite</textarea>
+    </div>
+
+    <h3 style="margin:32px 0 16px; font-size:1.4rem;">Education</h3>
+    <div class="form-group">
+      <textarea rows="4">Bachelor of Arts, Design Management\nTechnical University of Moldova (TUM)\n2018 – 2022</textarea>
+    </div>
+
+    <div style="margin-top:40px; text-align:right;">
+      <button onclick="closeEditModal()" style="padding:12px 28px; background:#f1f5f9; color:#64748b; border:none; border-radius:10px; margin-right:16px; cursor:pointer;">Cancel</button>
+      <button onclick="saveProfile()" style="padding:12px 28px; background:#2563eb; color:white; border:none; border-radius:10px; font-weight:600; cursor:pointer;">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function openEditModal() {
+    document.getElementById('editModal').style.display = 'flex';
+  }
+
+  function closeEditModal() {
+    document.getElementById('editModal').style.display = 'none';
+  }
+
+  function previewImage(event) {
+    const reader = new FileReader();
+    reader.onload = function() {
+      document.getElementById('previewPhoto').src = reader.result;
+    }
+    reader.readAsDataURL(event.target.files[0]);
+  }
+
+  function saveProfile() {
+    alert('Profil salvat cu succes! (În realitate se trimite către server)');
+    closeEditModal();
+  }
+
+  function toggleTheme() {
+    document.body.toggleAttribute('data-theme', document.body.getAttribute('data-theme') !== 'dark');
+  }
+
+  window.onclick = function(e) {
+    if (e.target.id === 'editModal') closeEditModal();
+  }
+</script>
+
+</body>
+</html>

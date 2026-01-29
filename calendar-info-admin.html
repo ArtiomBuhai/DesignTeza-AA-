@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Holiday Information - Admin</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: system-ui, sans-serif;
+      background:#f8f9fc;
+      color:#1e293b;
+      line-height:1.6;
+      min-height:100vh;
+    }
+    .dashboard { display:flex; min-height:100vh; }
+    .sidebar {
+      width:260px;
+      background:white;
+      border-right:1px solid #e2e8f0;
+      padding:32px 20px;
+      position:fixed;
+      height:100%;
+      overflow-y:auto;
+    }
+    .sidebar-logo {
+      font-size:2rem;
+      font-weight:800;
+      color:#2563eb;
+      margin-bottom:48px;
+    }
+    .sidebar-nav a {
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:14px 18px;
+      color:#64748b;
+      text-decoration:none;
+      font-size:1.05rem;
+      border-radius:10px;
+      margin-bottom:6px;
+      transition:all 0.2s;
+    }
+    .sidebar-nav a:hover,
+    .sidebar-nav a.active { background:#eff6ff; color:#2563eb; }
+    .main {
+      margin-left:260px;
+      flex:1;
+      padding:32px 40px;
+    }
+    .header {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:40px;
+    }
+    .header-left h1 { font-size:2.2rem; font-weight:700; }
+    .user-info {
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .avatar {
+      width:48px;
+      height:48px;
+      background:#2563eb;
+      color:white;
+      border-radius:50%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:600;
+    }
+    .info-card {
+      background:white;
+      border-radius:16px;
+      padding:32px;
+      box-shadow:0 4px 16px rgba(0,0,0,0.06);
+      margin-bottom:40px;
+      position:relative;
+    }
+    .edit-btn {
+      position:absolute;
+      top:24px;
+      right:24px;
+      background:#2563eb;
+      color:white;
+      border:none;
+      padding:10px 20px;
+      border-radius:10px;
+      font-weight:600;
+      cursor:pointer;
+    }
+    .edit-btn:hover { background:#1d4ed8; }
+    .info-title { font-size:1.8rem; font-weight:700; margin-bottom:24px; }
+    .info-text { font-size:1.05rem; color:#475569; margin-bottom:24px; }
+    .warning {
+      background:#fff7ed;
+      border-left:5px solid #f59e0b;
+      padding:16px 20px;
+      border-radius:8px;
+      margin:24px 0;
+      color:#92400e;
+    }
+    .important { font-weight:700; color:#c2410c; margin:16px 0; }
+    .important-red { color:#dc2626; font-weight:700; }
+    .list { margin:20px 0; padding-left:24px; }
+    .list li { margin-bottom:12px; font-size:1.05rem; color:#475569; }
+    .list li strong { color:#1e293b; }
+
+    @media (max-width:900px) {
+      .sidebar { width:80px; }
+      .sidebar-logo span, .sidebar-nav a span { display:none; }
+      .sidebar-nav a { justify-content:center; }
+      .main { margin-left:80px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="dashboard">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">Panel</div>
+    <nav class="sidebar-nav">
+      <a href="#">Dashboard</a>
+      <a href="#">Tasks</a>
+      <a href="#" class="active">Calendar</a>
+      <a href="#">Team</a>
+      <a href="#">Chat</a>
+      <a href="#">Profile</a>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+
+    <header class="header">
+      <div class="header-left">
+        <h1>Holiday information</h1>
+      </div>
+      <div class="user-info">
+        <div class="avatar">A</div>
+        <span>@AdeliUser</span>
+      </div>
+    </header>
+
+    <div class="info-card">
+      <button class="edit-btn" onclick="openEditModal()">Edit Information</button>
+
+      <h2 class="info-title">Concediu de odihnă anual</h2>
+
+      <p class="info-text">
+        Având în vedere că suntem în secolul concediilor de odihnă, am strâns cele mai importante prevederi legale din <strong>Codul Muncii</strong> referitoare la concediul de odihnă anual pe care trebuie să le cunoașteți ca angajați.
+      </p>
+
+      <p class="info-text">
+        <strong>Prevederile Codului Muncii</strong> în care se reglementează concediul de odihnă anual:
+      </p>
+
+      <ul class="list">
+        <li>Concediul de odihnă anual este un drept garantat pentru angajații care lucrează în baza contractului individual de muncă, indiferent de durata acestuia (art. 112 alin. (1) CM).</li>
+        <li>Concediul de odihnă pentru primul an de muncă poate fi acordat după 6 luni de muncă în unitate (art. 113 alin. (1) CM).</li>
+        <li>Durata concediului anual de odihnă, de regulă, este de 28 de zile calendaristice, cu excepția zilelor de sărbătoare nelucrătoare (art. 115 CM).</li>
+        <li>Angajatorul poate acorda concediu integral sau fracționat, însă în baza cererii salariatului și cu acordul scris al angajatorului, din care se reiese că salariatul a beneficiat de cel puțin 14 zile calendaristice de concediu anual (art. 116 pct.3 CM).</li>
+      </ul>
+
+      <div class="warning">
+        <strong>IMPORTANT!</strong> Este interzisă neacordarea concediului de odihnă anual timp de doi ani consecutivi – amendă de la 200 la 350 unități convenționale (art. 55 Cod contravențional).
+      </div>
+
+      <div class="warning important-red">
+        <strong>!!!</strong> Nu se admite neacordarea concediului anual de odihnă nefolosit prin compensare în bani.
+      </div>
+
+      <p class="info-text">
+        <strong>!!!</strong> În cazul încetării contractului individual de muncă, Codul Muncii prevede dreptul la compensarea tuturor zilelor de concediu nefolosit (art. 119, 121 CM).
+      </p>
+
+      <p class="info-text">
+        Cel mai mare număr de zile de concediu de odihnă anual în Republica Moldova este de 62 de zile – pentru dreptul la compensarea tuturor zilelor de concediu nefolosit în instituțiile de învățământ superior, colegii, gimnazii și școli de cultură generală.
+      </p>
+    </div>
+
+  </main>
+
+</div>
+
+<!-- Modal Edit Information -->
+<div id="editModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; justify-content:center; align-items:center;">
+  <div style="background:white; border-radius:16px; width:90%; max-width:800px; padding:32px; max-height:90vh; overflow-y:auto; box-shadow:0 10px 40px rgba(0,0,0,0.3);">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+      <h2 style="font-size:1.8rem; font-weight:700;">Edit Holiday Information</h2>
+      <button onclick="closeEditModal()" style="background:none; border:none; font-size:2rem; cursor:pointer;">×</button>
+    </div>
+
+    <textarea id="editContent" style="width:100%; min-height:400px; padding:16px; border:1px solid #d1d5db; border-radius:12px; font-size:1.05rem; resize:vertical;">
+Având în vedere că suntem în secolul concediilor de odihnă, am strâns cele mai importante prevederi legale din Codul Muncii referitoare la concediul de odihnă anual pe care trebuie să le cunoașteți ca angajați.
+
+Prevederile Codului Muncii în care se reglementează concediul de odihnă anual:
+• Concediul de odihnă anual este un drept garantat pentru angajații care lucrează în baza contractului individual de muncă, indiferent de durata acestuia (art. 112 alin. (1) CM).
+• Concediul de odihnă pentru primul an de muncă poate fi acordat după 6 luni de muncă în unitate (art. 113 alin. (1) CM).
+• Durata concediului anual de odihnă, de regulă, este de 28 de zile calendaristice, cu excepția zilelor de sărbătoare nelucrătoare (art. 115 CM).
+• Angajatorul poate acorda concediu integral sau fracționat, însă în baza cererii salariatului și cu acordul scris al angajatorului, din care se reiese că salariatul a beneficiat de cel puțin 14 zile calendaristice de concediu anual (art. 116 pct.3 CM).
+
+IMPORTANT! Este interzisă neacordarea concediului de odihnă anual timp de doi ani consecutivi – amendă de la 200 la 350 unități convenționale (art. 55 Cod contravențional).
+
+!!! Nu se admite neacordarea concediului anual de odihnă nefolosit prin compensare în bani.
+
+În cazul încetării contractului individual de muncă, Codul Muncii prevede dreptul la compensarea tuturor zilelor de concediu nefolosit (art. 119, 121 CM).
+
+Cel mai mare număr de zile de concediu de odihnă anual în Republica Moldova este de 62 de zile – pentru dreptul la compensarea tuturor zilelor de concediu nefolosit în instituțiile de învățământ superior, colegii, gimnazii și școli de cultură generală.
+    </textarea>
+
+    <div style="margin-top:24px; text-align:right;">
+      <button onclick="closeEditModal()" style="padding:12px 24px; margin-right:12px; background:#f1f5f9; color:#64748b; border:none; border-radius:10px; cursor:pointer;">Cancel</button>
+      <button onclick="saveEdit()" style="padding:12px 24px; background:#2563eb; color:white; border:none; border-radius:10px; cursor:pointer; font-weight:600;">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function openEditModal() {
+    document.getElementById('editModal').style.display = 'flex';
+  }
+
+  function closeEditModal() {
+    document.getElementById('editModal').style.display = 'none';
+  }
+
+  function saveEdit() {
+    alert('Informațiile au fost salvate! (Simulare – în realitate se salvează pe server)');
+    closeEditModal();
+  }
+
+  // Închide modal la click în afară
+  window.onclick = function(event) {
+    const modal = document.getElementById('editModal');
+    if (event.target === modal) {
+      closeEditModal();
+    }
+  }
+</script>
+
+</body>
+</html>
