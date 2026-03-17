@@ -1,0 +1,494 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tasks - Worker</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f8fbff;
+      color: #1e293b;
+      min-height: 100vh;
+    }
+
+    .dashboard-layout {
+      display: flex;
+      height: 100vh;
+    }
+
+    .sidebar {
+      width: 240px;
+      background: white;
+      border-right: 1px solid #e2e8f0;
+      padding: 32px 20px;
+      overflow-y: auto;
+      position: fixed;
+      height: 100%;
+    }
+
+    .sidebar-logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #2563eb;
+      margin-bottom: 48px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      color: #64748b;
+      text-decoration: none;
+      font-size: 1.05rem;
+      border-radius: 10px;
+      margin-bottom: 6px;
+      transition: all 0.2s;
+    }
+
+    .sidebar-nav a:hover, .sidebar-nav a.active {
+      background: #eff6ff;
+      color: #2563eb;
+      font-weight: 600;
+    }
+
+    .main-content {
+      margin-left: 240px;
+      flex: 1;
+      padding: 32px 40px;
+      overflow-y: auto;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+
+    .header-left h2 {
+      font-size: 2.4rem;
+      margin-bottom: 8px;
+    }
+
+    .date {
+      color: #64748b;
+      font-size: 1.1rem;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 10px 16px;
+      width: 280px;
+    }
+
+    .search-bar input {
+      border: none;
+      outline: none;
+      flex: 1;
+      font-size: 1rem;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+      background: #2563eb;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+
+    /* Kanban board */
+    .kanban-board {
+      margin-top: 40px;
+    }
+
+    .board-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .board-header h2 {
+      font-size: 2rem;
+      color: #1e293b;
+    }
+
+    .columns {
+      display: flex;
+      gap: 22px;
+      overflow-x: auto;
+      padding-bottom: 20px;
+    }
+
+    .column {
+      background: #f1f5f9;
+      border-radius: 20px;
+      padding: 24px;
+      min-width: 300px;
+      flex: 1;
+    }
+
+    .column-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .column-title {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .task-count {
+      background: #cbd5e1;
+      color: white;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .task-card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+    }
+
+    .task-text {
+      font-size: 1.05rem;
+      margin-bottom: 12px;
+      color: #1e293b;
+    }
+
+    .task-warning {
+      color: #92400e;
+      font-size: 0.95rem;
+      margin-bottom: 16px;
+    }
+
+    .task-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .add-submission-btn {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    .add-submission-btn:hover {
+      background: #1d4ed8;
+    }
+
+    .complete-btn {
+      background: #10b981;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    .complete-btn:hover {
+      background: #059669;
+    }
+
+    .in-revision {
+      background: #fef3c7;
+      color: #92400e;
+      padding: 6px 16px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    /* Responsive */
+    @media (max-width: 1100px) {
+      .sidebar {
+        width: 80px;
+      }
+      .sidebar-logo span, .sidebar-nav a span {
+        display: none;
+      }
+      .sidebar-nav a {
+        justify-content: center;
+      }
+      .main-content {
+        margin-left: 80px;
+      }
+      .columns {
+        flex-direction: column;
+      }
+    }
+  </style>
+  {% include 'core/_panel_sidebar_unified.html' %}
+</head>
+<body>
+
+<div class="dashboard-layout">
+
+  <!-- Sidebar -->
+    <aside class="sidebar">
+      <a class="sidebar-logo" href="{% url 'home' %}">
+        Panel
+      </a>
+
+    <nav class="sidebar-nav">
+      <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Dashboard</a>
+      <a href="{% url 'tasks' %}" class="{% if request.resolver_match.url_name == 'tasks' %}active{% endif %}">Tasks</a>
+      <a href="{% url 'calendar' %}" class="{% if request.resolver_match.url_name == 'calendar' %}active{% endif %}">Calendar</a>
+      <a href="{% url 'team' %}" class="{% if request.resolver_match.url_name == 'team' %}active{% endif %}">Team</a>
+      <a href="{% url 'chat' %}" class="{% if request.resolver_match.url_name == 'chat' %}active{% endif %}">Chat</a>
+      <a href="{% url 'profile' %}" class="{% if request.resolver_match.url_name == 'profile' %}active{% endif %}">Profile</a>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <div class="page-container">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <h2>Today</h2>
+        <p class="date">{% now "l, d F, Y" %}</p>
+      </div>
+
+      <div class="header-right">
+        {% include 'core/_header_search.html' %}
+        <div class="user-info">
+          <div class="avatar">
+            {% if user.profile.avatar %}
+            <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+            {% else %}
+            {{ user.username|first|upper }}
+            {% endif %}
+          </div>
+          <span>@{{ user.username }}</span>
+          <a href="{% url 'logout' %}" style="margin-left:12px; color:#2563eb; font-weight:600; text-decoration:none;">Logout</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Add task (admin/staff) -->
+    {% if user.is_staff or user.is_superuser %}
+    <section style="background:white;border:1px solid #e2e8f0;border-radius:14px;padding:16px;margin-bottom:24px;box-shadow:0 4px 14px rgba(0,0,0,0.05);">
+      <form method="post" action="{% url 'tasks' %}" style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;">
+        {% csrf_token %}
+        <div style="flex:1;min-width:180px;">
+          <label style="display:block;font-weight:600;margin-bottom:6px;">Title</label>
+          <input name="title" required placeholder="Task title" style="width:100%;padding:10px 12px;border:1px solid #d1d5db;border-radius:10px;">
+        </div>
+        <div style="flex:1;min-width:180px;">
+          <label style="display:block;font-weight:600;margin-bottom:6px;">Due date</label>
+          <input type="date" name="due_date" style="width:100%;padding:10px 12px;border:1px solid #d1d5db;border-radius:10px;">
+        </div>
+        <div style="min-width:140px;">
+          <label style="display:block;font-weight:600;margin-bottom:6px;">Status</label>
+          <select name="status" style="padding:10px 12px;border:1px solid #d1d5db;border-radius:10px;">
+            <option value="todo">To Do</option>
+            <option value="revision">In Revision</option>
+            <option value="done">Done</option>
+          </select>
+        </div>
+        <div style="min-width:140px;">
+          <label style="display:block;font-weight:600;margin-bottom:6px;">Priority</label>
+          <select name="priority" style="padding:10px 12px;border:1px solid #d1d5db;border-radius:10px;">
+            <option value="low">Low</option>
+            <option value="medium" selected>Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+        <div style="min-width:160px;">
+          <label style="display:block;font-weight:600;margin-bottom:6px;">Assignee</label>
+          <select name="assignee" style="padding:10px 12px;border:1px solid #d1d5db;border-radius:10px;">
+            <option value="">Unassigned</option>
+            {% for u in users %}
+            <option value="{{ u.id }}"{% if u.id == user.id %} selected{% endif %}>{{ u.username }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div style="flex:1 1 100%;">
+          <label style="display:block;font-weight:600;margin:10px 0 6px;">Description</label>
+          <textarea name="description" rows="2" placeholder="Optional details" style="width:100%;padding:10px 12px;border:1px solid #d1d5db;border-radius:10px;"></textarea>
+        </div>
+        <div>
+          <button type="submit" class="add-submission-btn">Add task</button>
+        </div>
+      </form>
+    </section>
+    {% endif %}
+
+    <!-- Kanban Board -->
+    <section class="kanban-board">
+      <div class="columns">
+        <!-- TO DO -->
+        <div class="column">
+          <div class="column-header">
+            <h3 class="column-title">TO DO</h3>
+            <span class="task-count">{{ tasks_by_status.todo|length }}</span>
+          </div>
+          {% for task in tasks_by_status.todo %}
+          <div class="task-card">
+            <div class="task-text">{{ task.title }}</div>
+            {% if task.description %}<div class="task-warning">{{ task.description }}</div>{% endif %}
+            <div class="task-warning" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
+              {% if task.assignee %}<span class="in-revision" style="background:#eef2ff;color:#2563eb;">@{{ task.assignee.username }}</span>{% endif %}
+              {% if task.due_date %}<span class="in-revision" style="background:#e0f2fe;color:#0f172a;">{{ task.due_date }}</span>{% endif %}
+              <span class="in-revision" style="background:#f1f5f9;color:#475569;">{{ task.get_priority_display }}</span>
+            </div>
+            {% with task.submissions.all as subs %}
+            <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+              {% if subs %}
+                <a href="{% url 'see_submission' task.id %}" class="add-submission-btn" style="padding:8px 12px; font-size:0.9rem; background:#0ea5e9;">See submission</a>
+              {% else %}
+                <a href="{% url 'add_submission' task.id %}" class="add-submission-btn" style="padding:8px 12px; font-size:0.9rem;">Add submission</a>
+              {% endif %}
+            </div>
+            {% include 'core/_task_comments.html' with task=task %}
+            {% endwith %}
+          </div>
+          {% empty %}<p style="color:#94a3b8;">No tasks</p>{% endfor %}
+        </div>
+
+        <!-- IN REVISION -->
+        <div class="column">
+          <div class="column-header">
+            <h3 class="column-title">IN REVISION</h3>
+            <span class="task-count">{{ tasks_by_status.revision|length }}</span>
+          </div>
+          {% for task in tasks_by_status.revision %}
+          <div class="task-card">
+            <div class="task-text">{{ task.title }}</div>
+            {% if task.description %}<div class="task-warning">{{ task.description }}</div>{% endif %}
+            <span class="in-revision">In revision</span>
+            <div class="task-warning" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
+              {% if task.assignee %}<span class="in-revision" style="background:#eef2ff;color:#2563eb;">@{{ task.assignee.username }}</span>{% endif %}
+              {% if task.due_date %}<span class="in-revision" style="background:#e0f2fe;color:#0f172a;">{{ task.due_date }}</span>{% endif %}
+              <span class="in-revision" style="background:#f1f5f9;color:#475569;">{{ task.get_priority_display }}</span>
+            </div>
+            {% with submitted=task.submissions.all %}
+            <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+              {% if submitted|length %}
+                <a href="{% url 'see_submission' task.id %}" class="add-submission-btn" style="padding:8px 12px; font-size:0.9rem; background:#0ea5e9;">See submission</a>
+              {% else %}
+                <a href="{% url 'add_submission' task.id %}" class="add-submission-btn" style="padding:8px 12px; font-size:0.9rem;">Add submission</a>
+              {% endif %}
+            </div>
+            {% include 'core/_task_comments.html' with task=task %}
+            {% endwith %}
+          </div>
+          {% empty %}<p style="color:#94a3b8;">No tasks</p>{% endfor %}
+        </div>
+
+        <!-- DONE -->
+        <div class="column">
+          <div class="column-header">
+            <h3 class="column-title">DONE</h3>
+            <span class="task-count">{{ tasks_by_status.done|length }}</span>
+          </div>
+          {% for task in tasks_by_status.done %}
+          <div class="task-card">
+            <div class="task-text">{{ task.title }}</div>
+            {% if task.description %}<div class="task-warning">{{ task.description }}</div>{% endif %}
+            <button class="complete-btn">Complete</button>
+            <div class="task-warning" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
+              {% if task.assignee %}<span class="in-revision" style="background:#eef2ff;color:#2563eb;">@{{ task.assignee.username }}</span>{% endif %}
+              {% if task.due_date %}<span class="in-revision" style="background:#e0f2fe;color:#0f172a;">{{ task.due_date }}</span>{% endif %}
+              <span class="in-revision" style="background:#f1f5f9;color:#475569;">{{ task.get_priority_display }}</span>
+            </div>
+            {% with submitted=task.submissions.all %}
+            <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+              {% if submitted|length %}
+                <a href="{% url 'see_submission' task.id %}" class="add-submission-btn" style="padding:8px 12px; font-size:0.9rem; background:#0ea5e9;">See submission</a>
+              {% else %}
+                <a href="{% url 'add_submission' task.id %}" class="add-submission-btn" style="padding:8px 12px; font-size:0.9rem;">Add submission</a>
+              {% endif %}
+            </div>
+            {% include 'core/_task_comments.html' with task=task %}
+            {% endwith %}
+          </div>
+          {% empty %}<p style="color:#94a3b8;">No tasks</p>{% endfor %}
+        </div>
+
+        <!-- ARCHIVED -->
+        <div class="column">
+          <div class="column-header">
+            <h3 class="column-title">ARCHIVED</h3>
+            <span class="task-count">{{ tasks_by_status.archived|length }}</span>
+          </div>
+          {% for task in tasks_by_status.archived %}
+          <div class="task-card">
+            <div class="task-text">{{ task.title }}</div>
+            {% if task.description %}<div class="task-warning">{{ task.description }}</div>{% endif %}
+            <span class="in-revision" style="background:#e2e8f0;color:#475569;">Archived</span>
+            <div class="task-warning" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
+              {% if task.assignee %}<span class="in-revision" style="background:#eef2ff;color:#2563eb;">@{{ task.assignee.username }}</span>{% endif %}
+              {% if task.due_date %}<span class="in-revision" style="background:#e0f2fe;color:#0f172a;">{{ task.due_date }}</span>{% endif %}
+              <span class="in-revision" style="background:#f1f5f9;color:#475569;">{{ task.get_priority_display }}</span>
+            </div>
+            {% with submitted=task.submissions.all %}
+            <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+              {% if submitted|length %}
+                <a href="{% url 'see_submission' task.id %}" class="add-submission-btn" style="padding:8px 12px; font-size:0.9rem; background:#0ea5e9;">See submission</a>
+              {% else %}
+                <a href="{% url 'add_submission' task.id %}" class="add-submission-btn" style="padding:8px 12px; font-size:0.9rem;">Add submission</a>
+              {% endif %}
+            </div>
+            {% include 'core/_task_comments.html' with task=task %}
+            {% endwith %}
+          </div>
+          {% empty %}<p style="color:#94a3b8;">No tasks</p>{% endfor %}
+        </div>
+      </div>
+    </section>
+
+    </div>
+  </main>
+
+</div>
+
+</body>
+</html>

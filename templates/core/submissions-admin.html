@@ -1,0 +1,173 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Submissions - Admin</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{font-family:'Inter',system-ui,sans-serif;background:#f8fbff;color:#1e293b;}
+    .layout{display:flex;min-height:100vh;}
+    .sidebar{width:240px;background:#fff;border-right:1px solid #e2e8f0;padding:32px 20px 24px;position:fixed;top:0;bottom:0;overflow-y:auto;}
+    .sidebar-logo{font-size:1.8rem;font-weight:700;color:#2563eb;margin-bottom:32px;display:block;}
+    .sidebar-nav{display:flex;flex-direction:column;gap:6px;}
+    .sidebar-nav a{display:flex;align-items:center;gap:12px;padding:12px 16px;color:#64748b;text-decoration:none;font-size:1.05rem;border-radius:10px;transition:all .2s;}
+    .sidebar-nav a:hover,.sidebar-nav a.active{background:#eff6ff;color:#2563eb;font-weight:700;}
+    main{flex:1;margin-left:240px;padding:32px 40px;}
+    .header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;gap:12px;flex-wrap:wrap;}
+    .header-right{display:flex;align-items:center;gap:14px;}
+    .search-wrap{position:relative;}
+    .search-bar{display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:10px 14px;width:260px;}
+    .search-bar input{border:none;outline:none;flex:1;font-size:1rem;}
+    .search-results{position:absolute;top:44px;left:0;right:0;background:#fff;border:1px solid #e2e8f0;border-radius:10px;box-shadow:0 8px 18px rgba(15,23,42,0.08);display:none;z-index:20;max-height:260px;overflow-y:auto;}
+    .search-results.visible{display:block;}
+    .search-results div{padding:10px 12px;border-bottom:1px solid #f1f5f9;cursor:pointer;}
+    .search-results div:last-child{border-bottom:none;}
+    .search-results div:hover{background:#eff6ff;}
+    .user-info{display:flex;align-items:center;gap:10px;color:#0f172a;font-weight:500;white-space:nowrap;}
+    .user-info .avatar{width:32px;height:32px;border-radius:50%;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;overflow:hidden;}
+    .user-box{display:flex;align-items:center;gap:10px;padding:8px 12px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;cursor:pointer;}
+    .user-box .avatar{width:32px;height:32px;border-radius:50%;background:#2563eb;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;}
+    .user-box .meta{display:flex;flex-direction:row;gap:6px;align-items:center;font-size:0.95rem;line-height:1.2;color:#0f172a;}
+    .logout-link{color:#2563eb;text-decoration:none;font-weight:600;}
+    .card{background:#fff;border-radius:18px;box-shadow:0 6px 20px rgba(15,23,42,0.06);padding:24px;}
+    table{width:100%;border-collapse:separate;border-spacing:0 10px;}
+    th{text-align:left;font-weight:700;color:#334155;font-size:0.95rem;padding:10px;}
+    td{background:#f8fafc;padding:14px 12px;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;}
+    tr{border-radius:12px;}
+    tr td:first-child{border-left:1px solid #e2e8f0;border-top-left-radius:12px;border-bottom-left-radius:12px;}
+    tr td:last-child{border-right:1px solid #e2e8f0;border-top-right-radius:12px;border-bottom-right-radius:12px;}
+    .status{padding:6px 10px;border-radius:10px;font-weight:700;font-size:0.9rem;display:inline-block;}
+    .pending{background:#fef9c3;color:#92400e;}
+    .approved{background:#dcfce7;color:#166534;}
+    .rejected{background:#fee2e2;color:#b91c1c;}
+    .btn{border:none;border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer;}
+    .btn-approve{background:#22c55e;color:#fff;}
+    .btn-reject{background:#ef4444;color:#fff;}
+    .small{color:#94a3b8;font-size:0.9rem;}
+    .comment-input{width:100%;padding:8px 10px;border:1px solid #e2e8f0;border-radius:10px;font-size:0.9rem;}
+  </style>
+  {% include 'core/_panel_sidebar_unified.html' %}
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo">Panel</div>
+    <nav class="sidebar-nav">
+      <a href="{% url 'dashboard' %}">Dashboard</a>
+      <a href="{% url 'tasks' %}">Tasks</a>
+      <a href="{% url 'calendar' %}">Calendar</a>
+      <a href="{% url 'team' %}">Team</a>
+      <a href="{% url 'chat' %}">Chat</a>
+      <a href="{% url 'profile' %}">Profile</a>
+    </nav>
+  </aside>
+  <main>
+    <header class="header">
+      <div>
+        <h2>Submissions control</h2>
+        <p style="color:#64748b">Approve or reject task submissions</p>
+      </div>
+      <div class="header-right">
+        {% include 'core/_header_search.html' %}
+        <div class="user-info">
+          <div class="avatar">
+            {% if user.profile.avatar %}
+            <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+            {% else %}
+            {{ user.username|first|upper }}
+            {% endif %}
+          </div>
+          <span>@{{ user.username }}</span>
+          <a class="logout-link" href="{% url 'logout' %}">Logout</a>
+        </div>
+      </div>
+    </header>
+
+    <div class="card">
+      <table>
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th>Author</th>
+            <th>Description</th>
+            <th>File</th>
+            <th>Status</th>
+            <th>Reviewer comment</th>
+            <th style="text-align:right;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for sub in submissions %}
+          <tr>
+            <td>{{ sub.task.title }}</td>
+            <td>{{ sub.author.get_full_name|default:sub.author.username }}</td>
+            <td style="max-width:200px;">{{ sub.description|default:'-' }}</td>
+            <td>
+              {% if sub.file %}
+                <a href="{{ sub.file.url }}" target="_blank">Attachment</a>
+              {% else %}-{% endif %}
+            </td>
+            <td>
+              <span class="status {% if sub.status == 'pending' %}pending{% elif sub.status == 'approved' %}approved{% else %}rejected{% endif %}">
+                {{ sub.get_status_display }}
+              </span>
+            </td>
+            <td>
+              <form method="post" action="{% url 'submissions_admin' %}" id="form-{{ sub.id }}">
+                {% csrf_token %}
+                <input type="hidden" name="submission_id" value="{{ sub.id }}">
+                <input type="hidden" name="action" value="approve">
+                <input class="comment-input" type="text" name="review_comment" value="{{ sub.review_comment }}" placeholder="Optional comment">
+              </form>
+            </td>
+            <td style="text-align:right; display:flex; gap:8px; justify-content:flex-end; align-items:center;">
+              <button class="btn btn-approve" onclick="submitAction({{ sub.id }}, 'approve')">Approve</button>
+              <button class="btn btn-reject" onclick="submitAction({{ sub.id }}, 'reject')">Reject</button>
+            </td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="7" style="text-align:center; background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px;">No submissions yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<script>
+  function submitAction(id, action){
+    const form = document.getElementById(`form-${id}`);
+    form.querySelector('input[name="action"]').value = action;
+    form.submit();
+  }
+
+  // Global search
+  const globalInput = document.getElementById('globalSearch');
+  const globalResults = document.getElementById('globalSearchResults');
+  async function globalSearchUsers(){
+    const q = globalInput.value.trim();
+    if(!q){ globalResults.classList.remove('visible'); globalResults.innerHTML=''; return; }
+    try{
+      const res = await fetch(`/search-user/?q=${encodeURIComponent(q)}`);
+      const data = await res.json();
+      globalResults.innerHTML = data.results.map(u=>`<div data-id="${u.id}">${u.full_name || u.username} · ${u.email||''}</div>`).join('');
+      globalResults.classList.add('visible');
+    }catch(err){ console.error(err); }
+  }
+  globalResults?.addEventListener('click', (e)=>{
+    const div = e.target.closest('div[data-id]');
+    if(!div) return;
+    const id = div.getAttribute('data-id');
+    window.location.href = `/team/member/${id}/`;
+  });
+  document.addEventListener('click',(e)=>{
+    if(!globalResults.contains(e.target) && e.target!==globalInput){
+      globalResults.classList.remove('visible');
+    }
+  });
+</script>
+</body>
+</html>

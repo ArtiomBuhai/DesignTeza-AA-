@@ -1,0 +1,656 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block title %}Team - Panel{% endblock %}
+{% block content %}
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+  :root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --teal: #10b981;
+    --bg: #f4f6fb;
+    --card: #ffffff;
+    --border: #e2e8f0;
+    --text: #0f172a;
+    --muted: #64748b;
+    --glass: rgba(255, 255, 255, 0.6);
+  }
+  .team-page {
+    font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+    color: var(--text);
+  }
+  .team-page * { box-sizing: border-box; }
+
+  /* Team page keeps only its own content styles.
+     Sidebar styles come from the shared layout partial. */
+
+  .team-hero {
+    background: linear-gradient(120deg, #0ea5e9, #6366f1, #8b5cf6);
+    color: white;
+    border-radius: 20px;
+    padding: 28px 28px 22px 28px;
+    box-shadow: 0 20px 50px rgba(99,102,241,0.22);
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: flex-start;
+    position: relative;
+    overflow: hidden;
+  }
+  .team-hero::after {
+    content: "";
+    position: absolute;
+    right: -40px; top: -60px;
+    width: 220px; height: 220px;
+    background: radial-gradient(circle, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0) 60%);
+    filter: blur(10px);
+  }
+  .hero-left h1 {
+    font-size: 2.2rem;
+    margin: 0 0 6px 0;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  .hero-meta { color: rgba(255,255,255,0.92); font-size: 1rem; }
+  .hero-actions {
+    display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
+    position: relative; z-index: 10;
+  }
+  .cta-btn {
+    background: white;
+    color: #0f172a;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 10px 30px rgba(15,23,42,0.2);
+  }
+  .cta-btn:hover { transform: translateY(-2px); }
+  .ghost-btn {
+    background: rgba(255,255,255,0.16);
+    border: 1px solid rgba(255,255,255,0.35);
+    color: white;
+    padding: 11px 16px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    backdrop-filter: blur(6px);
+  }
+  .ghost-btn:hover { background: rgba(255,255,255,0.26); }
+
+  .team-surface {
+    margin-top: 22px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    box-shadow: 0 8px 30px rgba(15,23,42,0.08);
+    padding: 24px;
+  }
+
+  .top-bar {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    margin-bottom: 20px;
+    justify-content: flex-end;
+  }
+  .search-input {
+    width: 100%;
+    padding: 12px 16px 12px 56px !important;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.2s;
+    background: #f8fafc;
+    color: var(--text);
+  }
+  .hero-search { position: relative; }
+  .search-input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+    background: white;
+  }
+  .search-icon {
+    position: absolute; left: 14px; top: 50%;
+    transform: translateY(-50%); color: var(--muted); font-size: 1.05rem;
+  }
+
+  .toolbar {
+    display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+  }
+  .pill-btn {
+    border: 1px solid var(--border);
+    background: #f8fafc;
+    color: var(--text);
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+  .pill-btn.active, .pill-btn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: #eef2ff;
+  }
+  .select-sort {
+    border: 1px solid var(--border);
+    background: #f8fafc;
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+  .metric-card {
+    background: #0ea5e9;
+    color: white;
+    border-radius: 14px;
+    padding: 14px 16px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(14,165,233,0.25);
+  }
+  .metric-card.secondary { background: #22c55e; box-shadow: 0 10px 30px rgba(34,197,94,0.22); }
+  .metric-card.neutral { background: #334155; box-shadow: 0 10px 30px rgba(51,65,85,0.22); }
+  .metric-label { font-size: 0.95rem; opacity: 0.92; }
+  .metric-value { font-size: 1.8rem; font-weight: 800; margin-top: 4px; }
+  .metric-sub { font-size: 0.95rem; opacity: 0.88; margin-top: 2px; }
+
+  .chips {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 14px 0 22px 0;
+  }
+  .chip {
+    padding: 10px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--muted);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+  .chip.active {
+    background: #eef2ff;
+    color: var(--primary);
+    border-color: var(--primary);
+    box-shadow: 0 10px 20px rgba(79,70,229,0.12);
+  }
+
+  .layout {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .specialties-section {
+    width: 320px;
+    flex-shrink: 0;
+    background: #f8fafc;
+    border: 1px dashed var(--border);
+    border-radius: 14px;
+    padding: 16px;
+  }
+  .specialties-title { margin: 0 0 10px 0; font-weight: 700; font-size: 1.05rem; }
+  .specialty-list { display: flex; flex-direction: column; gap: 10px; }
+  .specialty-item {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-weight: 600;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+  .specialty-item:hover { border-color: var(--primary); }
+  .specialty-item.active {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: #eef2ff;
+    box-shadow: 0 8px 18px rgba(37,99,235,0.15);
+  }
+
+  .members-section { flex: 1; min-width: 320px; }
+  .members-title { margin: 0 0 12px 0; font-weight: 800; font-size: 1.2rem; color: var(--text); }
+  .member-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+  .member-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.2s;
+    box-shadow: 0 6px 16px rgba(15,23,42,0.07);
+  }
+  .member-card::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), #22c55e);
+  }
+  .member-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 30px rgba(15,23,42,0.12);
+    border-color: var(--primary);
+  }
+  .member-header { display: flex; gap: 12px; align-items: center; }
+  .member-avatar {
+    width: 70px; height: 70px; border-radius: 14px;
+    object-fit: cover; flex-shrink: 0;
+    box-shadow: 0 6px 16px rgba(15,23,42,0.12);
+  }
+  .member-name { font-weight: 700; font-size: 1.1rem; margin-bottom: 2px; }
+  .member-role { color: var(--primary); font-weight: 700; font-size: 0.98rem; }
+  .member-username { color: var(--muted); font-size: 0.92rem; }
+  .member-actions {
+    display: flex; gap: 10px; margin-top: 12px;
+  }
+  .action-btn {
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #f8fafc;
+    font-weight: 700;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+  .action-btn.primary {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+  }
+  .action-btn.primary:hover { background: var(--primary-dark); }
+  .action-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+  /* List view */
+  .member-grid.list-view { display: flex; flex-direction: column; }
+  .member-grid.list-view .member-card { display: flex; gap: 12px; align-items: center; }
+  .member-grid.list-view .member-actions { margin-top: 0; max-width: 240px; }
+
+  /* Filter panel */
+  #filterOverlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15,23,42,0.35);
+    z-index: 999;
+  }
+  #filterPanel {
+    display: none;
+    position: fixed;
+    top: 0; right: 0;
+    width: 400px; max-width: 100%;
+    height: 100%;
+    background: white;
+    box-shadow: -4px 0 20px rgba(0,0,0,0.15);
+    z-index: 1001;
+    padding: 32px;
+    overflow-y: auto;
+  }
+  #filterPanel.open { display: block; }
+  .filter-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+  .filter-title { font-size: 1.4rem; font-weight: 800; color: var(--text); }
+  .filter-close { background: none; border: none; font-size: 2rem; cursor: pointer; color: var(--muted); line-height: 1; }
+  .filter-group { margin-bottom: 18px; }
+  .filter-label { font-weight: 700; margin-bottom: 8px; display: block; color: var(--text); }
+  .filter-input {
+    width: 100%; padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px; font-size: 1rem;
+  }
+  .filter-checkboxes { display: flex; flex-direction: column; gap: 8px; color: var(--text); }
+  .filter-btn {
+    width: 100%; padding: 14px;
+    background: var(--primary); color: white;
+    border: none; border-radius: 12px;
+    font-weight: 800; cursor: pointer;
+    margin-top: 10px; transition: all 0.18s;
+  }
+  .filter-btn:hover { background: var(--primary-dark); }
+
+  @media (max-width: 1100px) {
+    .layout { flex-direction: column; }
+    .specialties-section { width: 100%; }
+  }
+  @media (max-width: 768px) {
+    .team-hero { flex-direction: column; }
+    .hero-actions { width: 100%; }
+    .member-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+  }
+</style>
+
+  <div class="team-page">
+  <div class="team-hero">
+    <div class="hero-left">
+      <h1>Echipa ta</h1>
+      <div class="hero-meta">{% now "l, d F, Y" %}</div>
+    </div>
+    <div class="hero-actions">
+      <div class="search-container hero-search">
+        <span class="search-icon">🔍</span>
+        <input id="teamSearch" class="search-input" type="text" placeholder="Caută după nume / rol / user" oninput="filterMembers()" />
+      </div>
+      <button class="cta-btn" onclick="showMembers('all')">👥 Toți membrii</button>
+      <button id="filterBtn" type="button" class="ghost-btn" onclick="openFilterPanel()">🔍 Filtrează</button>
+    </div>
+  </div>
+
+  <div class="team-surface">
+    <div class="top-bar">
+      <div class="toolbar">
+        <select id="sortSelect" class="select-sort" onchange="filterMembers()">
+          <option value="name">Sortează: Nume (A-Z)</option>
+          <option value="role">Sortează: Rol</option>
+          <option value="recent">Sortează: Random</option>
+        </select>
+        <button id="viewCards" class="pill-btn active" onclick="setView('cards')">Cards</button>
+        <button id="viewList" class="pill-btn" onclick="setView('list')">Listă</button>
+      </div>
+    </div>
+
+    <div class="metrics">
+      <div class="metric-card">
+        <div class="metric-label">Membri totali</div>
+        <div class="metric-value" id="metricMembers">0</div>
+        <div class="metric-sub">toți colegii din platformă</div>
+      </div>
+      <div class="metric-card secondary">
+        <div class="metric-label">Specialități</div>
+        <div class="metric-value" id="metricSpecs">0</div>
+        <div class="metric-sub">domenii diferite</div>
+      </div>
+      <div class="metric-card neutral">
+        <div class="metric-label">Rezultate căutare</div>
+        <div class="metric-value" id="metricResults">0</div>
+        <div class="metric-sub">după filtrele curente</div>
+      </div>
+    </div>
+
+    <div class="chips" id="chipsRow"></div>
+
+    <div class="layout">
+      <section class="specialties-section">
+        <p class="specialties-title">Alege specialitatea</p>
+        <div class="specialty-list" id="specialtyList"></div>
+      </section>
+
+      <section class="members-section">
+        <p class="members-title">Membri</p>
+        <div id="members-container" class="member-grid"></div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- Overlay + Panou de filtrare avansat -->
+<div id="filterOverlay" onclick="closeFilterPanel()"></div>
+<div id="filterPanel">
+  <div class="filter-header">
+    <h2 class="filter-title">Filtrează echipa</h2>
+    <button class="filter-close" onclick="closeFilterPanel()">×</button>
+  </div>
+
+  <div class="filter-group">
+    <label class="filter-label">Nume</label>
+    <input type="text" class="filter-input" placeholder="Ana Maria..." id="filterName" />
+  </div>
+
+  <div class="filter-group">
+    <label class="filter-label">Specialitate</label>
+    <div class="filter-checkboxes" id="filterSpecialties"></div>
+  </div>
+
+  <div class="filter-group">
+    <label class="filter-label">Tehnologii (exemplu)</label>
+    <div class="filter-checkboxes">
+      <label><input type="checkbox" /> React</label>
+      <label><input type="checkbox" /> Node.js</label>
+      <label><input type="checkbox" /> Figma</label>
+      <label><input type="checkbox" /> Python</label>
+      <label><input type="checkbox" /> AWS</label>
+    </div>
+  </div>
+
+  <button class="filter-btn" onclick="applyFilter()">Aplică filtre</button>
+</div>
+
+<script>
+  // --- Data ---
+  const membersData = [
+    {% for m in members %}
+    {
+      id: {{ m.user.id }},
+      name: "{{ m.full_name|default_if_none:''|default:m.user.get_full_name|default:m.user.username|escapejs }}",
+      role: "{{ m.function|default:'Member'|escapejs }}",
+      avatar: "{% if m.avatar %}{{ m.avatar.url }}{% else %}https://ui-avatars.com/api/?name={{ m.full_name|default:m.user.username|urlencode }}&background=2563eb&color=fff{% endif %}",
+      specialty: "{{ m.function|default:'General'|escapejs }}",
+      username: "{{ m.user.username|escapejs }}",
+      email: "{{ m.user.email|default:''|escapejs }}"
+    }{% if not forloop.last %},{% endif %}
+    {% empty %}
+    {
+      name: "Ana-Maria",
+      role: "Front-end Developer",
+      specialty: "Front-end Developer",
+      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=300&h=300&fit=crop",
+      username: "ana"
+    },
+    {
+      name: "Ion Rusu",
+      role: "Back-end Developer",
+      specialty: "Back-end Developer",
+      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&h=300&fit=crop",
+      username: "ion"
+    },
+    {
+      name: "Maria Ionescu",
+      role: "UI/UX Designer",
+      specialty: "UI/UX Designer",
+      avatar: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=300&h=300&fit=crop",
+      username: "maria"
+    }
+    {% endfor %}
+  ];
+
+  let currentSpecialty = "all";
+  let filterSpecs = [];
+  let viewMode = "cards";
+
+  // --- Build UI pieces ---
+  function buildSpecialties() {
+    const list = document.getElementById("specialtyList");
+    const filterList = document.getElementById("filterSpecialties");
+    const chipsRow = document.getElementById("chipsRow");
+    const specs = Array.from(new Set(membersData.map((m) => m.specialty || "Other"))).sort();
+
+    const addSpecButton = (label, target) => {
+      const item = document.createElement("div");
+      item.className = target === "list" ? "specialty-item" : "chip";
+      item.dataset.specialty = label;
+      item.textContent = label === "all" ? "Toate" : label;
+      item.onclick = () => showMembers(label);
+      target === "list" ? list.appendChild(item) : chipsRow.appendChild(item);
+    };
+
+    list.innerHTML = "";
+    chipsRow.innerHTML = "";
+    filterList.innerHTML = "";
+
+    addSpecButton("all", "chip");
+    specs.forEach((spec) => addSpecButton(spec, "chip"));
+    addSpecButton("all", "list");
+    specs.forEach((spec) => addSpecButton(spec, "list"));
+
+    specs.forEach((spec) => {
+      const id = `spec-${spec.replace(/\\s+/g, "-").toLowerCase()}`;
+      const label = document.createElement("label");
+      const input = document.createElement("input");
+      input.type = "checkbox";
+      input.id = id;
+      input.value = spec;
+      input.checked = true;
+      label.appendChild(input);
+      label.appendChild(document.createTextNode(" " + spec));
+      filterList.appendChild(label);
+    });
+
+    updateActiveSpecs();
+  }
+
+  function updateActiveSpecs() {
+    document.querySelectorAll(".specialty-item, .chip").forEach((i) => {
+      i.classList.toggle("active", i.dataset.specialty === currentSpecialty);
+    });
+  }
+
+  function renderMembers(list) {
+    const container = document.getElementById("members-container");
+    if (!list.length) {
+      container.innerHTML =
+        '<p style="text-align:center; color:#64748b; padding:80px 0; font-size:1.05rem;">Niciun membru găsit.</p>';
+      document.getElementById("metricResults").textContent = 0;
+      return;
+    }
+    container.innerHTML = "";
+    list.forEach((member) => {
+      const card = document.createElement("div");
+      card.className = "member-card";
+      card.innerHTML = `
+        <div class="member-header">
+          <img src="${member.avatar}" alt="${member.name}" class="member-avatar" />
+          <div class="member-info">
+            <div class="member-name">${member.name}</div>
+            <div class="member-role">${member.role}</div>
+            <div class="member-username">@${member.username || "user"}</div>
+          </div>
+        </div>
+        <div class="member-actions">
+          <a class="action-btn primary" href="/chat/?dm=${member.id}">Mesaj</a>
+          <a class="action-btn" href="/team/member/${member.id}/">Profil</a>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+    document.getElementById("metricResults").textContent = list.length;
+  }
+
+  // --- Filters / sorting ---
+  function showMembers(specialty) {
+    currentSpecialty = specialty;
+    updateActiveSpecs();
+    filterMembers();
+  }
+
+  function sortList(list) {
+    const sortVal = document.getElementById("sortSelect").value;
+    if (sortVal === "name") return list.sort((a, b) => a.name.localeCompare(b.name));
+    if (sortVal === "role") return list.sort((a, b) => a.role.localeCompare(b.role));
+    if (sortVal === "recent") return list.sort(() => Math.random() - 0.5);
+    return list;
+  }
+
+  function filterMembers() {
+    const term = (document.getElementById("teamSearch").value || "").toLowerCase().trim();
+    let filtered = membersData.filter((m) => {
+      const matchesSearch =
+        m.name.toLowerCase().includes(term) ||
+        m.role.toLowerCase().includes(term) ||
+        (m.username || "").toLowerCase().includes(term);
+      const specVal = (m.specialty || "Other");
+      const specOkCurrent = currentSpecialty === "all" || specVal === currentSpecialty;
+      const specOkFilter = !filterSpecs.length || filterSpecs.includes(specVal);
+      const matchesSpec = specOkCurrent && specOkFilter;
+      return matchesSearch && matchesSpec;
+    });
+    filtered = sortList(filtered);
+    renderMembers(filtered);
+  }
+
+  function openFilterPanel() {
+    const panel = document.getElementById("filterPanel");
+    const ov = document.getElementById("filterOverlay");
+    if(panel) panel.style.display = 'block', panel.classList.add("open");
+    if(ov) ov.style.display = 'block';
+  }
+  function closeFilterPanel() {
+    const panel = document.getElementById("filterPanel");
+    const ov = document.getElementById("filterOverlay");
+    if(panel) { panel.classList.remove("open"); panel.style.display='none'; }
+    if(ov) ov.style.display = 'none';
+  }
+  function applyFilter() {
+    const nameTerm = (document.getElementById("filterName").value || "").toLowerCase().trim();
+    document.getElementById("teamSearch").value = nameTerm;
+    // specialty filters
+    filterSpecs = Array.from(document.querySelectorAll("#filterSpecialties input:checked")).map((i) => i.value);
+    if (filterSpecs.length === 1) {
+      currentSpecialty = filterSpecs[0];
+    } else {
+      currentSpecialty = "all";
+    }
+    updateActiveSpecs();
+    filterMembers();
+    closeFilterPanel();
+  }
+
+  function setView(mode) {
+    viewMode = mode;
+    document.getElementById("viewCards").classList.toggle("active", mode === "cards");
+    document.getElementById("viewList").classList.toggle("active", mode === "list");
+    const container = document.getElementById("members-container");
+    container.classList.toggle("list-view", mode === "list");
+  }
+
+  // --- Metrics ---
+  function updateMetrics() {
+    document.getElementById("metricMembers").textContent = membersData.length;
+    const specs = new Set(membersData.map((m) => m.specialty || "Other"));
+    document.getElementById("metricSpecs").textContent = specs.size;
+  }
+
+  // --- Init ---
+  buildSpecialties();
+  updateMetrics();
+  setView("cards");
+  showMembers("all");
+
+  // expose globally just in case inline handlers load before script
+  window.openFilterPanel = openFilterPanel;
+  window.closeFilterPanel = closeFilterPanel;
+
+  // ensure filter button opens panel
+  document.addEventListener('DOMContentLoaded', ()=>{
+    const btn = document.getElementById('filterBtn');
+    if(btn){
+      btn.addEventListener('click', function(e){
+        e.preventDefault();
+        openFilterPanel();
+      });
+    }
+  });
+</script>
+{% endblock %}

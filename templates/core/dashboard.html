@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard - Panel</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #f8fbff;
+      color: #1e293b;
+      min-height: 100vh;
+    }
+
+    .dashboard-layout {
+      display: flex;
+      height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 240px;
+      background: white;
+      border-right: 1px solid #e2e8f0;
+      padding: 32px 20px;
+      overflow-y: auto;
+      position: fixed;
+      height: 100%;
+    }
+
+    .sidebar-logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #2563eb;
+      margin-bottom: 48px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      color: #64748b;
+      text-decoration: none;
+      font-size: 1.05rem;
+      border-radius: 10px;
+      margin-bottom: 6px;
+      transition: all 0.2s;
+    }
+
+    .sidebar-nav a:hover, .sidebar-nav a.active {
+      background: #eff6ff;
+      color: #2563eb;
+      font-weight: 600;
+    }
+
+    /* Main content */
+    .main-content {
+      margin-left: 240px;
+      flex: 1;
+      padding: 32px 40px;
+      overflow-y: auto;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+
+    .header-left h2 {
+      font-size: 2.4rem;
+      margin-bottom: 8px;
+    }
+
+    .date {
+      color: #64748b;
+      font-size: 1.1rem;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 10px 16px;
+      width: 280px;
+    }
+
+    .search-bar input {
+      border: none;
+      outline: none;
+      flex: 1;
+      font-size: 1rem;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 500;
+    }
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+      background: #2563eb;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+
+    /* Stats */
+    .stats-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .stat-card {
+      flex: 1;
+      min-width: 220px;
+      background: white;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .stat-icon {
+      width: 60px;
+      height: 60px;
+      background: #eff6ff;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      color: #2563eb;
+    }
+
+    .stat-content h3 {
+      font-size: 1.1rem;
+      color: #64748b;
+      margin-bottom: 8px;
+    }
+
+    .big-number {
+      font-size: 2.4rem;
+      font-weight: 700;
+    }
+
+    /* Meetings */
+    .meetings-section {
+      background: white;
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .section-header h2 {
+      font-size: 1.8rem;
+    }
+
+    .add-btn {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .add-btn:hover {
+      background: #1d4ed8;
+    }
+
+    .section-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .sync-btn {
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+      color: #1e293b;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .sync-btn:hover {
+      background: #eef2ff;
+      border-color: #93c5fd;
+    }
+
+    .meetings-list .meeting-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      padding: 20px 0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .meeting-main {
+      display: flex;
+      gap: 20px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .meeting-date {
+      width: 80px;
+      text-align: center;
+      font-weight: 600;
+      color: #2563eb;
+    }
+
+    .meeting-date span {
+      display: block;
+      font-size: 2rem;
+    }
+
+    .meeting-info h4 {
+      font-size: 1.1rem;
+      margin-bottom: 6px;
+    }
+
+    .meeting-info p {
+      color: #64748b;
+    }
+
+    .delete-meeting-btn {
+      border: 1px solid #ef4444;
+      background: white;
+      color: #ef4444;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .delete-meeting-btn:hover {
+      background: #fef2f2;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .sidebar {
+        width: 80px;
+      }
+      .sidebar-logo span, .sidebar-nav a span {
+        display: none;
+      }
+      .sidebar-nav a {
+        justify-content: center;
+      }
+      .main-content {
+        margin-left: 80px;
+      }
+      .stats-row {
+        flex-direction: column;
+      }
+    }
+  </style>
+  {% include 'core/_panel_sidebar_unified.html' %}
+</head>
+<body>
+
+<div class="dashboard-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <a href="{% url 'home' %}" style="text-decoration:none;color:#2563eb;">Panel</a>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Dashboard</a>
+      <a href="{% url 'tasks' %}" class="{% if request.resolver_match.url_name == 'tasks' %}active{% endif %}">Tasks</a>
+      <a href="{% url 'calendar' %}" class="{% if request.resolver_match.url_name == 'calendar' %}active{% endif %}">Calendar</a>
+      <a href="{% url 'team' %}" class="{% if request.resolver_match.url_name == 'team' %}active{% endif %}">Team</a>
+      <a href="{% url 'chat' %}" class="{% if request.resolver_match.url_name == 'chat' %}active{% endif %}">Chat</a>
+      <a href="{% url 'profile' %}" class="{% if request.resolver_match.url_name == 'profile' %}active{% endif %}">Profile</a>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main-content">
+    <div class="page-container">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <h2>Today</h2>
+        <p class="date">{% now "l, d F, Y" %}</p>
+      </div>
+
+      <div class="header-right">
+        {% include 'core/_header_search.html' %}
+        <div class="user-info">
+          <div class="avatar">
+            {% if user.profile.avatar %}
+            <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+            {% else %}
+            {{ user.username|first|upper }}
+            {% endif %}
+          </div>
+          <span>@{{ user.username }}</span>
+          <a href="{% url 'logout' %}" style="margin-left:12px; color:#2563eb; font-weight:600; text-decoration:none;">Logout</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Stats -->
+    <section class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon">📈</div>
+        <div class="stat-content">
+          <h3>Weekly Activity</h3>
+          <p class="big-number">{{ weekly_activity }}%</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">📁</div>
+        <div class="stat-content">
+          <h3>Projects now</h3>
+          <p class="big-number">{{ total_tasks }}</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">✈️</div>
+        <div class="stat-content">
+          <h3>Leave Request</h3>
+          <p class="big-number">{{ vacation_people|length }}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Upcoming meetings -->
+    <section style="display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); column-gap:16px; row-gap:16px; align-items:stretch; margin-top:16px;">
+      <div class="meetings-section" style="grid-column:1 / span 2; margin:0; padding:24px;">
+        <div class="section-header">
+          <h2>Upcoming meetings</h2>
+          <div class="section-actions">
+            {% if google_calendar_ready %}
+              {% if google_calendar_connected %}
+                <form method="post" action="{% url 'google_calendar_disconnect' %}" style="margin:0;">
+                  {% csrf_token %}
+                  <input type="hidden" name="next" value="{{ request.path }}">
+                  <button type="submit" class="sync-btn">Disconnect Google</button>
+                </form>
+              {% else %}
+                <a class="sync-btn" href="{% url 'google_calendar_connect' %}?next={{ request.path|urlencode }}">Connect Google</a>
+              {% endif %}
+            {% else %}
+              <span class="sync-btn" style="opacity:.6;cursor:not-allowed;">Google not configured</span>
+            {% endif %}
+            <a class="add-btn" href="{% url 'add_meeting' %}">+ Add meeting</a>
+          </div>
+        </div>
+
+        <div class="meetings-list">
+          {% for m in upcoming_meetings %}
+          <div class="meeting-item">
+            <div class="meeting-main">
+              <div class="meeting-date">
+                {{ m.date|date:"b"|upper }} <span>{{ m.date|date:"d" }}</span>
+              </div>
+              <div class="meeting-info">
+                <h4>{{ m.title }}</h4>
+                <p>
+                  {% if m.time %}{{ m.time|time:"H:i" }} · {% endif %}
+                  {{ m.location|default_if_none:"" }}
+                  {% if m.participants %} · {{ m.participants }}{% endif %}
+                </p>
+              </div>
+            </div>
+            {% if can_manage_meetings or user.id == m.created_by_id %}
+            <form method="post" action="{% url 'delete_meeting' m.id %}" onsubmit="return confirm('Delete this meeting?');">
+              {% csrf_token %}
+              <button type="submit" class="delete-meeting-btn">Delete</button>
+            </form>
+            {% endif %}
+          </div>
+          {% empty %}
+          <p style="color:#94a3b8;">No upcoming meetings.</p>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="meetings-section" style="grid-column:3 / span 1; margin:0; padding:24px;">
+        <div class="section-header">
+          <h2>On vacation</h2>
+        </div>
+        <div class="meetings-list">
+          {% if vacation_people %}
+            {% for person in vacation_people %}
+            <div class="meeting-item" style="border-bottom:1px solid #e2e8f0; padding:12px 0;">
+              <div class="meeting-info">
+                <h4>{{ person.user.get_full_name|default:person.user.username }}</h4>
+                <p>{{ person.function }}</p>
+              </div>
+              <span style="background:#eff6ff;color:#2563eb;padding:6px 12px;border-radius:10px;font-weight:600;">Vacation</span>
+            </div>
+            {% endfor %}
+          {% else %}
+            <p style="color:#94a3b8;">No one is on vacation.</p>
+          {% endif %}
+        </div>
+      </div>
+    </section>
+
+    </div>
+  </main>
+
+</div>
+
+</body>
+</html>

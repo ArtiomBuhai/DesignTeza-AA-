@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Projects - Panel</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f8fbff;
+      color: #1e293b;
+      min-height: 100vh;
+    }
+
+    .dashboard-layout {
+      display: flex;
+      height: 100vh;
+    }
+
+    .sidebar {
+      width: 260px;
+      background: white;
+      border-right: 1px solid #e2e8f0;
+      padding: 30px 20px;
+      overflow-y: auto;
+      position: fixed;
+      height: 100%;
+    }
+
+    .sidebar-logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #2563eb;
+      margin-bottom: 50px;
+    }
+
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 16px 20px;
+      color: #64748b;
+      text-decoration: none;
+      font-size: 1.05rem;
+      border-radius: 12px;
+      margin-bottom: 8px;
+      transition: all 0.2s;
+    }
+
+    .sidebar-nav a:hover, .sidebar-nav a.active {
+      background: #eff6ff;
+      color: #2563eb;
+    }
+
+    .main-content {
+      margin-left: 260px;
+      flex: 1;
+      padding: 30px 40px;
+      overflow-y: auto;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+
+    .header-left h2 {
+      font-size: 2.4rem;
+      margin-bottom: 8px;
+    }
+
+    .date {
+      color: #64748b;
+      font-size: 1.1rem;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 10px 16px;
+      width: 280px;
+    }
+
+    .search-bar input {
+      border: none;
+      outline: none;
+      flex: 1;
+      font-size: 1rem;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+      background: #2563eb;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+
+    /* Projects dashboard */
+    .projects-dashboard {
+      display: flex;
+      gap: 40px;
+      margin-top: 40px;
+    }
+
+    .create-task-card {
+      flex: 1;
+      background: white;
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    }
+
+    .activities-card {
+      flex: 2;
+      background: white;
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+    }
+
+    .card-title {
+      font-size: 1.6rem;
+      margin-bottom: 30px;
+      color: #1e293b;
+    }
+
+    .form-group {
+      margin-bottom: 30px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      color: #334155;
+      font-size: 1.05rem;
+      font-weight: 500;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 16px 18px;
+      border: 1px solid #d1d5db;
+      border-radius: 14px;
+      font-size: 1.1rem;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: #3b82f6;
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(59,130,246,0.15);
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+    }
+
+    .add-task-btn {
+      width: 100%;
+      padding: 18px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 16px;
+      font-size: 1.15rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .add-task-btn:hover {
+      background: #1d4ed8;
+    }
+
+    /* Activities list */
+    .activity-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .activity-item:last-child {
+      border-bottom: none;
+    }
+
+    .activity-info {
+      flex: 1;
+    }
+
+    .activity-info p {
+      font-size: 1.05rem;
+      color: #1e293b;
+      margin-bottom: 6px;
+    }
+
+    .status {
+      padding: 6px 16px;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      min-width: 100px;
+      text-align: center;
+    }
+
+    .status-in-progress {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .status-complete {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    .check-btn {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    .check-btn:hover {
+      background: #1d4ed8;
+    }
+
+    /* Responsive */
+    @media (max-width: 1100px) {
+      .projects-dashboard {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 80px;
+      }
+      .main-content {
+        margin-left: 80px;
+      }
+    }
+  </style>
+  {% include 'core/_panel_sidebar_unified.html' %}
+</head>
+<body>
+
+<div class="dashboard-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      Panel
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="#" class="active">Tasks</a>
+      <a href="#">Calendar</a>
+      <a href="#">Team</a>
+      <a href="#">Chat</a>
+      <a href="#">Profile</a>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main-content">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <h2>Today</h2>
+        <p class="date">Wednesday, 10 November, 2025</p>
+      </div>
+
+      <div class="header-right">
+        <div class="search-bar">
+          <input type="text" placeholder="Search people">
+        </div>
+        <div class="user-info">
+          <div class="avatar">A</div>
+          <span>@AdeliUser</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Projects Dashboard -->
+    <section class="projects-dashboard">
+      <div class="create-task-card">
+        <h2 class="card-title">Create a task</h2>
+
+        <form>
+          <div class="form-group">
+            <label>Task Name</label>
+            <input type="text" placeholder="Task: Web design" required>
+          </div>
+
+          <div class="form-group">
+            <label>Description task</label>
+            <textarea placeholder="Description task"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Technologies</label>
+            <input type="text" placeholder="HTML, CSS, JS">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Start Date</label>
+              <input type="date">
+            </div>
+            <div class="form-group">
+              <label>Due Date</label>
+              <input type="date">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Who accomplishes the task</label>
+            <input type="text" placeholder="Maria" required>
+          </div>
+
+          <button type="submit" class="add-task-btn">Add task</button>
+        </form>
+      </div>
+
+      <div class="activities-card">
+        <h2 class="card-title">Activities</h2>
+
+        <div class="activity-item">
+          <div class="activity-info">
+            <p>Maria is working on project: Web design</p>
+          </div>
+          <span class="status status-in-progress">In Progress</span>
+          <button class="check-btn">Check</button>
+        </div>
+
+        <div class="activity-item">
+          <div class="activity-info">
+            <p>Maria is working on project: Web design</p>
+          </div>
+          <span class="status status-complete">Complete</span>
+          <button class="check-btn">Check</button>
+        </div>
+
+        <!-- Repetă blocul pentru mai multe activități -->
+        <div class="activity-item">
+          <div class="activity-info">
+            <p>Maria is working on project: Web design</p>
+          </div>
+          <span class="status status-in-progress">In Progress</span>
+          <button class="check-btn">Check</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+</div>
+
+</body>
+</html>

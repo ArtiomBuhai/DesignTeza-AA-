@@ -1,0 +1,21 @@
+<div class="task-comments">
+  <div class="task-comments-list">
+    {% for c in task.comments.all|slice:":3" %}
+    <div class="task-comment-item">
+      <div class="task-comment-head">
+        <strong>@{{ c.author.username }}</strong>
+        <span>{{ c.created_at|date:"d.m.Y H:i" }}</span>
+      </div>
+      <div class="task-comment-body">{{ c.body }}</div>
+    </div>
+    {% empty %}
+    <div class="task-comment-empty">No comments yet.</div>
+    {% endfor %}
+  </div>
+  <form method="post" action="{% url 'tasks' %}" class="task-comment-form">
+    {% csrf_token %}
+    <input type="hidden" name="comment_task_id" value="{{ task.id }}">
+    <input type="text" name="comment_text" maxlength="600" placeholder="Adaugă comentariu..." required>
+    <button type="submit">Post</button>
+  </form>
+</div>

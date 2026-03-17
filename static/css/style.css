@@ -1,0 +1,445 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #f8fbff;
+  color: #1e293b;
+  line-height: 1.6;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Reset pentru text să nu sară */
+p, h1, h2, h3, label, span, div {
+  line-height: 1.5;
+  white-space: normal;
+}
+
+/* Auth pages (Sign up & Login) */
+.auth-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.auth-card {
+  background: white;
+  border-radius: 28px;
+  border: 2px solid #60a5fa;
+  padding: 60px 50px;
+  width: 100%;
+  max-width: 620px;
+  box-shadow: 0 16px 60px rgba(0,90,200,0.1);
+}
+
+.auth-card h1 {
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: #1e40af;
+  text-align: center;
+  margin-bottom: 50px;
+  line-height: 1.1;
+}
+
+.auth-card h1 span {
+  color: #2563eb;
+}
+
+.role-toggle {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 50px;
+}
+
+.role-btn {
+  flex: 1;
+  padding: 14px 28px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  border-radius: 999px;
+  border: 2px solid #cbd5e1;
+  background: white;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.role-btn.active {
+  background: #2563eb;
+  color: white;
+  border-color: #2563eb;
+}
+
+.form-row {
+  display: flex;
+  gap: 28px;
+  margin-bottom: 32px;
+}
+
+.form-group {
+  flex: 1;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+  color: #334155;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+input {
+  width: 100%;
+  padding: 16px 18px;
+  border: 1px solid #d1d5db;
+  border-radius: 14px;
+  font-size: 1.05rem;
+}
+
+input:focus {
+  border-color: #3b82f6;
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(59,130,246,0.15);
+}
+
+.checkbox-row, .terms-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 40px 0 50px;
+  font-size: 1.05rem;
+  color: #475569;
+}
+
+.checkbox-row input, .terms-row input {
+  width: 22px;
+  height: 22px;
+  accent-color: #2563eb;
+}
+
+.submit-btn, .login-btn {
+  width: 100%;
+  padding: 18px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 16px;
+  font-size: 1.15rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.submit-btn:hover, .login-btn:hover {
+  background: #1d4ed8;
+}
+
+.footer-link {
+  text-align: center;
+  margin-top: 40px;
+  color: #64748b;
+  font-size: 1.05rem;
+}
+
+.footer-link a {
+  color: #2563eb;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+/* Dashboard & Add meeting */
+.dashboard-layout {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 260px;
+  background: white;
+  border-right: 1px solid #e2e8f0;
+  padding: 30px 20px;
+  overflow-y: auto;
+}
+
+.sidebar-logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2563eb;
+  margin-bottom: 50px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.sidebar-nav a {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 20px;
+  color: #64748b;
+  text-decoration: none;
+  font-size: 1.05rem;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  transition: all 0.2s;
+}
+
+.sidebar-nav a:hover, .sidebar-nav a.active {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.main-content {
+  margin-left: 260px;
+  flex: 1;
+  padding: 30px 40px;
+  overflow-y: auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.header-left h2 {
+  font-size: 2.4rem;
+  margin-bottom: 8px;
+}
+
+.date {
+  color: #64748b;
+  font-size: 1.1rem;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.search-bar {
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 10px 16px;
+  width: 280px;
+}
+
+.search-bar input {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 1rem;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.avatar {
+  width: 44px;
+  height: 44px;
+  background: #2563eb;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+/* Stats */
+.stats-row {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 50px;
+  flex-wrap: wrap;
+}
+
+.stat-card {
+  flex: 1;
+  min-width: 220px;
+  background: white;
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.stat-icon {
+  width: 60px;
+  height: 60px;
+  background: #eff6ff;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  color: #2563eb;
+}
+
+.stat-content h3 {
+  font-size: 1.1rem;
+  color: #64748b;
+  margin-bottom: 8px;
+}
+
+.big-number {
+  font-size: 2.4rem;
+  font-weight: 700;
+}
+
+/* Meetings */
+.meetings-section {
+  background: white;
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.section-header h2 {
+  font-size: 1.8rem;
+}
+
+.add-btn {
+  background: #2563eb;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.add-btn:hover {
+  background: #1d4ed8;
+}
+
+.meeting-item {
+  display: flex;
+  gap: 20px;
+  padding: 20px 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.meeting-date {
+  width: 80px;
+  text-align: center;
+  font-weight: 600;
+  color: #2563eb;
+}
+
+.meeting-date span {
+  display: block;
+  font-size: 2rem;
+}
+
+.meeting-info h4 {
+  font-size: 1.1rem;
+  margin-bottom: 6px;
+}
+
+.meeting-info p {
+  color: #64748b;
+}
+
+/* Add meeting */
+.add-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.add-form {
+  background: white;
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.form-group {
+  margin-bottom: 35px;
+}
+
+.add-form label {
+  font-size: 1.05rem;
+  font-weight: 500;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.add-form input, .add-form textarea {
+  width: 100%;
+  padding: 18px 20px;
+  border: 1px solid #d1d5db;
+  border-radius: 16px;
+  font-size: 1.12rem;
+}
+
+.add-form textarea {
+  min-height: 140px;
+  resize: vertical;
+}
+
+.add-meeting-btn {
+  width: 100%;
+  padding: 22px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 18px;
+  font-size: 1.22rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 80px;
+  }
+  .sidebar-logo span, .sidebar-nav a span {
+    display: none;
+  }
+  .sidebar-nav a {
+    justify-content: center;
+  }
+  .main-content {
+    margin-left: 80px;
+  }
+  .stats-row {
+    flex-direction: column;
+  }
+}
+'''
+from pathlib import Path
+path = Path('/Users/artiombuhai/Desktop/signup/static/css/style.css')
+path.write_text(content)
+print('css written')
+PY

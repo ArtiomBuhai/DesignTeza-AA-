@@ -1,0 +1,614 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Holiday Requests - Admin</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: system-ui, sans-serif;
+        background: #f8f9fc;
+        color: #1e293b;
+        min-height: 100vh;
+      }
+
+      .dashboard {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        width: 240px;
+        background: white;
+        border-right: 1px solid #e2e8f0;
+        padding: 32px 20px 24px;
+        position: fixed;
+        height: 100%;
+        overflow-y: auto;
+      }
+
+      .sidebar-logo {
+        font-size: 2rem;
+        font-weight: 800;
+        color: #2563eb;
+        margin-bottom: 32px;
+        display: block;
+      }
+
+      .sidebar-nav { display:flex; flex-direction:column; gap:6px; }
+
+      .sidebar-nav a {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        color: #64748b;
+        text-decoration: none;
+        font-size: 1.05rem;
+        border-radius: 10px;
+        transition: all 0.2s;
+      }
+
+      .sidebar-nav a:hover,
+      .sidebar-nav a.active {
+        background: #eff6ff;
+        color: #2563eb;
+        font-weight:700;
+      }
+
+      .main {
+        margin-left: 240px;
+        flex: 1;
+        padding: 32px 40px;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 40px;
+      }
+
+      .header-left h1 {
+        font-size: 2.4rem;
+        margin-bottom: 8px;
+      }
+
+      .date {
+        color: #64748b;
+        font-size: 1.1rem;
+      }
+
+      .header-right {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
+
+      .search-bar {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 12px 16px;
+        width: 300px;
+      }
+
+      .search-bar input {
+        border: none;
+        outline: none;
+        width: 100%;
+        font-size: 1rem;
+      }
+
+      .avatar {
+        width: 48px;
+        height: 48px;
+        background: #2563eb;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+      }
+
+      /* Holiday requests */
+      .requests-section {
+        background: white;
+        border-radius: 16px;
+        padding: 32px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+      }
+
+      .requests-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 32px;
+      }
+
+      .requests-title {
+        font-size: 2rem;
+        font-weight: 700;
+      }
+
+      .request-count {
+        background: #2563eb;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 1.1rem;
+        font-weight: 600;
+      }
+
+      .see-current-btn {
+        background: #2563eb;
+        color: white;
+        border: none;
+        padding: 12px 28px;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .see-current-btn:hover {
+        background: #1d4ed8;
+      }
+      .export-btn {
+        background: #eff6ff;
+        color: #1d4ed8;
+        border: 1px solid #2563eb;
+        padding: 11px 20px;
+        border-radius: 12px;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+      }
+      .export-btn:hover {
+        background: #dbeafe;
+      }
+
+      .request-list {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .request-row {
+        display: grid;
+        grid-template-columns: 170px 140px 260px 230px 260px 380px;
+        gap: 16px;
+        align-items: center;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 14px 16px;
+        box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
+      }
+      .request-row .request-actions {
+        justify-content: flex-start;
+        gap: 12px;
+        justify-self: start;
+        min-width: 240px;
+      }
+      .request-row .request-actions form {
+        margin: 0;
+      }
+      .request-row:nth-child(even) {
+        background: #fff;
+      }
+      .leave-mini {
+        margin-top: 4px;
+        font-size: 0.82rem;
+        color: #64748b;
+        line-height: 1.35;
+      }
+      .leave-mini strong {
+        color: #0f172a;
+      }
+      .request-status {
+        padding: 6px 10px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 0.92rem;
+        text-align: center;
+      }
+      .status-pending {
+        background: #fef9c3;
+        color: #92400e;
+      }
+      .status-approved {
+        background: #dcfce7;
+        color: #166534;
+      }
+      .status-rejected {
+        background: #fee2e2;
+        color: #991b1b;
+      }
+
+      .request-name {
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      .request-function {
+        font-size: 1rem;
+        color: #64748b;
+        margin-bottom: 16px;
+      }
+
+      .request-working {
+        font-size: 1.05rem;
+        margin-bottom: 12px;
+      }
+
+      .request-working strong {
+        color: #1e40af;
+      }
+
+      .request-period {
+        font-size: 1.05rem;
+        margin-bottom: 16px;
+      }
+
+      .request-type {
+        font-size: 1rem;
+        color: #64748b;
+        margin-bottom: 20px;
+      }
+
+      .request-tasks {
+        font-size: 1rem;
+        margin-bottom: 20px;
+      }
+
+      .request-tasks strong {
+        color: #1e293b;
+      }
+
+      .request-actions {
+        display: inline-flex;
+        gap: 12px;
+        align-items: center;
+        justify-content: flex-end;
+      }
+      /* Modal */
+      #declineModal {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.35);
+        backdrop-filter: blur(4px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+        padding: 16px;
+      }
+      #declineModal .modal-card {
+        background: linear-gradient(135deg, #ffffff, #f8fbff);
+        border-radius: 20px;
+        box-shadow: 0 28px 60px rgba(15, 23, 42, 0.28);
+        width: min(520px, 100%);
+        padding: 22px 24px 20px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        border: 1px solid #e2e8f0;
+      }
+      #declineModal .modal-card h3 {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: #0f172a;
+      }
+      #declineModal .modal-card p {
+        margin: 0;
+        color: #475569;
+        font-size: 0.98rem;
+      }
+      #declineModal textarea {
+        width: 100%;
+        min-height: 120px;
+        padding: 12px 14px;
+        border: 1.5px solid #2563eb;
+        border-radius: 14px;
+        font-size: 14px;
+        resize: vertical;
+        background: #f8fafc;
+        outline: none;
+      }
+      .modal-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+      }
+      .modal-actions button {
+        padding: 12px 16px;
+        border-radius: 12px;
+        font-weight: 700;
+        border: none;
+        cursor: pointer;
+        transition: all 0.15s;
+        min-width: 100px;
+      }
+      .modal-cancel {
+        background: #e2e8f0;
+        color: #0f172a;
+      }
+      .modal-confirm {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: white;
+      }
+      .modal-actions button:hover {
+        transform: translateY(-1px);
+      }
+      .note-badge {
+        display: inline-block;
+        background: #fef2f2;
+        color: #b91c1c;
+        border: 1px dashed #fecdd3;
+        border-radius: 10px;
+        padding: 6px 10px;
+        font-size: 0.9rem;
+        text-align: left;
+        max-width: 260px;
+        line-height: 1.3;
+      }
+
+      .decline-btn,
+      .accept-btn {
+        flex: 1;
+        padding: 12px 18px;
+        border-radius: 12px;
+        font-size: 0.95rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s;
+        min-width: 110px;
+        box-shadow: 0 6px 14px rgba(15, 23, 42, 0.12);
+        border: 1px solid transparent;
+        text-align: center;
+      }
+
+      .decline-btn {
+        background: #ef4444;
+        color: white;
+        border: 1px solid #ef4444;
+      }
+
+      .accept-btn {
+        background: #10b981;
+        color: white;
+        border: 1px solid #0ea873;
+      }
+
+      .decline-btn:hover {
+        background: #dc2626;
+        transform: translateY(-1px);
+      }
+
+      .accept-btn:hover {
+        background: #059669;
+        transform: translateY(-1px);
+      }
+
+      /* Responsive */
+      @media (max-width: 1024px) {
+        .sidebar {
+          width: 80px;
+        }
+        .sidebar-logo span,
+        .sidebar-nav a span {
+          display: none;
+        }
+        .sidebar-nav a {
+          justify-content: center;
+        }
+        .main {
+          margin-left: 80px;
+        }
+        .request-list {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+    {% include 'core/_panel_sidebar_unified.html' %}
+</head>
+  <body>
+    <div class="dashboard">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-logo">Panel</div>
+
+        <nav class="sidebar-nav">
+          <a href="{% url 'dashboard' %}">Dashboard</a>
+          <a href="{% url 'tasks' %}">Tasks</a>
+          <a href="{% url 'calendar' %}" class="active">Calendar</a>
+          <a href="{% url 'team' %}">Team</a>
+          <a href="{% url 'chat' %}">Chat</a>
+          <a href="{% url 'profile' %}">Profile</a>
+        </nav>
+      </aside>
+
+      <!-- Main -->
+      <main class="main">
+        <!-- Header -->
+        <header class="header">
+          <div class="header-left">
+            <h1>Today</h1>
+            <p class="date">{% now "l, d F, Y" %}</p>
+          </div>
+
+          <div class="header-right">
+            {% include 'core/_header_search.html' %}
+            <div class="user">
+              <div class="avatar">{{ user.username|first|upper }}</div>
+              <span>@{{ user.username }}</span>
+              <a href="{% url 'logout' %}" style="margin-left:10px; color:#2563eb; font-weight:600; text-decoration:none;">Logout</a>
+            </div>
+          </div>
+        </header>
+
+        <!-- Holiday requests -->
+        <section class="requests-section">
+          <div class="requests-header">
+            <h2 class="requests-title">Holiday requests</h2>
+            <div style="display:flex; gap:10px; align-items:center;">
+              <a class="export-btn" href="{% url 'export_holiday_requests_csv' %}">Export CSV</a>
+              <button
+                class="see-current-btn"
+                onclick="window.location.href='{% url 'calendar_current_holidays_admin' %}'"
+              >
+                See current holidays
+              </button>
+            </div>
+          </div>
+
+          <div class="request-list">
+            {% for r in requests %}
+            <div class="request-row">
+              <div>
+                {{ r.user.get_full_name|default:r.user.username }}
+                <div class="leave-mini">
+                  <strong>Concediu {{ r.leave_balance.year }}:</strong>
+                  {{ r.leave_balance.approved }} luate ·
+                  {{ r.leave_balance.pending }} pending ·
+                  {{ r.leave_balance.remaining }} rămase
+                </div>
+              </div>
+              <div>{{ r.user.profile.function|default:'Member' }}</div>
+              <div>{{ r.get_holiday_type_display }}</div>
+              <div>{{ r.start_date }} → {{ r.end_date }}</div>
+              <div
+                class="request-actions"
+                style="
+                  display: inline-flex;
+                  gap: 12px;
+                  align-items: center;
+                  justify-content: flex-start;
+                  min-width: 200px;
+                "
+              >
+                <div
+                  class="request-status {% if r.status == 'pending' %}status-pending{% elif r.status == 'approved' %}status-approved{% else %}status-rejected{% endif %}"
+                >
+                  {{ r.get_status_display }}
+                </div>
+                <form
+                  method="post"
+                  action="{% url 'calendar_holiday_requests_admin' %}"
+                  style="margin: 0"
+                >
+                  {% csrf_token %}
+                  <input type="hidden" name="req_id" value="{{ r.id }}" />
+                  <input type="hidden" name="action" value="approved" />
+                  <input type="hidden" name="admin_note" value="" />
+                  <button class="accept-btn" type="submit">Approve</button>
+                </form>
+                <button
+                  class="decline-btn"
+                  type="button"
+                  onclick="openDeclineModal('{{ r.id }}')"
+                >
+                  Reject
+                </button>
+              </div>
+              {% if r.admin_note %}
+              <div
+                class="note-badge"
+                style="
+                  grid-column: 6 / 7;
+                  text-align: left;
+                  max-width: 360px;
+                  word-break: break-word;
+                  white-space: normal;
+                  align-self: center;
+                  justify-self: start;
+                  margin-left: 70px;
+                  padding: 6px 10px;
+                "
+              >
+                <strong>Motiv admin:</strong> {{ r.admin_note }}
+              </div>
+              {% endif %}
+            </div>
+            {% empty %}
+            <p style="color: #94a3b8">No requests.</p>
+            {% endfor %}
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <!-- Modal pentru motivul de reject -->
+    <div id="declineModal">
+      <div class="modal-card">
+        <h3 style="margin: 0">Motiv respingere</h3>
+        <p style="color: #64748b">
+          Completează motivul pentru care respingi cererea.
+        </p>
+        <textarea
+          id="declineNote"
+          placeholder="Ex: Perioadă suprapusă cu proiect critic"
+        ></textarea>
+        <div class="modal-actions">
+          <button
+            class="modal-cancel"
+            type="button"
+            onclick="closeDeclineModal()"
+          >
+            Anulează
+          </button>
+          <button class="modal-confirm" type="button" onclick="submitDecline()">
+            Trimite
+          </button>
+        </div>
+        <form
+          id="declineForm"
+          method="post"
+          action="{% url 'calendar_holiday_requests_admin' %}"
+          style="display: none"
+        >
+          {% csrf_token %}
+          <input type="hidden" name="req_id" value="" />
+          <input type="hidden" name="action" value="rejected" />
+          <input type="hidden" name="admin_note" value="" />
+        </form>
+      </div>
+    </div>
+
+    <script>
+      let declineTarget = null;
+      function openDeclineModal(reqId) {
+        declineTarget = reqId;
+        document.getElementById("declineModal").style.display = "flex";
+        const note = document.getElementById("declineNote");
+        note.value = "";
+        note.focus();
+      }
+      function closeDeclineModal() {
+        document.getElementById("declineModal").style.display = "none";
+        declineTarget = null;
+      }
+      function submitDecline() {
+        const note = document.getElementById("declineNote").value.trim();
+        if (!note) {
+          alert("Adaugă motivul respingerii obligatoriu.");
+          return;
+        }
+        if (!declineTarget) return;
+        const form = document.getElementById("declineForm");
+        form.querySelector('input[name=\"req_id\"]').value = declineTarget;
+        form.querySelector('input[name=\"admin_note\"]').value = note;
+        form.submit();
+      }
+    </script>
+  </body>
+</html>

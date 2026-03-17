@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>See Holidays Request - Admin</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f8f9fc;
+      color: #1e293b;
+      min-height: 100vh;
+    }
+
+    .dashboard {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 260px;
+      background: white;
+      border-right: 1px solid #e2e8f0;
+      padding: 32px 20px;
+      position: fixed;
+      height: 100%;
+      overflow-y: auto;
+    }
+
+    .sidebar-logo {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #2563eb;
+      margin-bottom: 48px;
+    }
+
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      color: #64748b;
+      text-decoration: none;
+      font-size: 1.05rem;
+      border-radius: 10px;
+      margin-bottom: 6px;
+      transition: all 0.2s;
+    }
+
+    .sidebar-nav a:hover,
+    .sidebar-nav a.active {
+      background: #eff6ff;
+      color: #2563eb;
+    }
+
+    .main {
+      margin-left: 260px;
+      flex: 1;
+      padding: 32px 40px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+
+    .header-left h1 {
+      font-size: 2.4rem;
+      margin-bottom: 8px;
+    }
+
+    .date {
+      color: #64748b;
+      font-size: 1.1rem;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .search-bar {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 12px 16px;
+      width: 300px;
+    }
+
+    .search-bar input {
+      border: none;
+      outline: none;
+      width: 100%;
+      font-size: 1rem;
+    }
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      background: #2563eb;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+
+    /* Secțiuni principale */
+    .sections {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+
+    .section {
+      flex: 1;
+      min-width: 400px;
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+    }
+
+    .count-badge {
+      background: #2563eb;
+      color: white;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .see-current-btn {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .see-current-btn:hover {
+      background: #1d4ed8;
+    }
+
+    .request-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .request-item:last-child {
+      border-bottom: none;
+    }
+
+    .request-avatar {
+      width: 56px;
+      height: 56px;
+      background: #cbd5e1;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .request-info {
+      flex: 1;
+    }
+
+    .request-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .request-function {
+      font-size: 0.95rem;
+      color: #64748b;
+      margin-bottom: 8px;
+    }
+
+    .request-type {
+      font-size: 1rem;
+      color: #1e293b;
+      margin-bottom: 8px;
+    }
+
+    .request-period {
+      font-size: 1rem;
+      color: #64748b;
+    }
+
+    .request-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .tag {
+      background: #e0f2fe;
+      color: #2563eb;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .sections {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .sidebar {
+        width: 80px;
+      }
+      .sidebar-logo span, .sidebar-nav a span {
+        display: none;
+      }
+      .sidebar-nav a {
+        justify-content: center;
+      }
+      .main {
+        margin-left: 80px;
+      }
+    }
+  </style>
+  {% include 'core/_panel_sidebar_unified.html' %}
+</head>
+<body>
+
+<div class="dashboard">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">Panel</div>
+    <nav class="sidebar-nav">
+      <a href="{% url 'dashboard' %}">Dashboard</a>
+      <a href="{% url 'tasks' %}">Tasks</a>
+      <a href="{% url 'calendar' %}" class="active">Calendar</a>
+      <a href="{% url 'team' %}">Team</a>
+      <a href="{% url 'chat' %}">Chat</a>
+      <a href="{% url 'profile' %}">Profile</a>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <h1>Today</h1>
+        <p class="date">{% now "l, d F, Y" %}</p>
+      </div>
+
+      <div class="header-right">
+        {% include 'core/_header_search.html' %}
+        <div class="user">
+          <div class="avatar">{{ user.username|first|upper }}</div>
+          <span>@{{ user.username }}</span>
+          <a href="{% url 'logout' %}" style="margin-left:10px; color:#2563eb; font-weight:600; text-decoration:none;">Logout</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Secțiuni principale -->
+    <div class="sections">
+
+      <!-- Need to go soon -->
+      <div class="section">
+        <div class="section-header">
+          <h2 class="section-title">Need to go soon <span class="count-badge">{{ upcoming_requests|length }}</span></h2>
+          <button class="see-current-btn" onclick="window.location.href='{% url 'calendar_holiday_requests_admin' %}'">See requests</button>
+        </div>
+
+        {% if upcoming_requests %}
+          {% for r in upcoming_requests %}
+          <div class="request-item">
+            <div class="request-avatar"></div>
+            <div class="request-info">
+              <div class="request-name">{{ r.user.get_full_name|default:r.user.username }}</div>
+              <div class="request-function">{{ r.user.profile.function|default:'Member' }}</div>
+              <div class="request-type">{{ r.get_holiday_type_display }}</div>
+              <div class="request-period">{{ r.start_date }} - {{ r.end_date }}</div>
+            </div>
+          </div>
+          {% endfor %}
+        {% else %}
+          <p style="color:#94a3b8;">Nu există concedii programate în următoarele 14 zile.</p>
+        {% endif %}
+      </div>
+
+      <!-- On holiday -->
+      <div class="section">
+        <div class="section-header">
+          <h2 class="section-title">On holiday <span class="count-badge">{{ current_requests|length }}</span></h2>
+        </div>
+
+        {% if current_requests %}
+          {% for r in current_requests %}
+          <div class="request-item">
+            <div class="request-avatar"></div>
+            <div class="request-info">
+              <div class="request-name">{{ r.user.get_full_name|default:r.user.username }}</div>
+              <div class="request-function">{{ r.user.profile.function|default:'Member' }}</div>
+              <div class="request-type">{{ r.get_holiday_type_display }}</div>
+              <div class="request-period">{{ r.start_date }} - {{ r.end_date }}</div>
+            </div>
+          </div>
+          {% endfor %}
+        {% else %}
+          <p style="color:#94a3b8;">Nimeni nu este acum în concediu.</p>
+        {% endif %}
+
+      </div>
+
+    </div>
+
+  </main>
+
+</div>
+
+</body>
+</html>

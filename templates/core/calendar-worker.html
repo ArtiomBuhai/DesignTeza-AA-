@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calendar - Worker</title>
+  <style>
+    @import url('{% static "css/sidebar.css" %}');
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #f8f9fc;
+      color: #1e293b;
+      line-height: 1.5;
+    }
+
+    .dashboard {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 240px;
+      background: white;
+      border-right: 1px solid #e2e8f0;
+      padding: 32px 20px 24px;
+      position: fixed;
+      height: 100%;
+      overflow-y: auto;
+    }
+
+    .sidebar-logo {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #2563eb;
+      margin-bottom: 32px;
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .sidebar-nav { gap: 6px; }
+
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      color: #64748b;
+      text-decoration: none;
+      font-size: 1.05rem;
+      border-radius: 10px;
+      transition: all 0.2s;
+    }
+
+    .sidebar-nav a:hover,
+    .sidebar-nav a.active {
+      background: #eff6ff;
+      color: #2563eb;
+      font-weight:700;
+    }
+
+    .main {
+      margin-left: 240px;
+      flex: 1;
+      padding: 32px 40px;
+    }
+    .page-container {
+      max-width: 1900px;
+      margin: 0 auto;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+
+    .header-left h1 {
+      font-size: 2.4rem;
+      margin-bottom: 8px;
+    }
+
+    .date {
+      color: #64748b;
+      font-size: 1.1rem;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .search-bar {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 12px 16px;
+      width: 300px;
+    }
+
+    .search-bar input {
+      border: none;
+      outline: none;
+      width: 100%;
+      font-size: 1rem;
+    }
+
+    .user {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      background: #2563eb;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    /* Statistici */
+    .stats-bar {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: #2563eb;
+      color: #e5ecff;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-weight: 600;
+      box-shadow: 0 6px 18px rgba(37,99,235,0.18);
+      margin-bottom: 20px;
+      min-width: 360px;
+      font-size: 1.05rem;
+    }
+
+    .stats-bar .working {
+      font-size: 1.8rem;
+      color: #ffffff;
+    }
+
+    .stats-bar .divider {
+      width: 2px;
+      height: 28px;
+      background: rgba(255,255,255,0.75);
+      border-radius: 999px;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.15);
+    }
+
+    .stats-bar .non-working {
+      font-size: 1.8rem;
+      color: #dbe7ff;
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 26px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 14px 28px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-outline {
+      background: #f1f5f9;
+      color: #64748b;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: white;
+    }
+
+    .btn:hover {
+      opacity: 0.95;
+      transform: translateY(-1px);
+    }
+
+    /* Grid calendare */
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .month {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+    }
+
+    .month-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      text-align: center;
+      padding: 12px 8px;
+      font-size: 0.95rem;
+    }
+
+    th {
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    td {
+      border-radius: 8px;
+      transition: background 0.2s;
+    }
+
+    td.working {
+      background: #e0f2fe;
+      color: #1e40af;
+      font-weight: 500;
+    }
+
+    td.non-working {
+      background: #fee2e2;
+      color: #991b1b;
+      font-weight: 500;
+    }
+
+    .month-stats {
+      margin-top: 12px;
+      text-align: center;
+      font-size: 0.95rem;
+      color: #475569;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: nowrap;
+      white-space: nowrap;
+    }
+
+    .month-stats strong.working { color: #1e40af; }
+    .month-stats .divider { color: #94a3b8; }
+    .month-stats strong.non-working { color: #991b1b; }
+
+    /* Responsive */
+    @media (max-width: 1400px) {
+      .calendar-grid { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+    }
+
+    @media (max-width: 1100px) {
+      .calendar-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 900px) {
+      .calendar-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .sidebar {
+        width: 80px;
+      }
+      .sidebar-logo span, .sidebar-nav a span {
+        display: none;
+      }
+      .sidebar-nav a {
+        justify-content: center;
+      }
+      .main-content {
+        margin-left: 80px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .stats {
+        font-size: 1.2rem;
+        padding: 16px 20px;
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
+
+      .actions { flex-direction: column; }
+    }
+
+    @media (max-width: 600px) {
+      .calendar-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+  {% include 'core/_panel_sidebar_unified.html' %}
+</head>
+<body>
+
+<div class="dashboard">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">Panel</div>
+
+    <nav class="sidebar-nav">
+      <a href="{% url 'dashboard' %}">Dashboard</a>
+      <a href="{% url 'tasks' %}">Tasks</a>
+      <a href="{% url 'calendar' %}" class="active">Calendar</a>
+      <a href="{% url 'team' %}">Team</a>
+      <a href="{% url 'chat' %}">Chat</a>
+      <a href="{% url 'profile' %}">Profile</a>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <div class="page-container">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <h1>Today</h1>
+        <p class="date">{% now "l, d F, Y" %}</p>
+      </div>
+
+      <div class="header-right">
+        {% include 'core/_header_search.html' %}
+        <div class="user">
+          <div class="avatar">
+            {% if user.profile.avatar %}
+            <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+            {% else %}
+            {{ user.username|first|upper }}
+            {% endif %}
+          </div>
+          <span>@{{ user.username }}</span>
+          <a href="{% url 'logout' %}" style="margin-left:12px; color:#2563eb; font-weight:600; text-decoration:none;">Logout</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Conținut -->
+    <div class="stats-bar">
+      <span class="working">247</span>
+      <span class="divider"></span>
+      <span class="non-working">118</span>
+      <span>working days | non-working days</span>
+    </div>
+
+    <div class="actions">
+      <a class="btn btn-outline" href="{% url 'calendar_info_worker' %}">Read about holidays</a>
+      {% if google_calendar_ready %}
+        {% if google_calendar_connected %}
+          <form method="post" action="{% url 'google_calendar_disconnect' %}" style="margin:0;">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <button class="btn btn-outline" type="submit">Disconnect Google</button>
+          </form>
+        {% else %}
+          <a class="btn btn-outline" href="{% url 'google_calendar_connect' %}?next={{ request.path|urlencode }}">Connect Google</a>
+        {% endif %}
+      {% else %}
+        <span class="btn btn-outline" style="opacity:.6;cursor:not-allowed;">Google not configured</span>
+      {% endif %}
+      <a class="btn btn-primary" href="{% url 'calendar_request_worker' %}">Request a holiday</a>
+    </div>
+
+    <div class="calendar-grid">
+
+      <!-- Ianuarie -->
+      <div class="month">
+        <h2 class="month-title">January</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th><th>Su</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td></td><td></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+            <tr><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td></tr>
+            <tr><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td></tr>
+            <tr><td>20</td><td>21</td><td class="working">22</td><td>23</td><td>24</td><td>25</td><td>26</td></tr>
+            <tr><td>27</td><td>28</td><td>29</td><td>30</td><td>31</td><td></td><td></td></tr>
+          </tbody>
+        </table>
+        <div class="month-stats">
+          <strong class="working">Working days: 22</strong><span class="divider">|</span><strong class="non-working">Non-working days: 9</strong>
+        </div>
+      </div>
+
+      <!-- Februarie -->
+      <div class="month">
+        <h2 class="month-title">February</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th><th>Su</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td></td><td></td><td></td><td></td><td></td><td>1</td><td>2</td></tr>
+            <tr><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td></tr>
+            <tr><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td></tr>
+            <tr><td>17</td><td>18</td><td>19</td><td>20</td><td>21</td><td>22</td><td>23</td></tr>
+            <tr><td>24</td><td>25</td><td>26</td><td>27</td><td>28</td><td></td><td></td></tr>
+          </tbody>
+        </table>
+        <div class="month-stats">
+          <strong class="working">Working days: 20</strong><span class="divider">|</span><strong class="non-working">Non-working days: 8</strong>
+        </div>
+      </div>
+
+      <!-- Martie -->
+      <div class="month">
+        <h2 class="month-title">March</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th><th>Su</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td></td><td></td><td></td><td></td><td></td><td>1</td><td>2</td></tr>
+            <tr><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td></tr>
+            <tr><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td></tr>
+            <tr><td>17</td><td>18</td><td>19</td><td>20</td><td>21</td><td>22</td><td>23</td></tr>
+            <tr><td>24</td><td>25</td><td>26</td><td>27</td><td>28</td><td>29</td><td>30</td></tr>
+            <tr><td>31</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+        <div class="month-stats">
+          <strong class="working">Working days: 21</strong><span class="divider">|</span><strong class="non-working">Non-working days: 10</strong>
+        </div>
+      </div>
+
+      <!-- Aprilie -->
+      <div class="month">
+        <h2 class="month-title">April</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th><th>Su</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr>
+            <tr><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td></tr>
+            <tr><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td></tr>
+            <tr><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td></tr>
+            <tr><td>28</td><td>29</td><td>30</td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+        <div class="month-stats">
+          <strong class="working">Working days: 22</strong><span class="divider">|</span><strong class="non-working">Non-working days: 8</strong>
+        </div>
+      </div>
+
+      <!-- Mai -->
+      <div class="month">
+        <h2 class="month-title">May</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th><th>Su</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td></td><td></td><td></td><td>1</td><td>2</td><td>3</td><td>4</td></tr>
+            <tr><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td></tr>
+            <tr><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td></tr>
+            <tr><td>19</td><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td></tr>
+            <tr><td>26</td><td>27</td><td>28</td><td>29</td><td>30</td><td>31</td><td></td></tr>
+          </tbody>
+        </table>
+        <div class="month-stats">
+          <strong class="working">Working days: 22</strong><span class="divider">|</span><strong class="non-working">Non-working days: 9</strong>
+        </div>
+      </div>
+
+      <!-- Iunie -->
+      <div class="month">
+        <h2 class="month-title">June</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th><th>Su</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td>1</td></tr>
+            <tr><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td></tr>
+            <tr><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td></tr>
+            <tr><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td><td>21</td><td>22</td></tr>
+            <tr><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td><td>28</td><td>29</td></tr>
+            <tr><td>30</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+        <div class="month-stats">
+          <strong class="working">Working days: 21</strong><span class="divider">|</span><strong class="non-working">Non-working days: 9</strong>
+        </div>
+      </div>
+
+      <!-- Iulie -->
+      <div class="month">
+        <h2 class="month-title">July</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th><th>Su</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td></tr>
+            <tr><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td></tr>
+            <tr><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td></tr>
+            <tr><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td></tr>
+            <tr><td>28</td><td>29</td><td>30</td><td>31</td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+        <div class="month-stats">
+          <strong class="working">Working days: 23</strong><span class="divider">|</span><strong class="non-working">Non-working days: 8</strong>
+        </div>
+      </div>
+
+      <!-- August -->
+      <div class="month">
+        <h2 class="month-title">August</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th><th>Su</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td></td><td></td><td></td><td></td><td>1</td><td>2</td><td>3</td></tr>
+            <tr><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td></tr>
+            <tr><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td></tr>
+            <tr><td>18</td><td>19</td><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td></tr>
+            <tr><td>25</td><td>26</td><td>27</td><td>28</td><td>29</td><td>30</td><td>31</td></tr>
+          </tbody>
+        </table>
+        <div class="month-stats">
+          <strong class="working">Working days: 21</strong><span class="divider">|</span><strong class="non-working">Non-working days: 10</strong>
+        </div>
+      </div>
+
+      <!-- Septembrie -->
+      <div class="month">
+        <h2 class="month-title">September</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th><th>Su</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr>
+            <tr><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td></tr>
+            <tr><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td><td>21</td></tr>
+            <tr><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td><td>28</td></tr>
+            <tr><td>29</td><td>30</td><td></td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+        <div class="month-stats">
+          <strong class="working">Working days: 22</strong><span class="divider">|</span><strong class="non-working">Non-working days: 8</strong>
+        </div>
+      </div>
+
+      <!-- Octombrie -->
+      <div class="month">
+        <h2 class="month-title">October</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th><th>Su</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td></td><td></td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td></tr>
+            <tr><td>6</td><td>7</td><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td></tr>
+            <tr><td>13</td><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td></tr>
+            <tr><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td></tr>
+            <tr><td>27</td><td>28</td><td>29</td><td>30</td><td>31</td><td></td><td></td></tr>
+          </tbody>
+        </table>
+        <div class="month-stats">
+          <strong class="working">Working days: 23</strong><span class="divider">|</span><strong class="non-working">Non-working days: 8</strong>
+        </div>
+      </div>
+
+      <!-- Noiembrie -->
+      <div class="month">
+        <h2 class="month-title">November</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th><th>Su</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td></td><td></td><td></td><td></td><td></td><td>1</td><td>2</td></tr>
+            <tr><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td>8</td><td>9</td></tr>
+            <tr><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td><td>15</td><td>16</td></tr>
+            <tr><td>17</td><td>18</td><td>19</td><td>20</td><td>21</td><td>22</td><td>23</td></tr>
+            <tr><td>24</td><td>25</td><td>26</td><td>27</td><td>28</td><td>29</td><td>30</td></tr>
+          </tbody>
+        </table>
+        <div class="month-stats">
+          <strong class="working">Working days: 20</strong><span class="divider">|</span><strong class="non-working">Non-working days: 10</strong>
+        </div>
+      </div>
+
+      <!-- Decembrie -->
+      <div class="month">
+        <h2 class="month-title">December</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th><th>Su</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr>
+            <tr><td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td></tr>
+            <tr><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td><td>21</td></tr>
+            <tr><td>22</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td><td>28</td></tr>
+            <tr><td>29</td><td>30</td><td>31</td><td></td><td></td><td></td><td></td></tr>
+          </tbody>
+        </table>
+        <div class="month-stats">
+          <strong class="working">Working days: 22</strong><span class="divider">|</span><strong class="non-working">Non-working days: 9</strong>
+        </div>
+      </div>
+
+    </div>
+
+    </div>
+  </main>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profil - {{ target_user.username }}</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: #f8fbff; color: #0f172a; }
+    .dashboard { display: flex; min-height: 100vh; }
+    .sidebar {
+      width: 240px; background: white; border-right:1px solid #e2e8f0;
+      padding:32px 20px; position:fixed; height:100%; overflow-y:auto;
+    }
+    .sidebar-logo { font-size:1.8rem; font-weight:700; color:#2563eb; margin-bottom:48px; }
+    .sidebar-nav a {
+      display:flex; align-items:center; gap:12px; padding:14px 18px; border-radius:10px;
+      color:#64748b; text-decoration:none; margin-bottom:6px; transition:all .2s;
+    }
+    .sidebar-nav a:hover { background:#eff6ff; color:#2563eb; font-weight:600; }
+    .main { margin-left:240px; flex:1; padding:32px 40px; }
+    .card {
+      background:white; border:1px solid #e2e8f0; border-radius:20px;
+      padding:28px; box-shadow:0 8px 24px rgba(15,23,42,0.06);
+    }
+    .header { display:flex; justify-content:space-between; align-items:center; margin-bottom:28px; }
+    .header-right { display:flex; align-items:center; gap:14px; }
+    .user-block { display:flex; align-items:center; gap:16px; }
+    .avatar {
+      width:72px; height:72px; border-radius:50%; background:#2563eb; color:white;
+      display:flex; align-items:center; justify-content:center; font-weight:700; font-size:1.4rem; overflow:hidden;
+    }
+    .section { margin-top:22px; }
+    h2 { font-size:1.8rem; margin-bottom:6px; }
+    h3 { font-size:1.1rem; margin-bottom:8px; color:#334155; }
+    p { color:#475569; margin-bottom:8px; }
+    .chips { display:flex; gap:10px; flex-wrap:wrap; margin-top:8px; }
+    .chip { padding:8px 12px; background:#eff6ff; color:#2563eb; border-radius:999px; font-weight:600; }
+  </style>
+  {% include 'core/_panel_sidebar_unified.html' %}
+</head>
+<body>
+<div class="dashboard">
+  <aside class="sidebar">
+    <div class="sidebar-logo">Panel</div>
+    <nav class="sidebar-nav">
+      <a href="{% url 'dashboard' %}">Dashboard</a>
+      <a href="{% url 'tasks' %}">Tasks</a>
+      <a href="{% url 'calendar' %}">Calendar</a>
+      <a href="{% url 'team' %}">Team</a>
+      <a href="{% url 'chat' %}">Chat</a>
+      <a href="{% url 'profile' %}">Profile</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <div class="header">
+      <div>
+        <h2>Profile info</h2>
+        <p style="color:#64748b;">Public profile</p>
+      </div>
+      <div class="header-right">
+        {% include 'core/_header_search.html' %}
+        <div class="user-info">
+          <div class="avatar" style="width:44px;height:44px;font-size:1.05rem;">
+            {% if user.profile.avatar %}
+            <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+            {% else %}
+            {{ user.username|first|upper }}
+            {% endif %}
+          </div>
+          <span style="font-weight:600;color:#0f172a;">@{{ user.username }}</span>
+          <a href="{% url 'logout' %}" style="margin-left:12px; color:#2563eb; font-weight:600; text-decoration:none;">Logout</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px;">
+      <div class="user-block">
+        <div class="avatar">
+          {% if profile_obj and profile_obj.avatar %}
+          <img src="{{ profile_obj.avatar.url }}" style="width:100%;height:100%;object-fit:cover;">
+          {% else %}
+          {{ target_user.username|first|upper }}
+          {% endif %}
+        </div>
+        <div>
+          <div style="font-weight:700; font-size:1.2rem;">{{ profile_obj.full_name|default:target_user.username }}</div>
+          <div style="color:#2563eb; font-weight:600;">{{ profile_obj.function|default:"Member" }}</div>
+          <div style="color:#475569;">{{ target_user.email }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      {% if profile_obj.about %}<div class="section"><h3>About</h3><p>{{ profile_obj.about }}</p></div>{% endif %}
+      {% if profile_obj.experience %}<div class="section"><h3>Experience</h3><p>{{ profile_obj.experience|linebreaks }}</p></div>{% endif %}
+      {% if profile_obj.education %}<div class="section"><h3>Education</h3><p>{{ profile_obj.education|linebreaks }}</p></div>{% endif %}
+      {% if skills_list %}<div class="section"><h3>Skills</h3><div class="chips">{% for s in skills_list %}<span class="chip">{{ s }}</span>{% endfor %}</div></div>{% endif %}
+      {% if languages_list %}<div class="section"><h3>Languages</h3><div class="chips">{% for l in languages_list %}<span class="chip" style="background:#ecfeff;color:#0ea5e9;">{{ l }}</span>{% endfor %}</div></div>{% endif %}
+    </div>
+  </main>
+</div>
+</body>
+</html>

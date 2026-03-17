@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Calendar - Worker - Pending</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #f8f9fc;
+      color: #1e293b;
+      min-height: 100vh;
+    }
+
+    .dashboard {
+      display: flex;
+      height: 100vh;
+    }
+
+    .sidebar {
+      width: 260px;
+      background: white;
+      border-right: 1px solid #e2e8f0;
+      padding: 32px 20px;
+      position: fixed;
+      height: 100%;
+      overflow-y: auto;
+    }
+
+    .sidebar-logo {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #2563eb;
+      margin-bottom: 48px;
+    }
+
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 18px;
+      color: #64748b;
+      text-decoration: none;
+      font-size: 1.05rem;
+      border-radius: 10px;
+      margin-bottom: 6px;
+      transition: all 0.2s;
+    }
+
+    .sidebar-nav a:hover,
+    .sidebar-nav a.active {
+      background: #eff6ff;
+      color: #2563eb;
+    }
+
+    .main {
+      margin-left: 240px;
+      flex: 1;
+      padding: 28px 32px;
+      overflow-y: auto;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .back-arrow {
+      font-size: 1.8rem;
+      color: #64748b;
+      cursor: pointer;
+    }
+
+    .header-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .search-wrapper { position: relative; }
+    .search-bar {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 12px 16px;
+      width: 300px;
+    }
+
+    .search-bar input {
+      border: none;
+      outline: none;
+      width: 100%;
+      font-size: 1rem;
+    }
+
+    .search-results {
+      position: absolute;
+      top: 110%;
+      left: 0;
+      right: 0;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+      z-index: 40;
+      overflow: hidden;
+      max-height: 280px;
+      overflow-y: auto;
+    }
+    .search-results a {
+      display: block;
+      padding: 10px 12px;
+      color: #0f172a;
+      text-decoration: none;
+      border-bottom: 1px solid #e2e8f0;
+      font-weight: 600;
+    }
+    .search-results a span { display:block; font-size:0.9rem; color:#64748b; font-weight:400; }
+    .search-results a:hover { background: #eef2ff; }
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      background: #2563eb;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+
+    .user-name {
+      font-weight: 600;
+    }
+
+    /* Conținut principal */
+    .content {
+      display: grid;
+      grid-template-columns: 260px 1fr 260px;
+      gap: 28px;
+      align-items: start;
+    }
+
+    .holiday-type {
+      background: white;
+      border-radius: 16px;
+      padding: 16px 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      min-height: 520px;
+      border: 1px solid #f1f5f9;
+    }
+
+    .holiday-type h2 {
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+    }
+
+    .type-item {
+      display: block;
+      padding: 12px 14px;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      font-weight: 600;
+      color: #111827;
+      cursor: pointer;
+      transition: all .15s;
+      margin-bottom: 10px;
+      background: #fff;
+    }
+    .type-item input { display:none; }
+    .type-item.active,
+    .type-item:hover {
+      background: #eef2ff;
+      border-color: #2563eb;
+      color: #2563eb;
+    }
+
+    .holiday-list {
+      list-style: none;
+    }
+
+    .holiday-item {
+      padding: 14px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 8px;
+    }
+
+    .holiday-item.active {
+      background: #eff6ff;
+      color: #2563eb;
+      font-weight: 600;
+    }
+
+    .holiday-item:hover {
+      background: #f1f5f9;
+    }
+
+    .calendar-section {
+      flex: 2;
+      min-width: 720px;
+      background: white;
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      min-height: 560px;
+      border: 1px solid #eef2f7;
+    }
+    .leave-balance-inline {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(100px, 1fr));
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+    .leave-balance-inline .chip {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 9px 10px;
+    }
+    .leave-balance-inline .chip .k {
+      color: #64748b;
+      font-size: 0.8rem;
+      margin-bottom: 2px;
+    }
+    .leave-balance-inline .chip .v {
+      color: #0f172a;
+      font-size: 1rem;
+      font-weight: 700;
+    }
+    .holiday-error {
+      margin-bottom: 14px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #fecaca;
+      background: #fef2f2;
+      color: #b91c1c;
+      font-weight: 600;
+    }
+
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .calendar-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    .month-nav {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 1.1rem;
+    }
+
+    .month-nav button {
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      color: #64748b;
+      cursor: pointer;
+    }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+
+    th, td {
+      text-align: center;
+      padding: 14px 10px;
+      font-size: 1.05rem;
+      border: 1px solid #edf1f5;
+      min-width: 68px;
+    }
+
+    th {
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    td {
+      cursor: pointer;
+      transition: all 0.15s;
+      background: #fff;
+    }
+
+    td.selected {
+      background: #e8f0ff;
+      color: #1d4ed8;
+      font-weight: 700;
+      box-shadow: inset 0 0 0 2px #2563eb;
+    }
+
+    td.pending {
+      background: #fff7ed;
+      color: #c2410c;
+      font-weight: 600;
+      box-shadow: inset 0 0 0 2px #fb923c;
+    }
+
+    td.range {
+      background: #f3f4f6;
+      color: #111827;
+    }
+
+    td:hover {
+      background: #f1f5f9;
+    }
+
+    .workers-on-holiday {
+      flex: 1;
+      min-width: 260px;
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      min-height: 320px;
+    }
+
+    .workers-title {
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+    }
+
+    .worker-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .worker-item:last-child {
+      border-bottom: none;
+    }
+
+    .worker-avatar {
+      width: 40px;
+      height: 40px;
+      background: #cbd5e1;
+      border-radius: 50%;
+    }
+
+    .worker-info {
+      flex: 1;
+    }
+
+    .worker-name {
+      font-weight: 600;
+    }
+
+    .worker-date {
+      color: #64748b;
+      font-size: 0.95rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 1200px) {
+      .content {
+        flex-direction: column;
+      }
+      .leave-balance-inline {
+        grid-template-columns: repeat(2, minmax(100px, 1fr));
+      }
+    }
+
+    @media (max-width: 900px) {
+      .sidebar {
+        width: 80px;
+      }
+      .sidebar-logo span, .sidebar-nav a span {
+        display: none;
+      }
+      .sidebar-nav a {
+        justify-content: center;
+      }
+      .main {
+        margin-left: 80px;
+      }
+      .leave-balance-inline {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  {% include 'core/_panel_sidebar_unified.html' %}
+</head>
+<body>
+
+<div class="dashboard">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">Panel</div>
+
+    <nav class="sidebar-nav">
+      <a href="{% url 'dashboard' %}">Dashboard</a>
+      <a href="{% url 'tasks' %}">Tasks</a>
+      <a href="{% url 'calendar' %}" class="active">Calendar</a>
+      <a href="{% url 'team' %}">Team</a>
+      <a href="{% url 'chat' %}">Chat</a>
+      <a href="{% url 'profile' %}">Profile</a>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+
+    <!-- Header simplu ca în design -->
+    <header class="header" style="padding-right:12px;">
+      <div class="header-left">
+        <span class="back-arrow" onclick="history.back()">←</span>
+        <h1>Choose your holiday</h1>
+      </div>
+      <div class="header-right">
+        {% include 'core/_header_search.html' %}
+        <div class="user" style="display:flex; align-items:center; gap:10px;">
+          <div class="avatar">
+            {% if user.profile.avatar %}
+            <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}" style="width:100%;height:100%;object-fit:cover;">
+            {% else %}
+            {{ user.username|first|upper }}
+            {% endif %}
+          </div>
+          <span>@{{ user.username }}</span>
+          <a href="{% url 'logout' %}" style="margin-left:10px; color:#2563eb; font-weight:600; text-decoration:none;">Logout</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Conținut -->
+    <form class="content" method="post">
+      {% csrf_token %}
+
+      <!-- Tip concediu - listă stânga -->
+      <div class="holiday-type">
+        <h2>Type of holiday</h2>
+        {% for code,label in holiday_choices %}
+          {% if holiday_type %}
+            <label class="type-item {% if holiday_type == code %}active{% endif %}">
+              <input type="radio" name="holiday_type" value="{{ code }}" {% if holiday_type == code %}checked{% endif %}>
+              {{ label }}
+            </label>
+          {% else %}
+            <label class="type-item {% if forloop.first %}active{% endif %}">
+              <input type="radio" name="holiday_type" value="{{ code }}" {% if forloop.first %}checked{% endif %}>
+              {{ label }}
+            </label>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <!-- Calendar + date picker -->
+      <div class="calendar-section">
+        <div class="calendar-header">
+          <h2 class="calendar-title">Choose dates</h2>
+          <div class="month-nav">
+            <button type="button" onclick="window.location='?y={{ prev_y }}&m={{ prev_m }}'">‹</button>
+            <span>{{ month_name }} {{ year }}</span>
+            <button type="button" onclick="window.location='?y={{ next_y }}&m={{ next_m }}'">›</button>
+          </div>
+        </div>
+
+        <div class="leave-balance-inline">
+          <div class="chip">
+            <div class="k">Alocate</div>
+            <div class="v">{{ leave_balance.allocated }}</div>
+          </div>
+          <div class="chip">
+            <div class="k">Aprobate</div>
+            <div class="v">{{ leave_balance.approved }}</div>
+          </div>
+          <div class="chip">
+            <div class="k">Pending</div>
+            <div class="v">{{ leave_balance.pending }}</div>
+          </div>
+          <div class="chip">
+            <div class="k">Disponibile</div>
+            <div class="v">{{ leave_balance.requestable }}</div>
+          </div>
+        </div>
+
+        {% if holiday_error %}
+        <div class="holiday-error">{{ holiday_error }}</div>
+        {% endif %}
+
+        <table>
+          <thead>
+            <tr>
+              <th>MON</th><th>TUE</th><th>WED</th><th>THU</th><th>FRI</th><th>SAT</th><th>SUN</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for week in month_rows %}
+            <tr>
+              {% for day in week %}
+              {% if day == 0 %}
+                <td></td>
+              {% else %}
+                <td data-day="{{ day }}" class="{% if start_sel and day == start_sel.day %}selected{% elif end_sel and day == end_sel.day %}pending{% endif %}">{{ day }}</td>
+              {% endif %}
+              {% endfor %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <input type="hidden" name="start_date" id="start_date" value="{% if start_sel %}{{ start_sel|date:'Y-m-d' }}{% endif %}">
+        <input type="hidden" name="end_date" id="end_date" value="{% if end_sel %}{{ end_sel|date:'Y-m-d' }}{% endif %}">
+
+        <label style="display:block; font-weight:600; margin:16px 0 6px;">Comment (optional)</label>
+        <textarea name="comment" rows="3" placeholder="Add any note for your manager..." style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:12px;"></textarea>
+
+        <div style="display:flex; justify-content:flex-end; margin-top:16px;">
+          <button class="btn btn-primary" type="submit" style="padding:12px 18px; background:#2563eb; color:white; border:none; border-radius:10px; font-weight:700; cursor:pointer;">Send request</button>
+        </div>
+      </div>
+
+      <!-- Cererile mele -->
+      <div class="workers-on-holiday">
+        <h2>My holiday requests</h2>
+        <div class="worker-list">
+          {% for req in my_requests %}
+          <div class="worker-item">
+            <div class="worker-info">
+              <div class="worker-name">{{ req.start_date }} → {{ req.end_date }}</div>
+              <div class="worker-date">
+                {{ req.get_holiday_type_display }}
+                <span style="color:{% if req.status == 'pending' %}#f59e0b{% elif req.status == 'approved' %}#16a34a{% else %}#dc2626{% endif %}; font-weight:700; margin-left:6px;">
+                  ({{ req.get_status_display }})
+                </span>
+              </div>
+              {% if req.admin_note %}
+              <div style="color:#6b7280; font-size:0.95rem; margin-top:4px;">
+                Motiv: {{ req.admin_note }}
+              </div>
+              {% endif %}
+            </div>
+          </div>
+          {% empty %}
+          <div class="worker-item">
+            <div class="worker-info">
+              <div class="worker-date" style="color:#94a3b8;">Nu ai cereri încă.</div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+    </form>
+
+  </main>
+
+</div>
+
+<script>
+  (function() {
+    const year = {{ year }};
+    const month = {{ month }}; // numeric 1-12
+    const startInput = document.getElementById('start_date');
+    const endInput = document.getElementById('end_date');
+    let start = startInput.value ? new Date(startInput.value) : null;
+    let end = endInput.value ? new Date(endInput.value) : null;
+
+    function iso(d){
+      return d.toISOString().slice(0,10);
+    }
+
+    function updateHidden(){
+      startInput.value = start ? iso(start) : '';
+      endInput.value = end ? iso(end) : '';
+    }
+
+    function clearClasses(){
+      document.querySelectorAll('td[data-day]').forEach(td=>{
+        td.classList.remove('selected','pending','range');
+      });
+    }
+
+    function paint(){
+      clearClasses();
+      if(start){
+        const td = document.querySelector(`td[data-day="${start.getDate()}"]`);
+        if(td) td.classList.add('selected');
+      }
+      if(end){
+        const td = document.querySelector(`td[data-day="${end.getDate()}"]`);
+        if(td) td.classList.add('pending');
+      }
+      if(start && end){
+        const s = start.getDate();
+        const e = end.getDate();
+        document.querySelectorAll('td[data-day]').forEach(td=>{
+          const d = parseInt(td.dataset.day);
+          if(d > Math.min(s,e) && d < Math.max(s,e)) td.classList.add('range');
+        });
+      }
+      updateHidden();
+    }
+
+    document.querySelectorAll('td[data-day]').forEach(td=>{
+      td.addEventListener('click',()=>{
+        const d = parseInt(td.dataset.day);
+        const dateObj = new Date(year, month-1, d);
+        if(!start || (start && end)){
+          start = dateObj; end = null;
+        } else {
+          end = dateObj;
+          if(end < start){ const tmp=start; start=end; end=tmp; }
+        }
+        paint();
+      });
+    });
+
+    paint();
+  })();
+
+  // active state pentru tipul de concediu
+  (function() {
+    const items = document.querySelectorAll('.type-item');
+    items.forEach(item => {
+      const inp = item.querySelector('input[type="radio"]');
+      inp.addEventListener('change', () => {
+        items.forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+      });
+    });
+  })();
+</script>
+
+</body>
+</html>

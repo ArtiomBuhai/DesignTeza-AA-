@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Add Submission - Panel</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: system-ui, sans-serif;
+      background: #f8fbff;
+      color: #1e293b;
+      min-height: 100vh;
+    }
+
+    .dashboard-layout { display: flex; min-height: 100vh; }
+
+    .sidebar {
+      width: 240px;
+      background: white;
+      border-right: 1px solid #e2e8f0;
+      padding: 32px 20px;
+      overflow-y: auto;
+      position: fixed;
+      height: 100%;
+    }
+
+    .sidebar-logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #2563eb;
+      margin-bottom: 48px;
+    }
+
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      color: #64748b;
+      text-decoration: none;
+      font-size: 1.05rem;
+      border-radius: 12px;
+      margin-bottom: 8px;
+      transition: all 0.2s;
+    }
+
+    .sidebar-nav a:hover, .sidebar-nav a.active {
+      background: #eff6ff;
+      color: #2563eb;
+      font-weight: 600;
+    }
+
+    .main-content {
+      margin-left: 240px;
+      flex: 1;
+      padding: 32px 40px;
+      overflow-y: auto;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+
+    .header-left h2 {
+      font-size: 2.4rem;
+      margin-bottom: 8px;
+    }
+
+    .date {
+      color: #64748b;
+      font-size: 1.1rem;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 10px 16px;
+      width: 280px;
+    }
+
+    .search-bar input {
+      border: none;
+      outline: none;
+      flex: 1;
+      font-size: 1rem;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .avatar {
+      width: 44px;
+      height: 44px;
+      background: #2563eb;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+    }
+
+    /* Submission card */
+    .submission-card {
+      background: white;
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      margin-top: 40px;
+    }
+
+    .submission-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+
+    .back-arrow {
+      font-size: 1.6rem;
+      color: #64748b;
+      cursor: pointer;
+      margin-right: 20px;
+    }
+
+    .submission-title {
+      font-size: 2rem;
+      color: #1e293b;
+    }
+
+    .form-group {
+      margin-bottom: 40px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 12px;
+      color: #334155;
+      font-size: 1.05rem;
+      font-weight: 500;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 18px 20px;
+      border: 1px solid #d1d5db;
+      border-radius: 16px;
+      font-size: 1.1rem;
+      min-height: 160px;
+      resize: vertical;
+      transition: all 0.2s;
+    }
+
+    textarea:focus {
+      border-color: #3b82f6;
+      outline: none;
+      box-shadow: 0 0 0 4px rgba(59,130,246,0.15);
+    }
+
+    .file-upload-area {
+      border: 2px dashed #d1d5db;
+      border-radius: 16px;
+      padding: 80px 20px;
+      text-align: center;
+      background: #f8fafc;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .file-upload-area:hover {
+      border-color: #3b82f6;
+      background: #f0f7ff;
+    }
+
+    .file-upload-area i {
+      font-size: 3.5rem;
+      color: #64748b;
+      margin-bottom: 20px;
+    }
+
+    .file-upload-area p {
+      font-size: 1.15rem;
+      color: #64748b;
+      margin-bottom: 12px;
+    }
+
+    .file-upload-area .file-types {
+      font-size: 1rem;
+      color: #94a3b8;
+    }
+
+    .file-selected-name {
+      margin-top: 10px;
+      color: #334155;
+      font-size: 0.95rem;
+      font-weight: 500;
+      word-break: break-all;
+    }
+
+    .save-btn {
+      width: 100%;
+      padding: 20px;
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 16px;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(37,99,235,0.3);
+      transition: all 0.25s;
+    }
+
+    .save-btn:hover {
+      background: #1d4ed8;
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px rgba(37,99,235,0.4);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .sidebar {
+        width: 80px;
+      }
+      .sidebar-logo span, .sidebar-nav a span {
+        display: none;
+      }
+      .sidebar-nav a {
+        justify-content: center;
+      }
+      .main-content {
+        margin-left: 80px;
+      }
+    }
+  </style>
+  {% include 'core/_panel_sidebar_unified.html' %}
+</head>
+<body>
+
+<div class="dashboard-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      Panel
+    </div>
+
+    <nav class="sidebar-nav">
+      <a href="{% url 'dashboard' %}">Dashboard</a>
+      <a href="{% url 'tasks' %}" class="active">Tasks</a>
+      <a href="{% url 'calendar' %}">Calendar</a>
+      <a href="{% url 'team' %}">Team</a>
+      <a href="{% url 'chat' %}">Chat</a>
+      <a href="{% url 'profile' %}">Profile</a>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="main-content">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <h2>Add submission</h2>
+        <p class="date">{{ task.title }}</p>
+      </div>
+
+      <div class="header-right">
+        {% include 'core/_header_search.html' %}
+        <div class="user-info">
+          <div class="avatar">
+            {% if user.profile.avatar %}
+            <img src="{{ user.profile.avatar.url }}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />
+            {% else %}
+            {{ user.username|first|upper }}
+            {% endif %}
+          </div>
+          <span>@{{ user.username }}</span>
+          <a href="{% url 'logout' %}" style="margin-left:12px; color:#2563eb; font-weight:600; text-decoration:none;">Logout</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Submission card -->
+    <section class="submission-card">
+      <div class="submission-header">
+        <div style="display: flex; align-items: center;">
+          <span class="back-arrow" onclick="history.back()">←</span>
+          <h2 class="submission-title">Task submission</h2>
+        </div>
+      </div>
+
+      {% if error %}<p style="color:#dc2626; margin-bottom:16px;">{{ error }}</p>{% endif %}
+
+      <form class="submission-form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+          <label>Submission description</label>
+          <textarea name="description" placeholder="Describe your submission here...">{{ request.POST.description }}</textarea>
+        </div>
+
+        <div class="form-group">
+          <label>File submissions</label>
+          <label class="file-upload-area" id="fileUploadArea">
+            <i style="font-size: 4rem; color: #64748b; margin-bottom: 20px;">↓</i>
+            <p>You can drag and drop files here to add them</p>
+            <p class="file-types">Accepted file types: Archive (ZIP), PDF Document</p>
+            <input id="submissionFileInput" type="file" name="file" style="display:none;">
+          </label>
+          <div id="selectedFileName" class="file-selected-name"></div>
+        </div>
+
+        <button type="submit" class="save-btn">Send submission</button>
+      </form>
+    </section>
+
+  </main>
+
+</div>
+
+<script>
+  const fileInput = document.getElementById('submissionFileInput');
+  const fileNameEl = document.getElementById('selectedFileName');
+  const uploadArea = document.getElementById('fileUploadArea');
+
+  function setSelectedFileName(file) {
+    if (!fileNameEl) return;
+    fileNameEl.textContent = file ? `Selected file: ${file.name}` : '';
+  }
+
+  fileInput?.addEventListener('change', () => {
+    const file = fileInput.files && fileInput.files.length ? fileInput.files[0] : null;
+    setSelectedFileName(file);
+  });
+
+  uploadArea?.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadArea.style.borderColor = '#3b82f6';
+  });
+
+  uploadArea?.addEventListener('dragleave', () => {
+    uploadArea.style.borderColor = '#d1d5db';
+  });
+
+  uploadArea?.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadArea.style.borderColor = '#d1d5db';
+    const files = e.dataTransfer?.files;
+    if (!files || !files.length || !fileInput) return;
+    try { fileInput.files = files; } catch (err) {}
+    setSelectedFileName(files[0]);
+  });
+</script>
+
+</body>
+</html>

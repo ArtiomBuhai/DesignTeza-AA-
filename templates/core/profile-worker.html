@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profile - Worker</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --bg: #f8f9fc;
+      --card: white;
+      --text: #1e293b;
+      --gray: #64748b;
+      --light: #f1f5f9;
+    }
+    [data-theme="dark"] {
+      --bg: #0f172a;
+      --card: #1e293b;
+      --text: #e2e8f0;
+      --gray: #94a3b8;
+      --light: #334155;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height:100vh;
+      transition: background 0.3s, color 0.3s;
+    }
+    .dashboard { display:flex; min-height:100vh; }
+    .sidebar {
+      width:240px;
+      background:var(--card);
+      border-right:1px solid #e2e8f0;
+      padding:32px 20px;
+      position:fixed;
+      height:100%;
+      overflow-y:auto;
+      transition: background 0.3s;
+    }
+    .sidebar-logo {
+      font-size:2rem;
+      font-weight:800;
+      color:var(--primary);
+      margin-bottom:48px;
+    }
+    .sidebar-nav a {
+      display:flex;
+      align-items:center;
+      gap:12px;
+      padding:14px 18px;
+      color:var(--gray);
+      text-decoration:none;
+      font-size:1.05rem;
+      border-radius:10px;
+      margin-bottom:6px;
+      transition:all 0.2s;
+    }
+    .sidebar-nav a:hover,
+    .sidebar-nav a.active { background:var(--light); color:var(--primary); }
+    .main {
+      margin-left:240px;
+      flex:1;
+      padding:32px 40px;
+    }
+    .header {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:40px;
+    }
+    .header-left h1 { font-size:2.4rem; margin-bottom:8px; }
+    .header-right {
+      display:flex;
+      align-items:center;
+      gap:14px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .user-info {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:500;
+      color:#0f172a;
+      white-space:nowrap;
+    }
+    .avatar {
+      width:44px;
+      height:44px;
+      border-radius:50%;
+      background:#2563eb;
+      color:white;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:700;
+      font-size:1.1rem;
+      overflow:hidden;
+      flex-shrink:0;
+    }
+    .logout-link {
+      margin-left:8px;
+      color:#2563eb;
+      font-weight:600;
+      text-decoration:none;
+    }
+    .logout-link:hover {
+      color:#1d4ed8;
+      text-decoration:underline;
+    }
+    .profile-header {
+      display:flex;
+      align-items:center;
+      gap:32px;
+      margin-bottom:48px;
+      flex-wrap:wrap;
+    }
+    .profile-avatar {
+      width:140px;
+      height:140px;
+      border-radius:50%;
+      object-fit:cover;
+      border:4px solid white;
+      box-shadow:0 8px 32px rgba(0,0,0,0.15);
+    }
+    .profile-info h1 {
+      font-size:2.2rem;
+      margin-bottom:8px;
+    }
+    .profile-info .username {
+      font-size:1.2rem;
+      color:var(--gray);
+      margin-bottom:12px;
+    }
+    .profile-info .function {
+      font-size:1.1rem;
+      color:var(--primary);
+      font-weight:600;
+    }
+    .profile-info .function-cta {
+      background:none;
+      border:none;
+      padding:0;
+      font:inherit;
+      color:var(--primary);
+      font-weight:600;
+      cursor:pointer;
+      text-decoration:underline;
+      text-underline-offset:3px;
+    }
+    .profile-info .function-cta:hover {
+      color:#1d4ed8;
+    }
+    .profile-card {
+      background:var(--card);
+      border-radius:16px;
+      padding:32px;
+      box-shadow:0 6px 24px rgba(0,0,0,0.08);
+      margin-bottom:32px;
+      position:relative;
+    }
+    .leave-balance-card {
+      background: var(--card);
+      border-radius: 16px;
+      padding: 20px 22px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+      margin-bottom: 24px;
+      border: 1px solid #e2e8f0;
+    }
+    .leave-balance-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+    .leave-balance-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(120px, 1fr));
+      gap: 10px;
+    }
+    .leave-chip {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 10px 12px;
+    }
+    .leave-chip .k {
+      color: #64748b;
+      font-size: 0.82rem;
+      margin-bottom: 3px;
+    }
+    .leave-chip .v {
+      color: #0f172a;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+    .edit-btn {
+      position:absolute;
+      top:24px;
+      right:24px;
+      background:var(--primary);
+      color:white;
+      border:none;
+      padding:10px 20px;
+      border-radius:10px;
+      font-weight:600;
+      cursor:pointer;
+      transition:all 0.2s;
+    }
+    .edit-btn:hover { background:var(--primary-dark); transform:translateY(-2px); }
+    .section-title {
+      font-size:1.6rem;
+      font-weight:700;
+      margin:32px 0 16px;
+      color:var(--primary);
+    }
+    .about-text {
+      font-size:1.05rem;
+      color:#475569;
+      margin-bottom:24px;
+    }
+    .timeline-item {
+      position:relative;
+      padding-left:32px;
+      margin-bottom:32px;
+    }
+    .timeline-item::before {
+      content:'';
+      position:absolute;
+      left:8px;
+      top:0;
+      bottom:0;
+      width:3px;
+      background:#e2e8f0;
+    }
+    .timeline-dot {
+      position:absolute;
+      left:0;
+      top:6px;
+      width:20px;
+      height:20px;
+      background:var(--primary);
+      border-radius:50%;
+      border:4px solid white;
+      box-shadow:0 0 0 4px rgba(37,99,235,0.2);
+    }
+    .timeline-title {
+      font-size:1.3rem;
+      font-weight:600;
+      margin-bottom:6px;
+    }
+    .timeline-company, .timeline-period {
+      color:#64748b;
+      font-size:0.95rem;
+    }
+    .tag-list {
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:16px;
+    }
+    .tag {
+      background:#e0f2fe;
+      color:var(--primary);
+      padding:6px 14px;
+      border-radius:20px;
+      font-size:0.9rem;
+      font-weight:500;
+    }
+    /* Inline edit panel (no overlay) */
+    #editModal {
+      display:none;
+      position:static;
+      inset:auto;
+      background:transparent;
+      z-index:auto;
+      justify-content:stretch;
+      align-items:stretch;
+      margin-top:32px;
+    }
+    .modal-content {
+      background:var(--card);
+      border-radius:16px;
+      width:100%;
+      max-width:1000px;
+      overflow:visible;
+      padding:32px;
+      box-shadow:0 8px 30px rgba(0,0,0,0.1);
+      margin:0 auto;
+    }
+    .modal-header {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:32px;
+    }
+    .modal-title { font-size:1.8rem; font-weight:700; }
+    .modal-close {
+      background:none;
+      border:none;
+      font-size:2.2rem;
+      cursor:pointer;
+      color:#64748b;
+    }
+    .form-grid {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:32px;
+    }
+    @media (max-width:900px) {
+      .form-grid { grid-template-columns:1fr; }
+      .header {
+        flex-direction:column;
+        align-items:flex-start;
+      }
+      .header-right {
+        width:100%;
+        justify-content:space-between;
+      }
+      .header-right .search-wrapper {
+        flex:1;
+        min-width:220px;
+      }
+      .header-right .search-bar {
+        width:100% !important;
+      }
+    }
+    @media (max-width:800px) { .leave-balance-grid { grid-template-columns: repeat(2, minmax(120px, 1fr)); } }
+    @media (max-width:520px) { .leave-balance-grid { grid-template-columns: 1fr; } }
+    .form-group {
+      margin-bottom:24px;
+    }
+    label {
+      display:block;
+      margin-bottom:8px;
+      font-weight:600;
+      font-size:0.95rem;
+      color:#475569;
+    }
+    input, textarea, select {
+      width:100%;
+      padding:12px 16px;
+      border:1px solid #d1d5db;
+      border-radius:10px;
+      font-size:1rem;
+      transition:border-color 0.2s;
+    }
+    input:focus, textarea:focus, select:focus {
+      outline:none;
+      border-color:var(--primary);
+      box-shadow:0 0 0 3px rgba(37,99,235,0.15);
+    }
+    .photo-upload {
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:16px;
+      margin-bottom:32px;
+    }
+    .current-photo {
+      width:120px;
+      height:120px;
+      border-radius:50%;
+      object-fit:cover;
+      border:4px solid var(--light);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      background:#2563eb;
+      color:white;
+      font-weight:700;
+      font-size:1.6rem;
+    }
+    .file-input {
+      display:none;
+    }
+    .upload-btn {
+      background:var(--primary);
+      color:white;
+      padding:10px 24px;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:600;
+    }
+    .save-btn {
+      padding:14px 40px;
+      background:var(--primary);
+      color:white;
+      border:none;
+      border-radius:12px;
+      font-weight:600;
+      cursor:pointer;
+      margin-top:32px;
+    }
+    .save-btn:hover { background:var(--primary-dark); }
+  </style>
+  {% include 'core/_panel_sidebar_unified.html' %}
+</head>
+<body>
+
+<div class="dashboard">
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">Panel</div>
+    <nav class="sidebar-nav">
+      <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Dashboard</a>
+      <a href="{% url 'tasks' %}" class="{% if request.resolver_match.url_name == 'tasks' %}active{% endif %}">Tasks</a>
+      <a href="{% url 'calendar' %}" class="{% if request.resolver_match.url_name == 'calendar' %}active{% endif %}">Calendar</a>
+      <a href="{% url 'team' %}" class="{% if request.resolver_match.url_name == 'team' %}active{% endif %}">Team</a>
+      <a href="{% url 'chat' %}" class="{% if request.resolver_match.url_name == 'chat' %}active{% endif %}">Chat</a>
+      <a href="{% url 'profile' %}" class="{% if request.resolver_match.url_name == 'profile' %}active{% endif %}">Profile</a>
+    </nav>
+  </aside>
+
+  <!-- Main -->
+  <main class="main">
+    <div class="page-container">
+
+    <header class="header">
+      <div class="header-left">
+        <h1>Profile</h1>
+      </div>
+      <div class="header-right">
+        {% include 'core/_header_search.html' %}
+        <div class="user-info">
+          <div class="avatar">
+            {% if profile and profile.avatar %}
+            <img src="{{ profile.avatar.url }}" alt="{{ user.username }}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+            {% else %}
+            {{ user.username|first|upper }}
+            {% endif %}
+          </div>
+          <span>@{{ user.username }}</span>
+          <a class="logout-link" href="{% url 'logout' %}">Logout</a>
+        </div>
+      </div>
+    </header>
+
+      <div class="profile-header">
+        <img
+          src="{% if profile and profile.avatar %}{{ profile.avatar.url }}{% else %}https://ui-avatars.com/api/?name={{ profile.full_name|default:user.get_full_name|default:user.username|urlencode }}&size=300&background=2563eb&color=fff{% endif %}"
+          alt="{{ user.username }}"
+          class="profile-avatar"
+        />
+        <div class="profile-info">
+          <h1>{{ profile.full_name|default:user.get_full_name|default:user.username }}</h1>
+          <p class="username">@{{ user.username }}</p>
+          {% if profile.function %}
+          <p class="function">{{ profile.function }}</p>
+          {% else %}
+          <button class="function-cta" type="button" onclick="openFunctionEditor()">Completează funcția</button>
+          {% endif %}
+        </div>
+      </div>
+
+      <section class="leave-balance-card">
+        <div class="leave-balance-title">Concediu anual {{ leave_balance.year }}</div>
+        <div class="leave-balance-grid">
+          <div class="leave-chip">
+            <div class="k">Alocate</div>
+            <div class="v">{{ leave_balance.allocated }}</div>
+          </div>
+          <div class="leave-chip">
+            <div class="k">Aprobate</div>
+            <div class="v">{{ leave_balance.approved }}</div>
+          </div>
+          <div class="leave-chip">
+            <div class="k">În așteptare</div>
+            <div class="v">{{ leave_balance.pending }}</div>
+          </div>
+          <div class="leave-chip">
+            <div class="k">Rămase</div>
+            <div class="v">{{ leave_balance.remaining }}</div>
+          </div>
+        </div>
+      </section>
+
+      <div class="profile-card">
+        <button class="edit-btn" type="button" onclick="openEditModal()">Edit Profile</button>
+
+        <h2 class="section-title">About</h2>
+        <p class="about-text">
+          {{ profile.about|default:"Completează o descriere despre tine." }}
+        </p>
+
+        <h2 class="section-title">Experience</h2>
+        {% if profile.experience %}
+        <p class="about-text">{{ profile.experience|linebreaksbr }}</p>
+        {% else %}
+        <p class="about-text">Adaugă experiența ta.</p>
+        {% endif %}
+
+        <h2 class="section-title">Education</h2>
+        {% if profile.education %}
+        <p class="about-text">{{ profile.education|linebreaksbr }}</p>
+        {% else %}
+        <p class="about-text">Adaugă educația ta.</p>
+        {% endif %}
+
+        <h2 class="section-title">Skills & Languages</h2>
+        <div class="tag-list">
+          {% if skills_list %}
+            {% for sk in skills_list %}
+              <span class="tag">{{ sk }}</span>
+            {% endfor %}
+          {% endif %}
+          {% if languages_list %}
+            {% for lg in languages_list %}
+              <span class="tag">{{ lg }}</span>
+            {% endfor %}
+          {% endif %}
+          {% if not skills_list and not languages_list %}
+            <p class="about-text">Adaugă skill-urile și limbile pe care le cunoști.</p>
+          {% endif %}
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+</div>
+
+<!-- Modal Edit Profile -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="modal-header">
+          <h2 class="modal-title">Edit Profile</h2>
+          <button class="modal-close" type="button" onclick="closeEditModal()">×</button>
+        </div>
+
+        <div class="photo-upload">
+          {% if profile and profile.avatar %}
+            <img id="previewPhoto" class="current-photo" src="{{ profile.avatar.url }}" alt="{{ user.username }}">
+          {% else %}
+            <div id="previewPhoto" class="current-photo">{{ user.username|first|upper }}</div>
+          {% endif %}
+          <label for="photoInput" class="upload-btn">Change Photo</label>
+          <input type="file" name="avatar" id="photoInput" class="file-input" accept="image/*" onchange="previewImage(event)">
+        </div>
+
+        <div class="form-grid">
+          <div>
+            <div class="form-group">
+              <label>Full Name</label>
+              <input type="text" name="full_name" value="{{ profile.full_name|default:user.get_full_name|default:user.username }}">
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" name="email" value="{{ user.email }}">
+            </div>
+            <div class="form-group">
+              <label>Function / Position</label>
+              <input id="functionInput" type="text" name="function" value="{{ profile.function }}">
+            </div>
+            <div class="form-group">
+              <label>About Me</label>
+              <textarea rows="5" name="about">{{ profile.about }}</textarea>
+            </div>
+          </div>
+
+          <div>
+            <div class="form-group">
+              <label>Languages</label>
+              <textarea rows="3" name="languages">{{ profile.languages }}</textarea>
+            </div>
+            <div class="form-group">
+              <label>Skills (comma separated)</label>
+              <textarea rows="3" name="skills">{{ profile.skills }}</textarea>
+            </div>
+          </div>
+        </div>
+
+        <h3 style="margin:32px 0 16px; font-size:1.4rem;">Experience</h3>
+        <div class="form-group">
+          <textarea rows="6" name="experience">{{ profile.experience }}</textarea>
+        </div>
+
+        <h3 style="margin:32px 0 16px; font-size:1.4rem;">Education</h3>
+        <div class="form-group">
+          <textarea rows="4" name="education">{{ profile.education }}</textarea>
+        </div>
+
+        <div style="margin-top:40px; text-align:right;">
+          <button type="button" onclick="closeEditModal()" style="padding:12px 28px; background:#f1f5f9; color:#64748b; border:none; border-radius:10px; margin-right:16px; cursor:pointer;">Cancel</button>
+          <button type="submit" class="save-btn" style="padding:12px 28px; background:#2563eb; color:white; border:none; border-radius:10px; font-weight:600; cursor:pointer;">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<script>
+  function openEditModal() {
+    const m = document.getElementById('editModal');
+    if (m) {
+      m.style.display = 'block';
+      m.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  function closeEditModal() {
+    document.getElementById('editModal').style.display = 'none';
+  }
+
+  function openFunctionEditor() {
+    openEditModal();
+    setTimeout(() => {
+      const input = document.getElementById('functionInput');
+      if (input) {
+        input.focus();
+        input.select();
+      }
+    }, 120);
+  }
+
+  function previewImage(event) {
+    const reader = new FileReader();
+    reader.onload = function() {
+      document.getElementById('previewPhoto').src = reader.result;
+    }
+    reader.readAsDataURL(event.target.files[0]);
+  }
+
+  function saveProfile() {
+    alert('Profil salvat cu succes! (În realitate se trimite către server)');
+    closeEditModal();
+  }
+
+  function toggleTheme() {
+    document.body.toggleAttribute('data-theme', document.body.getAttribute('data-theme') !== 'dark');
+  }
+
+  window.onclick = function(e) {
+    // no backdrop now
+  }
+</script>
+
+</body>
+</html>
