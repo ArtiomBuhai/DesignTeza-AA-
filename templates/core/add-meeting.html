@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="ro">
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Add a meeting - Panel</title>
+  <title>{% trans "Adaugă meeting" %} - {% trans "Panel" %}</title>
   <style>
     * {
       margin: 0;
@@ -295,16 +297,16 @@
   <!-- Sidebar -->
   <aside class="sidebar">
     <div class="sidebar-logo">
-      <a href="{% url 'home' %}" style="text-decoration:none;color:#2563eb;">Panel</a>
+      <a href="{% url 'home' %}" style="text-decoration:none;color:#2563eb;">{% trans "Panel" %}</a>
     </div>
 
     <nav class="sidebar-nav">
-      <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Dashboard</a>
-      <a href="{% url 'tasks' %}" class="{% if request.resolver_match.url_name == 'tasks' %}active{% endif %}">Tasks</a>
-      <a href="{% url 'calendar' %}" class="{% if request.resolver_match.url_name == 'calendar' %}active{% endif %}">Calendar</a>
-      <a href="{% url 'team' %}" class="{% if request.resolver_match.url_name == 'team' %}active{% endif %}">Team</a>
-      <a href="{% url 'chat' %}" class="{% if request.resolver_match.url_name == 'chat' %}active{% endif %}">Chat</a>
-      <a href="{% url 'profile' %}" class="{% if request.resolver_match.url_name == 'profile' %}active{% endif %}">Profile</a>
+      <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">{% trans "Panou" %}</a>
+      <a href="{% url 'tasks' %}" class="{% if request.resolver_match.url_name == 'tasks' %}active{% endif %}">{% trans "Taskuri" %}</a>
+      <a href="{% url 'calendar' %}" class="{% if request.resolver_match.url_name == 'calendar' %}active{% endif %}">{% trans "Calendar" %}</a>
+      <a href="{% url 'team' %}" class="{% if request.resolver_match.url_name == 'team' %}active{% endif %}">{% trans "Echipă" %}</a>
+      <a href="{% url 'chat' %}" class="{% if request.resolver_match.url_name == 'chat' %}active{% endif %}">{% trans "Chat" %}</a>
+      <a href="{% url 'profile' %}" class="{% if request.resolver_match.url_name == 'profile' %}active{% endif %}">{% trans "Profil" %}</a>
     </nav>
   </aside>
 
@@ -315,12 +317,13 @@
     <!-- Header -->
     <header class="header">
       <div class="header-left">
-        <h2>Today</h2>
+        <h2>{% trans "Astăzi" %}</h2>
         <p class="date">{% now "l, d F, Y" %}</p>
       </div>
 
       <div class="header-right">
         {% include 'core/_header_search.html' %}
+        {% include 'core/_language_select.html' %}
         <div class="user-info">
           <div class="avatar">
             {% if user.profile.avatar %}
@@ -330,7 +333,7 @@
             {% endif %}
           </div>
           <span>@{{ user.username }}</span>
-          <a href="{% url 'logout' %}" style="margin-left:12px; color:#2563eb; font-weight:600; text-decoration:none;">Logout</a>
+          <a href="{% url 'logout' %}" style="margin-left:12px; color:#2563eb; font-weight:600; text-decoration:none;">{% trans "Ieșire" %}</a>
         </div>
       </div>
     </header>
@@ -338,40 +341,40 @@
     <!-- Add meeting -->
     <section class="add-meeting-section">
       <div class="add-header">
-        <h2>Add a meeting</h2>
-        <a class="back-btn" href="{% url 'home' %}">Return to Dashboard</a>
+        <h2>{% trans "Adaugă meeting" %}</h2>
+        <a class="back-btn" href="{% url 'home' %}">{% trans "Înapoi la panou" %}</a>
       </div>
 
       <div class="form-calendar-wrapper">
         <form class="add-form" method="post">
           {% csrf_token %}
           <div class="form-group">
-            <label>Title</label>
-            <input type="text" name="title" placeholder="e.g. Full company meeting" required>
+            <label>{% trans "Titlu" %}</label>
+            <input type="text" name="title" placeholder="{% trans 'ex: Ședință generală' %}" required>
           </div>
 
           <div class="form-row">
             <div class="form-group">
-              <label>Date</label>
-              <input type="date" name="date" required>
+              <label>{% trans "Data" %}</label>
+              <input type="date" name="date" lang="{{ LANGUAGE_CODE }}" required>
             </div>
             <div class="form-group">
-              <label>Time</label>
+              <label>{% trans "Ora" %}</label>
               <input type="time" name="time">
             </div>
           </div>
 
           <div class="form-group">
-            <label>Participants</label>
-            <input type="text" name="participants" placeholder="Search or add people (e.g. Ana, Daniel, etc.)">
+            <label>{% trans "Participanți" %}</label>
+            <input type="text" name="participants" placeholder="{% trans 'Caută sau adaugă persoane (ex: Ana, Daniel, etc.)' %}">
           </div>
 
           <div class="form-group">
-            <label>Description</label>
-            <textarea name="description" placeholder="Meeting details, agenda, location..."></textarea>
+            <label>{% trans "Descriere" %}</label>
+            <textarea name="description" placeholder="{% trans 'Detalii meeting, agendă, locație...' %}"></textarea>
           </div>
 
-          <button type="submit" class="add-meeting-btn">Add meeting</button>
+          <button type="submit" class="add-meeting-btn">{% trans "Adaugă meeting" %}</button>
         </form>
 
         <!-- Calendar în dreapta -->

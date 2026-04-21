@@ -1,10 +1,11 @@
-{% load static %}
+{% load static i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login to the panel</title>
+  <title>{% trans "Autentificare în panel" %}</title>
   <link rel="stylesheet" href="{% static 'css/style.css' %}" />
 </head>
 <body>
@@ -13,42 +14,43 @@
     <div class="auth-card">
 
       <h1 id="page-title">
-        Please sign in to access<br>the <span>administrative panel</span>
+        {% trans "Te rugăm să te autentifici pentru a accesa" %}<br>
+        {% trans "panoul" %} <span>{% trans "administrativ" %}</span>
       </h1>
 
       {% if form.errors %}
-        <p style="color:red; text-align:center; margin-bottom:16px;">Username sau parolă greșită.</p>
+        <p style="color:red; text-align:center; margin-bottom:16px;">{% trans "Username sau parolă greșită." %}</p>
       {% endif %}
 
       <div class="role-toggle">
-        <button class="role-btn {% if False %}active{% endif %}" data-role="admin">Login as admin</button>
-        <button class="role-btn active" data-role="worker">Login as worker</button>
+        <button class="role-btn {% if False %}active{% endif %}" data-role="admin">{% trans "Autentificare admin" %}</button>
+        <button class="role-btn active" data-role="worker">{% trans "Autentificare worker" %}</button>
       </div>
 
       <form method="post" action="{% url 'login' %}">{% csrf_token %}
         <input type="hidden" name="next" value="{{ next|default:'/team/' }}" />
 
         <div class="form-group">
-          <label>Username or Email</label>
+          <label>{% trans "Username sau Email" %}</label>
           <input type="text" name="username" placeholder="adely.design@gmail.com" required autofocus />
         </div>
 
         <div class="form-group password-group">
-          <label>Password</label>
+          <label>{% trans "Parolă" %}</label>
           <input type="password" name="password" placeholder="••••••••••••••" required />
-          <a href="#" class="forgot-link">Forgot Password?</a>
+          <a href="#" class="forgot-link">{% trans "Ai uitat parola?" %}</a>
         </div>
 
         <div class="checkbox-row">
           <input type="checkbox" id="remember" name="remember" checked />
-          <label for="remember">Remember me</label>
+          <label for="remember">{% trans "Ține-mă minte" %}</label>
         </div>
 
-        <button type="submit" class="login-btn">Login</button>
+        <button type="submit" class="login-btn">{% trans "Autentificare" %}</button>
       </form>
 
       <p class="footer-link">
-        Don't have an account? <a href="{% url 'signup' %}">Sign up</a>
+        {% trans "Nu ai cont?" %} <a href="{% url 'signup' %}">{% trans "Înregistrare" %}</a>
       </p>
 
     </div>
@@ -56,8 +58,8 @@
 
   <script>
     const titleEl = document.getElementById('page-title');
-    const adminText = 'Please sign in to access<br>the <span>administrative panel</span>';
-    const workerText = 'Please sign in to access<br>the <span>panel</span>';
+    const adminText = '{% trans "Te rugăm să te autentifici pentru a accesa" %}<br>{% trans "panoul" %} <span>{% trans "administrativ" %}</span>';
+    const workerText = '{% trans "Te rugăm să te autentifici pentru a accesa" %}<br>{% trans "panoul" %} <span>{% trans "panel" %}</span>';
 
     document.querySelectorAll('.role-btn').forEach(btn => {
       btn.addEventListener('click', () => {

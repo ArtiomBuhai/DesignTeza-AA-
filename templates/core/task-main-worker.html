@@ -1,10 +1,11 @@
-{% load static %}
+{% load static i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Tasks - Worker</title>
+  <title>{% trans "Taskuri" %} - {% trans "Worker" %}</title>
   <style>
     * {
       margin: 0;
@@ -276,12 +277,12 @@
       </a>
 
     <nav class="sidebar-nav">
-      <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Dashboard</a>
-      <a href="{% url 'tasks' %}" class="{% if request.resolver_match.url_name == 'tasks' %}active{% endif %}">Tasks</a>
-      <a href="{% url 'calendar' %}" class="{% if request.resolver_match.url_name == 'calendar' %}active{% endif %}">Calendar</a>
-      <a href="{% url 'team' %}" class="{% if request.resolver_match.url_name == 'team' %}active{% endif %}">Team</a>
-      <a href="{% url 'chat' %}" class="{% if request.resolver_match.url_name == 'chat' %}active{% endif %}">Chat</a>
-      <a href="{% url 'profile' %}" class="{% if request.resolver_match.url_name == 'profile' %}active{% endif %}">Profile</a>
+      <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">{% trans "Panou" %}</a>
+      <a href="{% url 'tasks' %}" class="{% if request.resolver_match.url_name == 'tasks' %}active{% endif %}">{% trans "Taskuri" %}</a>
+      <a href="{% url 'calendar' %}" class="{% if request.resolver_match.url_name == 'calendar' %}active{% endif %}">{% trans "Calendar" %}</a>
+      <a href="{% url 'team' %}" class="{% if request.resolver_match.url_name == 'team' %}active{% endif %}">{% trans "Echipă" %}</a>
+      <a href="{% url 'chat' %}" class="{% if request.resolver_match.url_name == 'chat' %}active{% endif %}">{% trans "Chat" %}</a>
+      <a href="{% url 'profile' %}" class="{% if request.resolver_match.url_name == 'profile' %}active{% endif %}">{% trans "Profil" %}</a>
     </nav>
   </aside>
 
@@ -292,12 +293,13 @@
     <!-- Header -->
     <header class="header">
       <div class="header-left">
-        <h2>Today</h2>
+        <h2>{% trans "Astăzi" %}</h2>
         <p class="date">{% now "l, d F, Y" %}</p>
       </div>
 
       <div class="header-right">
         {% include 'core/_header_search.html' %}
+        {% include 'core/_language_select.html' %}
         <div class="user-info">
           <div class="avatar">
             {% if user.profile.avatar %}
@@ -307,7 +309,7 @@
             {% endif %}
           </div>
           <span>@{{ user.username }}</span>
-          <a href="{% url 'logout' %}" style="margin-left:12px; color:#2563eb; font-weight:600; text-decoration:none;">Logout</a>
+          <a href="{% url 'logout' %}" style="margin-left:12px; color:#2563eb; font-weight:600; text-decoration:none;">{% trans "Ieșire" %}</a>
         </div>
       </div>
     </header>
@@ -318,44 +320,44 @@
       <form method="post" action="{% url 'tasks' %}" style="display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;">
         {% csrf_token %}
         <div style="flex:1;min-width:180px;">
-          <label style="display:block;font-weight:600;margin-bottom:6px;">Title</label>
-          <input name="title" required placeholder="Task title" style="width:100%;padding:10px 12px;border:1px solid #d1d5db;border-radius:10px;">
+          <label style="display:block;font-weight:600;margin-bottom:6px;">{% trans "Titlu" %}</label>
+          <input name="title" required placeholder="{% trans 'Titlu task' %}" style="width:100%;padding:10px 12px;border:1px solid #d1d5db;border-radius:10px;">
         </div>
         <div style="flex:1;min-width:180px;">
-          <label style="display:block;font-weight:600;margin-bottom:6px;">Due date</label>
-          <input type="date" name="due_date" style="width:100%;padding:10px 12px;border:1px solid #d1d5db;border-radius:10px;">
+          <label style="display:block;font-weight:600;margin-bottom:6px;">{% trans "Termen limită" %}</label>
+          <input type="date" name="due_date" lang="{{ LANGUAGE_CODE }}" style="width:100%;padding:10px 12px;border:1px solid #d1d5db;border-radius:10px;">
         </div>
         <div style="min-width:140px;">
-          <label style="display:block;font-weight:600;margin-bottom:6px;">Status</label>
+          <label style="display:block;font-weight:600;margin-bottom:6px;">{% trans "Status" %}</label>
           <select name="status" style="padding:10px 12px;border:1px solid #d1d5db;border-radius:10px;">
-            <option value="todo">To Do</option>
-            <option value="revision">In Revision</option>
-            <option value="done">Done</option>
+            <option value="todo">{% trans "De făcut" %}</option>
+            <option value="revision">{% trans "În revizie" %}</option>
+            <option value="done">{% trans "Finalizat" %}</option>
           </select>
         </div>
         <div style="min-width:140px;">
-          <label style="display:block;font-weight:600;margin-bottom:6px;">Priority</label>
+          <label style="display:block;font-weight:600;margin-bottom:6px;">{% trans "Prioritate" %}</label>
           <select name="priority" style="padding:10px 12px;border:1px solid #d1d5db;border-radius:10px;">
-            <option value="low">Low</option>
-            <option value="medium" selected>Medium</option>
-            <option value="high">High</option>
+            <option value="low">{% trans "Scăzută" %}</option>
+            <option value="medium" selected>{% trans "Medie" %}</option>
+            <option value="high">{% trans "Ridicată" %}</option>
           </select>
         </div>
         <div style="min-width:160px;">
-          <label style="display:block;font-weight:600;margin-bottom:6px;">Assignee</label>
+          <label style="display:block;font-weight:600;margin-bottom:6px;">{% trans "Responsabil" %}</label>
           <select name="assignee" style="padding:10px 12px;border:1px solid #d1d5db;border-radius:10px;">
-            <option value="">Unassigned</option>
+            <option value="">{% trans "Neasignat" %}</option>
             {% for u in users %}
             <option value="{{ u.id }}"{% if u.id == user.id %} selected{% endif %}>{{ u.username }}</option>
             {% endfor %}
           </select>
         </div>
         <div style="flex:1 1 100%;">
-          <label style="display:block;font-weight:600;margin:10px 0 6px;">Description</label>
-          <textarea name="description" rows="2" placeholder="Optional details" style="width:100%;padding:10px 12px;border:1px solid #d1d5db;border-radius:10px;"></textarea>
+          <label style="display:block;font-weight:600;margin:10px 0 6px;">{% trans "Descriere" %}</label>
+          <textarea name="description" rows="2" placeholder="{% trans 'Detalii opționale' %}" style="width:100%;padding:10px 12px;border:1px solid #d1d5db;border-radius:10px;"></textarea>
         </div>
         <div>
-          <button type="submit" class="add-submission-btn">Add task</button>
+          <button type="submit" class="add-submission-btn">{% trans "Adaugă task" %}</button>
         </div>
       </form>
     </section>
@@ -367,120 +369,124 @@
         <!-- TO DO -->
         <div class="column">
           <div class="column-header">
-            <h3 class="column-title">TO DO</h3>
+            <h3 class="column-title">{% trans "DE FĂCUT" %}</h3>
             <span class="task-count">{{ tasks_by_status.todo|length }}</span>
           </div>
           {% for task in tasks_by_status.todo %}
           <div class="task-card">
             <div class="task-text">{{ task.title }}</div>
-            {% if task.description %}<div class="task-warning">{{ task.description }}</div>{% endif %}
+            {% if task.display_description %}<div class="task-warning">{{ task.display_description }}</div>{% endif %}
+            {% if task.display_technologies %}<div class="task-warning">{% trans "Tehnologii" %}: {{ task.display_technologies }}</div>{% endif %}
             <div class="task-warning" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
               {% if task.assignee %}<span class="in-revision" style="background:#eef2ff;color:#2563eb;">@{{ task.assignee.username }}</span>{% endif %}
-              {% if task.due_date %}<span class="in-revision" style="background:#e0f2fe;color:#0f172a;">{{ task.due_date }}</span>{% endif %}
+              {% if task.due_date %}<span class="in-revision" style="background:#e0f2fe;color:#0f172a;">{{ task.due_date|date:"d.m.Y" }}</span>{% endif %}
               <span class="in-revision" style="background:#f1f5f9;color:#475569;">{{ task.get_priority_display }}</span>
             </div>
             {% with task.submissions.all as subs %}
             <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
               {% if subs %}
-                <a href="{% url 'see_submission' task.id %}" class="add-submission-btn" style="padding:8px 12px; font-size:0.9rem; background:#0ea5e9;">See submission</a>
+                <a href="{% url 'see_submission' task.id %}" class="add-submission-btn" style="padding:8px 12px; font-size:0.9rem; background:#0ea5e9;">{% trans "Vezi predarea" %}</a>
               {% else %}
-                <a href="{% url 'add_submission' task.id %}" class="add-submission-btn" style="padding:8px 12px; font-size:0.9rem;">Add submission</a>
+                <a href="{% url 'add_submission' task.id %}" class="add-submission-btn" style="padding:8px 12px; font-size:0.9rem;">{% trans "Adaugă predare" %}</a>
               {% endif %}
             </div>
             {% include 'core/_task_comments.html' with task=task %}
             {% endwith %}
           </div>
-          {% empty %}<p style="color:#94a3b8;">No tasks</p>{% endfor %}
+          {% empty %}<p style="color:#94a3b8;">{% trans "Nu există taskuri" %}</p>{% endfor %}
         </div>
 
         <!-- IN REVISION -->
         <div class="column">
           <div class="column-header">
-            <h3 class="column-title">IN REVISION</h3>
+            <h3 class="column-title">{% trans "ÎN REVIZIE" %}</h3>
             <span class="task-count">{{ tasks_by_status.revision|length }}</span>
           </div>
           {% for task in tasks_by_status.revision %}
           <div class="task-card">
             <div class="task-text">{{ task.title }}</div>
-            {% if task.description %}<div class="task-warning">{{ task.description }}</div>{% endif %}
-            <span class="in-revision">In revision</span>
+            {% if task.display_description %}<div class="task-warning">{{ task.display_description }}</div>{% endif %}
+            {% if task.display_technologies %}<div class="task-warning">{% trans "Tehnologii" %}: {{ task.display_technologies }}</div>{% endif %}
+            <span class="in-revision">{% trans "În revizie" %}</span>
             <div class="task-warning" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
               {% if task.assignee %}<span class="in-revision" style="background:#eef2ff;color:#2563eb;">@{{ task.assignee.username }}</span>{% endif %}
-              {% if task.due_date %}<span class="in-revision" style="background:#e0f2fe;color:#0f172a;">{{ task.due_date }}</span>{% endif %}
+              {% if task.due_date %}<span class="in-revision" style="background:#e0f2fe;color:#0f172a;">{{ task.due_date|date:"d.m.Y" }}</span>{% endif %}
               <span class="in-revision" style="background:#f1f5f9;color:#475569;">{{ task.get_priority_display }}</span>
             </div>
             {% with submitted=task.submissions.all %}
             <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
               {% if submitted|length %}
-                <a href="{% url 'see_submission' task.id %}" class="add-submission-btn" style="padding:8px 12px; font-size:0.9rem; background:#0ea5e9;">See submission</a>
+                <a href="{% url 'see_submission' task.id %}" class="add-submission-btn" style="padding:8px 12px; font-size:0.9rem; background:#0ea5e9;">{% trans "Vezi predarea" %}</a>
               {% else %}
-                <a href="{% url 'add_submission' task.id %}" class="add-submission-btn" style="padding:8px 12px; font-size:0.9rem;">Add submission</a>
+                <a href="{% url 'add_submission' task.id %}" class="add-submission-btn" style="padding:8px 12px; font-size:0.9rem;">{% trans "Adaugă predare" %}</a>
               {% endif %}
             </div>
             {% include 'core/_task_comments.html' with task=task %}
             {% endwith %}
           </div>
-          {% empty %}<p style="color:#94a3b8;">No tasks</p>{% endfor %}
+          {% empty %}<p style="color:#94a3b8;">{% trans "Nu există taskuri" %}</p>{% endfor %}
         </div>
 
         <!-- DONE -->
         <div class="column">
           <div class="column-header">
-            <h3 class="column-title">DONE</h3>
+            <h3 class="column-title">{% trans "FINALIZATE" %}</h3>
             <span class="task-count">{{ tasks_by_status.done|length }}</span>
           </div>
           {% for task in tasks_by_status.done %}
           <div class="task-card">
             <div class="task-text">{{ task.title }}</div>
-            {% if task.description %}<div class="task-warning">{{ task.description }}</div>{% endif %}
-            <button class="complete-btn">Complete</button>
+            {% if task.display_description %}<div class="task-warning">{{ task.display_description }}</div>{% endif %}
+            {% if task.display_technologies %}<div class="task-warning">{% trans "Tehnologii" %}: {{ task.display_technologies }}</div>{% endif %}
+            <button class="complete-btn">{% trans "Finalizat" %}</button>
             <div class="task-warning" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
               {% if task.assignee %}<span class="in-revision" style="background:#eef2ff;color:#2563eb;">@{{ task.assignee.username }}</span>{% endif %}
-              {% if task.due_date %}<span class="in-revision" style="background:#e0f2fe;color:#0f172a;">{{ task.due_date }}</span>{% endif %}
+              {% if task.due_date %}<span class="in-revision" style="background:#e0f2fe;color:#0f172a;">{{ task.due_date|date:"d.m.Y" }}</span>{% endif %}
               <span class="in-revision" style="background:#f1f5f9;color:#475569;">{{ task.get_priority_display }}</span>
             </div>
             {% with submitted=task.submissions.all %}
             <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
               {% if submitted|length %}
-                <a href="{% url 'see_submission' task.id %}" class="add-submission-btn" style="padding:8px 12px; font-size:0.9rem; background:#0ea5e9;">See submission</a>
+                <a href="{% url 'see_submission' task.id %}" class="add-submission-btn" style="padding:8px 12px; font-size:0.9rem; background:#0ea5e9;">{% trans "Vezi predarea" %}</a>
               {% else %}
-                <a href="{% url 'add_submission' task.id %}" class="add-submission-btn" style="padding:8px 12px; font-size:0.9rem;">Add submission</a>
+                <a href="{% url 'add_submission' task.id %}" class="add-submission-btn" style="padding:8px 12px; font-size:0.9rem;">{% trans "Adaugă predare" %}</a>
               {% endif %}
             </div>
             {% include 'core/_task_comments.html' with task=task %}
             {% endwith %}
           </div>
-          {% empty %}<p style="color:#94a3b8;">No tasks</p>{% endfor %}
+          {% empty %}<p style="color:#94a3b8;">{% trans "Nu există taskuri" %}</p>{% endfor %}
         </div>
 
         <!-- ARCHIVED -->
         <div class="column">
           <div class="column-header">
-            <h3 class="column-title">ARCHIVED</h3>
+            <h3 class="column-title">{% trans "ARHIVATE" %}</h3>
             <span class="task-count">{{ tasks_by_status.archived|length }}</span>
           </div>
           {% for task in tasks_by_status.archived %}
           <div class="task-card">
             <div class="task-text">{{ task.title }}</div>
-            {% if task.description %}<div class="task-warning">{{ task.description }}</div>{% endif %}
-            <span class="in-revision" style="background:#e2e8f0;color:#475569;">Archived</span>
+            {% if task.display_description %}<div class="task-warning">{{ task.display_description }}</div>{% endif %}
+            {% if task.display_technologies %}<div class="task-warning">{% trans "Tehnologii" %}: {{ task.display_technologies }}</div>{% endif %}
+            <span class="in-revision" style="background:#e2e8f0;color:#475569;">{% trans "Arhivat" %}</span>
             <div class="task-warning" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
               {% if task.assignee %}<span class="in-revision" style="background:#eef2ff;color:#2563eb;">@{{ task.assignee.username }}</span>{% endif %}
-              {% if task.due_date %}<span class="in-revision" style="background:#e0f2fe;color:#0f172a;">{{ task.due_date }}</span>{% endif %}
+              {% if task.due_date %}<span class="in-revision" style="background:#e0f2fe;color:#0f172a;">{{ task.due_date|date:"d.m.Y" }}</span>{% endif %}
               <span class="in-revision" style="background:#f1f5f9;color:#475569;">{{ task.get_priority_display }}</span>
             </div>
             {% with submitted=task.submissions.all %}
             <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
               {% if submitted|length %}
-                <a href="{% url 'see_submission' task.id %}" class="add-submission-btn" style="padding:8px 12px; font-size:0.9rem; background:#0ea5e9;">See submission</a>
+                <a href="{% url 'see_submission' task.id %}" class="add-submission-btn" style="padding:8px 12px; font-size:0.9rem; background:#0ea5e9;">{% trans "Vezi predarea" %}</a>
               {% else %}
-                <a href="{% url 'add_submission' task.id %}" class="add-submission-btn" style="padding:8px 12px; font-size:0.9rem;">Add submission</a>
+                <a href="{% url 'add_submission' task.id %}" class="add-submission-btn" style="padding:8px 12px; font-size:0.9rem;">{% trans "Adaugă predare" %}</a>
               {% endif %}
             </div>
             {% include 'core/_task_comments.html' with task=task %}
             {% endwith %}
           </div>
-          {% empty %}<p style="color:#94a3b8;">No tasks</p>{% endfor %}
+          {% empty %}<p style="color:#94a3b8;">{% trans "Nu există taskuri" %}</p>{% endfor %}
         </div>
       </div>
     </section>

@@ -1,9 +1,11 @@
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Open Task - Panel</title>
+  <title>{% trans "Task deschis" %} - {% trans "Panel" %}</title>
   <style>
     * {
       margin: 0;
@@ -300,16 +302,16 @@
   <!-- Sidebar -->
   <aside class="sidebar">
     <div class="sidebar-logo">
-      Panel
+      {% trans "Panel" %}
     </div>
 
     <nav class="sidebar-nav">
-      <a href="dashboard.html">Dashboard</a>
-      <a href="#" class="active">Tasks</a>
-      <a href="#">Calendar</a>
-      <a href="#">Team</a>
-      <a href="#">Chat</a>
-      <a href="#">Profile</a>
+      <a href="dashboard.html">{% trans "Panou" %}</a>
+      <a href="#" class="active">{% trans "Taskuri" %}</a>
+      <a href="#">{% trans "Calendar" %}</a>
+      <a href="#">{% trans "Echipă" %}</a>
+      <a href="#">{% trans "Chat" %}</a>
+      <a href="#">{% trans "Profil" %}</a>
     </nav>
   </aside>
 
@@ -319,14 +321,15 @@
     <!-- Header -->
     <header class="header">
       <div class="header-left">
-        <h2>Today</h2>
-        <p class="date">Wednesday, 10 November, 2025</p>
+        <h2>{% trans "Astăzi" %}</h2>
+        <p class="date">{% trans "Miercuri, 10 Noiembrie, 2025" %}</p>
       </div>
 
       <div class="header-right">
         <div class="search-bar">
-          <input type="text" placeholder="Search people">
+          <input type="text" placeholder="{% trans 'Caută persoane' %}">
         </div>
+        {% include 'core/_language_select.html' %}
         <div class="user-info">
           <div class="avatar">A</div>
           <span>@AdeliUser</span>
@@ -338,53 +341,53 @@
     <section class="task-info-card">
       <div class="task-title-wrapper">
         <span class="back-arrow" onclick="history.back()">←</span>
-        <h2 class="task-title">Tasks INFORMATION</h2>
+        <h2 class="task-title">{% trans "Informații task" %}</h2>
       </div>
 
       <div class="task-actions">
-        <button class="ask-btn">Ask questions to manager</button>
-        <button class="add-submission-btn">Add submission</button>
+        <button class="ask-btn">{% trans "Întreabă managerul" %}</button>
+        <button class="add-submission-btn">{% trans "Adaugă predare" %}</button>
       </div>
 
       <div class="task-description">
-        Write a mail to see how much works to those people near the other company
+        {% trans "Scrie un email pentru a afla cât lucrează oamenii din compania parteneră." %}
       </div>
 
       <div class="task-warning">
-        This must contain: adress, work, any other information...
-        This must contain: adress, work, any other information...
-        This must contain: adress, work, any other information...
+        {% trans "Trebuie să conțină: adresă, lucru, orice altă informație..." %}
+        {% trans "Trebuie să conțină: adresă, lucru, orice altă informație..." %}
+        {% trans "Trebuie să conțină: adresă, lucru, orice altă informație..." %}
       </div>
 
       <div class="task-detail">
         <div class="task-detail-item">
-          <h4>People in the project</h4>
+          <h4>{% trans "Oameni în proiect" %}</h4>
           <p>Anna Maria, Valerie</p>
         </div>
 
         <div class="task-detail-item">
-          <h4>Project requires</h4>
+          <h4>{% trans "Proiectul necesită" %}</h4>
           <p>HTML, SQL, DATABASE</p>
         </div>
 
         <div class="task-detail-item">
-          <h4>Manager of the project</h4>
+          <h4>{% trans "Managerul proiectului" %}</h4>
           <p>Ana Maria</p>
         </div>
 
         <div class="task-detail-item">
-          <h4>Start Date → Due Date</h4>
+          <h4>{% trans "Data start → Data limită" %}</h4>
           <p>5 Nov → 25 Nov</p>
         </div>
       </div>
 
       <!-- Comments -->
       <div class="comments-section">
-        <h3>Comments</h3>
+        <h3>{% trans "Comentarii" %}</h3>
 
         <div class="comment-form">
-          <input type="text" placeholder="Write a comment...">
-          <button>Send</button>
+          <input type="text" placeholder="{% trans 'Scrie un comentariu...' %}">
+          <button>{% trans "Trimite" %}</button>
         </div>
       </div>
     </section>

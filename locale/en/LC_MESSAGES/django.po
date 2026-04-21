@@ -1,0 +1,2395 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-15 13:24+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: core/models.py:29 templates/core/task-main-worker.html:333
+#: templates/core/tasks-admin.html:208
+msgid "De făcut"
+msgstr "To Do"
+
+#: core/models.py:30 templates/core/task-main-worker.html:334
+#: templates/core/task-main-worker.html:410 templates/core/tasks-admin.html:209
+msgid "În revizie"
+msgstr "In Revision"
+
+#: core/models.py:31 templates/core/projects.html:383
+#: templates/core/task-main-worker.html:335
+#: templates/core/task-main-worker.html:441
+msgid "Finalizat"
+msgstr "Done"
+
+#: core/models.py:32 templates/core/task-main-worker.html:472
+#: templates/core/tasks-admin.html:249
+msgid "Arhivat"
+msgstr "Archived"
+
+#: core/models.py:35 templates/core/task-main-worker.html:341
+msgid "Scăzută"
+msgstr "Low"
+
+#: core/models.py:36 templates/core/task-main-worker.html:342
+msgid "Medie"
+msgstr "Medium"
+
+#: core/models.py:37 templates/core/task-main-worker.html:343
+msgid "Ridicată"
+msgstr "High"
+
+#: core/models.py:72
+msgid "Termen în 24h"
+msgstr "Due in 24h"
+
+#: core/models.py:73
+msgid "Termen astăzi"
+msgstr "Due today"
+
+#: core/models.py:74
+msgid "Întârziat"
+msgstr "Overdue"
+
+#: core/models.py:93
+msgid "Grup"
+msgstr "Group"
+
+#: core/models.py:94
+msgid "Direct"
+msgstr "Direct"
+
+#: core/models.py:175 core/models.py:230
+#: templates/core/calendar-worker-pending.html:499
+#: templates/core/profile-worker.html:475
+msgid "În așteptare"
+msgstr "Pending"
+
+#: core/models.py:176 core/models.py:231
+msgid "Aprobat"
+msgstr "Approved"
+
+#: core/models.py:177 core/models.py:232
+msgid "Respins"
+msgstr "Rejected"
+
+#: core/models.py:196 templates/core/add-meeting.html:308
+#: templates/core/add-submission.html:275 templates/core/base.html:299
+#: templates/core/calendar-admin.html:323
+#: templates/core/calendar-holiday-requests-admin.html:437
+#: templates/core/calendar-info-admin.html:118
+#: templates/core/calendar-info-worker.html:205
+#: templates/core/calendar-see-holidays-request-admin.html:270
+#: templates/core/calendar-worker-pending.html:425
+#: templates/core/calendar-worker.html:335 templates/core/chat.html:594
+#: templates/core/dashboard.html:327 templates/core/open-task-ask-chat.html:383
+#: templates/core/open-task-worker.html:313
+#: templates/core/profile-admin.html:320 templates/core/profile-public.html:53
+#: templates/core/profile-worker.html:416 templates/core/projects.html:300
+#: templates/core/see-completed-submission-admin.html:371
+#: templates/core/see-completed-submission.html:279
+#: templates/core/see-submission.html:262
+#: templates/core/submissions-admin.html:64
+#: templates/core/task-main-worker.html:284 templates/core/tasks-admin.html:112
+#: templates/core/team-filter.html:355
+msgid "Chat"
+msgstr "Chat"
+
+#: core/models.py:197 templates/core/submissions-admin.html:95
+msgid "Task"
+msgstr "Task"
+
+#: core/models.py:198 templates/core/calendar-holiday-requests-admin.html:484
+#: templates/core/dashboard.html:451
+msgid "Concediu"
+msgstr "Leave"
+
+#: core/models.py:199
+msgid "Altul"
+msgstr "Other"
+
+#: core/models.py:218 templates/core/calendar-info-admin.html:152
+msgid "Concediu de odihnă anual"
+msgstr "Annual leave"
+
+#: core/models.py:219
+msgid "Concediu medical"
+msgstr "Medical leave"
+
+#: core/models.py:220
+msgid "Concediu de maternitate"
+msgstr "Maternity leave"
+
+#: core/models.py:221
+msgid "Concediu paternal"
+msgstr "Paternity leave"
+
+#: core/models.py:222
+msgid "Concediu de studii"
+msgstr "Study leave"
+
+#: core/models.py:223
+msgid "Concediu parțial plătit pentru îngrijirea copilului"
+msgstr "Partially paid leave to care for a child"
+
+#: core/models.py:224
+msgid "Concediu suplimentar neplătit pentru îngrijirea copilului"
+msgstr "Additional unpaid leave to care for a child"
+
+#: core/models.py:225
+msgid "Concediu pentru îngrijirea unui membru bolnav al familiei"
+msgstr "Leave to care for a sick family member"
+
+#: core/models.py:226
+msgid "Concediu pentru îngrijirea copilului cu dizabilități"
+msgstr "Leave to care for a child with disabilities"
+
+#: core/models.py:227
+msgid "Concediu neplătit din cont propriu"
+msgstr "Unpaid leave (personal)"
+
+#: core/models.py:283
+msgid "Utilizator"
+msgstr "User"
+
+#: core/models.py:284 templates/core/base.html:342 templates/core/base.html:364
+msgid "Asistent"
+msgstr "Assistant"
+
+#: core/views.py:1180
+#, python-format
+msgid "Meeting salvat, dar sincronizarea Google Calendar a eșuat: %(error)s"
+msgstr "Meeting saved, but Google Calendar sync failed: %(error)s"
+
+#: core/views.py:1183
+msgid "Meeting salvat local. Conectează Google Calendar pentru sincronizare."
+msgstr "Meeting saved locally. Connect Google Calendar to sync."
+
+#: core/views.py:1215
+msgid "Nu ai permisiunea să ștergi acest meeting."
+msgstr "You don't have permission to delete this meeting."
+
+#: core/views.py:1240
+msgid "Meeting șters local, dar ștergerea din Google Calendar a eșuat."
+msgstr "Meeting deleted locally, but deletion from Google Calendar failed."
+
+#: core/views.py:1330
+msgid "Linkul de sincronizare a fost regenerat."
+msgstr "Sync link regenerated."
+
+#: core/views.py:1339 core/views.py:1385
+msgid "Google Calendar nu este configurat pe server."
+msgstr "Google Calendar is not configured on the server."
+
+#: core/views.py:1369
+msgid "Conectarea Google a eșuat: stare invalidă."
+msgstr "Google connection failed: invalid state."
+
+#: core/views.py:1374 core/views.py:1397
+#, python-format
+msgid "Conectarea Google a eșuat: %(error)s"
+msgstr "Google connection failed: %(error)s"
+
+#: core/views.py:1379
+msgid "Conectarea Google a eșuat: lipsește codul de autorizare."
+msgstr "Google connection failed: missing authorization code."
+
+#: core/views.py:1403
+msgid "Conectarea Google a eșuat: nu a fost returnat access token."
+msgstr "Google connection failed: no access token returned."
+
+#: core/views.py:1410
+msgid ""
+"Google nu a trimis refresh token. Șterge accesul aplicației și reconectează."
+msgstr ""
+"Google didn't return a refresh token. Revoke the app access and reconnect."
+
+#: core/views.py:1436
+#, python-format
+msgid "Google Calendar conectat. S-au sincronizat %(count)s meeting-uri."
+msgstr "Google Calendar connected. Synced %(count)s meetings."
+
+#: core/views.py:1439
+#, python-format
+msgid "%(count)s meeting-uri nu au putut fi sincronizate."
+msgstr "%(count)s meetings could not be synced."
+
+#: core/views.py:1449
+msgid "Google Calendar deconectat."
+msgstr "Google Calendar disconnected."
+
+#: core/views.py:1515
+msgid "Predare actualizată."
+msgstr "Submission updated."
+
+#: core/views.py:1533
+msgid "Nu ai permisiunea să modifici funcția acestui user."
+msgstr "You don't have permission to edit this user's role."
+
+#: core/views.py:1538
+msgid "Funcția nu poate fi goală."
+msgstr "Function cannot be empty."
+
+#: core/views.py:1543
+msgid "Funcția a fost actualizată."
+msgstr "Function updated."
+
+#: core/views.py:1743
+msgid "Completează toate câmpurile."
+msgstr "Fill in all fields."
+
+#: core/views.py:1747
+msgid "Parolele nu coincid."
+msgstr "Passwords do not match."
+
+#: core/views.py:1751
+msgid "Există deja un cont cu acest email."
+msgstr "An account with this email already exists."
+
+#: core/views.py:1783
+msgid "Cont creat și autentificat cu succes."
+msgstr "Account created and logged in successfully."
+
+#: core/views.py:1786
+msgid "Cont creat. Autentifică-te."
+msgstr "Account created. Please log in."
+
+#: templates/core/_header_search.html:4 templates/core/chat.html:629
+#: templates/core/open-task-ask-chat.html:400
+#: templates/core/open-task-worker.html:330 templates/core/projects.html:317
+#: templates/core/see-completed-submission-admin.html:388
+#: templates/core/see-completed-submission.html:296
+msgid "Caută persoane"
+msgstr "Search people"
+
+#: templates/core/_header_search.html:8 templates/core/_header_search.html:13
+#: templates/core/base.html:348
+msgid "Notificări"
+msgstr "Notifications"
+
+#: templates/core/_header_search.html:14
+msgid "Marchează toate ca citite"
+msgstr "Mark all as read"
+
+#: templates/core/_header_search.html:15
+msgid "Nu ai notificări încă"
+msgstr "No notifications yet"
+
+#: templates/core/_task_comments.html:13
+msgid "Nu există comentarii încă."
+msgstr "No comments yet."
+
+#: templates/core/_task_comments.html:19
+msgid "Adaugă comentariu..."
+msgstr "Add a comment..."
+
+#: templates/core/_task_comments.html:20
+msgid "Postează"
+msgstr "Post"
+
+#: templates/core/add-meeting.html:8 templates/core/add-meeting.html:344
+#: templates/core/add-meeting.html:377 templates/core/dashboard.html:406
+msgid "Adaugă meeting"
+msgstr "Add meeting"
+
+#: templates/core/add-meeting.html:8 templates/core/add-meeting.html:300
+#: templates/core/add-submission.html:8 templates/core/add-submission.html:267
+#: templates/core/base.html:8 templates/core/base.html:274
+#: templates/core/calendar-admin.html:316
+#: templates/core/calendar-holiday-requests-admin.html:430
+#: templates/core/calendar-info-admin.html:112
+#: templates/core/calendar-info-worker.html:198
+#: templates/core/calendar-see-holidays-request-admin.html:264
+#: templates/core/calendar-worker-pending.html:418
+#: templates/core/calendar-worker.html:328 templates/core/chat.html:8
+#: templates/core/chat.html:586 templates/core/dashboard.html:8
+#: templates/core/dashboard.html:319 templates/core/open-task-ask-chat.html:375
+#: templates/core/open-task-worker.html:8
+#: templates/core/open-task-worker.html:305
+#: templates/core/profile-admin.html:314 templates/core/profile-public.html:47
+#: templates/core/profile-worker.html:410 templates/core/projects.html:8
+#: templates/core/projects.html:292
+#: templates/core/see-completed-submission-admin.html:363
+#: templates/core/see-completed-submission.html:8
+#: templates/core/see-completed-submission.html:271
+#: templates/core/see-submission.html:8 templates/core/see-submission.html:254
+#: templates/core/submissions-admin.html:58 templates/core/tasks-admin.html:106
+#: templates/core/team-filter.html:8 templates/core/team-filter.html:349
+#: templates/core/team.html:3
+msgid "Panel"
+msgstr "Panel"
+
+#: templates/core/add-meeting.html:304 templates/core/add-submission.html:271
+#: templates/core/base.html:279 templates/core/calendar-admin.html:319
+#: templates/core/calendar-holiday-requests-admin.html:433
+#: templates/core/calendar-info-admin.html:114
+#: templates/core/calendar-info-worker.html:201
+#: templates/core/calendar-see-holidays-request-admin.html:266
+#: templates/core/calendar-worker-pending.html:421
+#: templates/core/calendar-worker.html:331 templates/core/chat.html:590
+#: templates/core/dashboard.html:8 templates/core/dashboard.html:323
+#: templates/core/open-task-ask-chat.html:379
+#: templates/core/open-task-worker.html:309
+#: templates/core/profile-admin.html:316 templates/core/profile-public.html:49
+#: templates/core/profile-worker.html:412 templates/core/projects.html:296
+#: templates/core/see-completed-submission-admin.html:367
+#: templates/core/see-completed-submission.html:275
+#: templates/core/see-submission.html:258
+#: templates/core/submissions-admin.html:60
+#: templates/core/task-main-worker.html:280 templates/core/tasks-admin.html:108
+#: templates/core/team-filter.html:351
+msgid "Panou"
+msgstr "Dashboard"
+
+#: templates/core/add-meeting.html:305 templates/core/add-submission.html:272
+#: templates/core/base.html:284 templates/core/base.html:346
+#: templates/core/calendar-admin.html:320
+#: templates/core/calendar-holiday-requests-admin.html:434
+#: templates/core/calendar-info-admin.html:115
+#: templates/core/calendar-info-worker.html:202
+#: templates/core/calendar-see-holidays-request-admin.html:267
+#: templates/core/calendar-worker-pending.html:422
+#: templates/core/calendar-worker.html:332 templates/core/chat.html:591
+#: templates/core/dashboard.html:324 templates/core/open-task-ask-chat.html:380
+#: templates/core/open-task-worker.html:310
+#: templates/core/profile-admin.html:317 templates/core/profile-public.html:50
+#: templates/core/profile-worker.html:413 templates/core/projects.html:297
+#: templates/core/see-completed-submission-admin.html:368
+#: templates/core/see-completed-submission.html:276
+#: templates/core/see-submission.html:259
+#: templates/core/submissions-admin.html:61
+#: templates/core/task-main-worker.html:8
+#: templates/core/task-main-worker.html:281 templates/core/tasks-admin.html:8
+#: templates/core/tasks-admin.html:109 templates/core/team-filter.html:352
+msgid "Taskuri"
+msgstr "Tasks"
+
+#: templates/core/add-meeting.html:306 templates/core/add-submission.html:273
+#: templates/core/base.html:289 templates/core/calendar-admin.html:8
+#: templates/core/calendar-admin.html:321
+#: templates/core/calendar-holiday-requests-admin.html:435
+#: templates/core/calendar-info-admin.html:116
+#: templates/core/calendar-info-worker.html:203
+#: templates/core/calendar-see-holidays-request-admin.html:268
+#: templates/core/calendar-worker-pending.html:8
+#: templates/core/calendar-worker-pending.html:423
+#: templates/core/calendar-worker.html:8
+#: templates/core/calendar-worker.html:333 templates/core/chat.html:592
+#: templates/core/dashboard.html:325 templates/core/open-task-ask-chat.html:381
+#: templates/core/open-task-worker.html:311
+#: templates/core/profile-admin.html:318 templates/core/profile-public.html:51
+#: templates/core/profile-worker.html:414 templates/core/projects.html:298
+#: templates/core/see-completed-submission-admin.html:369
+#: templates/core/see-completed-submission.html:277
+#: templates/core/see-submission.html:260
+#: templates/core/submissions-admin.html:62
+#: templates/core/task-main-worker.html:282 templates/core/tasks-admin.html:110
+#: templates/core/team-filter.html:353
+msgid "Calendar"
+msgstr "Calendar"
+
+#: templates/core/add-meeting.html:307 templates/core/add-submission.html:274
+#: templates/core/base.html:294 templates/core/calendar-admin.html:322
+#: templates/core/calendar-holiday-requests-admin.html:436
+#: templates/core/calendar-info-admin.html:117
+#: templates/core/calendar-info-worker.html:204
+#: templates/core/calendar-see-holidays-request-admin.html:269
+#: templates/core/calendar-worker-pending.html:424
+#: templates/core/calendar-worker.html:334 templates/core/chat.html:593
+#: templates/core/dashboard.html:326 templates/core/open-task-ask-chat.html:382
+#: templates/core/open-task-worker.html:312
+#: templates/core/profile-admin.html:319 templates/core/profile-public.html:52
+#: templates/core/profile-worker.html:415 templates/core/projects.html:299
+#: templates/core/see-completed-submission-admin.html:370
+#: templates/core/see-completed-submission.html:278
+#: templates/core/see-submission.html:261
+#: templates/core/submissions-admin.html:63
+#: templates/core/task-main-worker.html:283 templates/core/tasks-admin.html:111
+#: templates/core/team-filter.html:354 templates/core/team.html:3
+msgid "Echipă"
+msgstr "Team"
+
+#: templates/core/add-meeting.html:309 templates/core/add-submission.html:276
+#: templates/core/base.html:304 templates/core/calendar-admin.html:324
+#: templates/core/calendar-holiday-requests-admin.html:438
+#: templates/core/calendar-info-admin.html:119
+#: templates/core/calendar-info-worker.html:206
+#: templates/core/calendar-see-holidays-request-admin.html:271
+#: templates/core/calendar-worker-pending.html:426
+#: templates/core/calendar-worker.html:336 templates/core/chat.html:595
+#: templates/core/dashboard.html:328 templates/core/open-task-ask-chat.html:384
+#: templates/core/open-task-worker.html:314 templates/core/profile-admin.html:8
+#: templates/core/profile-admin.html:321 templates/core/profile-admin.html:331
+#: templates/core/profile-public.html:8 templates/core/profile-public.html:54
+#: templates/core/profile-worker.html:8 templates/core/profile-worker.html:417
+#: templates/core/profile-worker.html:427 templates/core/projects.html:301
+#: templates/core/see-completed-submission-admin.html:372
+#: templates/core/see-completed-submission.html:280
+#: templates/core/see-submission.html:263
+#: templates/core/submissions-admin.html:65
+#: templates/core/task-main-worker.html:285 templates/core/tasks-admin.html:113
+#: templates/core/team-filter.html:356 templates/core/team.html:448
+msgid "Profil"
+msgstr "Profile"
+
+#: templates/core/add-meeting.html:320 templates/core/calendar-admin.html:333
+#: templates/core/calendar-holiday-requests-admin.html:447
+#: templates/core/calendar-see-holidays-request-admin.html:281
+#: templates/core/calendar-worker.html:347 templates/core/chat.html:604
+#: templates/core/dashboard.html:339 templates/core/open-task-ask-chat.html:394
+#: templates/core/open-task-worker.html:324 templates/core/projects.html:311
+#: templates/core/see-completed-submission-admin.html:382
+#: templates/core/see-completed-submission.html:290
+#: templates/core/task-main-worker.html:296
+msgid "Astăzi"
+msgstr "Today"
+
+#: templates/core/add-meeting.html:336 templates/core/add-submission.html:302
+#: templates/core/base.html:326 templates/core/calendar-admin.html:362
+#: templates/core/calendar-holiday-requests-admin.html:457
+#: templates/core/calendar-info-admin.html:143
+#: templates/core/calendar-info-worker.html:232
+#: templates/core/calendar-see-holidays-request-admin.html:291
+#: templates/core/calendar-worker-pending.html:451
+#: templates/core/calendar-worker.html:363 templates/core/chat.html:620
+#: templates/core/dashboard.html:355 templates/core/profile-admin.html:345
+#: templates/core/profile-public.html:76 templates/core/profile-worker.html:441
+#: templates/core/see-submission.html:289
+#: templates/core/submissions-admin.html:86
+#: templates/core/task-main-worker.html:312 templates/core/tasks-admin.html:134
+msgid "Ieșire"
+msgstr "Logout"
+
+#: templates/core/add-meeting.html:345
+msgid "Înapoi la panou"
+msgstr "Back to dashboard"
+
+#: templates/core/add-meeting.html:352 templates/core/task-main-worker.html:323
+msgid "Titlu"
+msgstr "Title"
+
+#: templates/core/add-meeting.html:353
+msgid "ex: Ședință generală"
+msgstr "e.g., General meeting"
+
+#: templates/core/add-meeting.html:358
+msgid "Data"
+msgstr "Date"
+
+#: templates/core/add-meeting.html:362
+msgid "Ora"
+msgstr "Time"
+
+#: templates/core/add-meeting.html:368
+msgid "Participanți"
+msgstr "Participants"
+
+#: templates/core/add-meeting.html:369
+msgid "Caută sau adaugă persoane (ex: Ana, Daniel, etc.)"
+msgstr "Search or add people (e.g., Ana, Daniel, etc.)"
+
+#: templates/core/add-meeting.html:373 templates/core/submissions-admin.html:97
+#: templates/core/task-main-worker.html:356
+msgid "Descriere"
+msgstr "Description"
+
+#: templates/core/add-meeting.html:374
+msgid "Detalii meeting, agendă, locație..."
+msgstr "Meeting details, agenda, location..."
+
+#: templates/core/add-submission.html:8 templates/core/add-submission.html:286
+#: templates/core/open-task-ask-chat.html:419
+#: templates/core/open-task-worker.html:349
+#: templates/core/task-main-worker.html:390
+#: templates/core/task-main-worker.html:421
+#: templates/core/task-main-worker.html:452
+#: templates/core/task-main-worker.html:483
+msgid "Adaugă predare"
+msgstr "Add submission"
+
+#: templates/core/add-submission.html:312
+#: templates/core/see-completed-submission-admin.html:403
+#: templates/core/see-completed-submission.html:311
+#: templates/core/see-submission.html:273
+#: templates/core/see-submission.html:299
+msgid "Predare task"
+msgstr "Task submission"
+
+#: templates/core/add-submission.html:321
+#: templates/core/see-completed-submission-admin.html:438
+#: templates/core/see-completed-submission.html:316
+#: templates/core/see-submission.html:305
+msgid "Descriere predare"
+msgstr "Submission description"
+
+#: templates/core/add-submission.html:322
+msgid "Descrie predarea aici..."
+msgstr "Describe the submission here..."
+
+#: templates/core/add-submission.html:326
+msgid "Fișier predare"
+msgstr "Submission file"
+
+#: templates/core/add-submission.html:329
+msgid "Poți trage fișiere aici pentru a le adăuga"
+msgstr "You can drag files here to add them"
+
+#: templates/core/add-submission.html:330
+msgid "Tipuri acceptate: arhivă (ZIP), document PDF"
+msgstr "Accepted types: archive (ZIP), PDF document"
+
+#: templates/core/add-submission.html:336
+msgid "Trimite predarea"
+msgstr "Send submission"
+
+#: templates/core/base.html:331 templates/core/index.html:75
+#: templates/registration/login.html:49
+msgid "Autentificare"
+msgstr "Login"
+
+#: templates/core/base.html:346
+msgid "Cum adaug task?"
+msgstr "How do I add a task?"
+
+#: templates/core/base.html:347
+msgid "Cum adaug meeting?"
+msgstr "How do I add a meeting?"
+
+#: templates/core/base.html:347
+msgid "Meeting"
+msgstr "Meeting"
+
+#: templates/core/base.html:348
+msgid "Unde sunt notificările?"
+msgstr "Where are the notifications?"
+
+#: templates/core/base.html:349
+msgid "Cum trimit predarea?"
+msgstr "How do I send a submission?"
+
+#: templates/core/base.html:349
+msgid "Predare"
+msgstr "Submission"
+
+#: templates/core/base.html:350
+msgid "Rezumat azi"
+msgstr "Today's summary"
+
+#: templates/core/base.html:351
+msgid "Taskuri întârziate"
+msgstr "Overdue tasks"
+
+#: templates/core/base.html:352
+msgid "Prioritate mare"
+msgstr "High priority"
+
+#: templates/core/base.html:353
+msgid "Cine e în concediu acum?"
+msgstr "Who is on leave right now?"
+
+#: templates/core/base.html:353
+msgid "Concedii acum"
+msgstr "On leave now"
+
+#: templates/core/base.html:354
+msgid "Următorul deadline"
+msgstr "Next deadline"
+
+#: templates/core/base.html:354
+msgid "Deadline"
+msgstr "Deadline"
+
+#: templates/core/base.html:355
+msgid "Caută task design"
+msgstr "Search task design"
+
+#: templates/core/base.html:355
+msgid "Caută task"
+msgstr "Search task"
+
+#: templates/core/base.html:356
+msgid "Amintește-mi peste 2 ore să trimit raportul"
+msgstr "Remind me in 2 hours to send the report"
+
+#: templates/core/base.html:356
+msgid "Reminder"
+msgstr "Reminder"
+
+#: templates/core/base.html:360
+msgid "Scrie o întrebare..."
+msgstr "Write a question..."
+
+#: templates/core/base.html:361
+#: templates/core/calendar-holiday-requests-admin.html:574
+#: templates/core/chat.html:734 templates/core/open-task-ask-chat.html:466
+#: templates/core/open-task-ask-chat.html:476
+#: templates/core/open-task-worker.html:390
+msgid "Trimite"
+msgstr "Send"
+
+#: templates/core/base.html:380
+msgid ""
+"Salut! Pot ajuta cu taskuri, meeting-uri, chat, notificări, concedii și "
+"export CSV."
+msgstr ""
+"Hi! I can help with tasks, meetings, chat, notifications, leave and CSV "
+"export."
+
+#: templates/core/base.html:381
+msgid "Nu am înțeles. Încearcă o întrebare mai scurtă."
+msgstr "I didn't understand. Try a shorter question."
+
+#: templates/core/base.html:382
+msgid "Eroare temporară. Încearcă din nou."
+msgstr "Temporary error. Try again."
+
+#: templates/core/calendar-admin.html:8
+#: templates/core/calendar-holiday-requests-admin.html:8
+#: templates/core/calendar-info-admin.html:8
+#: templates/core/calendar-see-holidays-request-admin.html:8
+#: templates/core/profile-admin.html:8
+#: templates/core/see-completed-submission-admin.html:8
+#: templates/core/submissions-admin.html:8 templates/core/tasks-admin.html:8
+msgid "Admin"
+msgstr "Admin"
+
+#: templates/core/calendar-admin.html:373
+#: templates/core/calendar-worker.html:373
+msgid "zile lucrătoare"
+msgstr "working days"
+
+#: templates/core/calendar-admin.html:373
+#: templates/core/calendar-worker.html:373
+msgid "zile nelucrătoare"
+msgstr "non-working days"
+
+#: templates/core/calendar-admin.html:384
+#: templates/core/calendar-worker.html:383 templates/core/dashboard.html:398
+msgid "Deconectează Google"
+msgstr "Disconnect Google"
+
+#: templates/core/calendar-admin.html:389
+#: templates/core/calendar-worker.html:386 templates/core/dashboard.html:401
+msgid "Conectează Google"
+msgstr "Connect Google"
+
+#: templates/core/calendar-admin.html:394
+#: templates/core/calendar-worker.html:389 templates/core/dashboard.html:404
+msgid "Google nu este configurat"
+msgstr "Google not configured"
+
+#: templates/core/calendar-admin.html:401
+#: templates/core/calendar-worker.html:377
+msgid "Citește despre concedii"
+msgstr "Read about leave"
+
+#: templates/core/calendar-admin.html:407
+msgid "Vezi cereri de concediu"
+msgstr "View leave requests"
+
+#: templates/core/calendar-admin.html:413
+#: templates/core/calendar-holiday-requests-admin.html:472
+msgid "Vezi concediile curente"
+msgstr "View current leave"
+
+#: templates/core/calendar-admin.html:421
+#: templates/core/calendar-worker.html:398
+msgid "Ianuarie"
+msgstr "January"
+
+#: templates/core/calendar-admin.html:425
+#: templates/core/calendar-admin.html:494
+#: templates/core/calendar-admin.html:563
+#: templates/core/calendar-admin.html:641
+#: templates/core/calendar-admin.html:710
+#: templates/core/calendar-admin.html:779
+#: templates/core/calendar-admin.html:857
+#: templates/core/calendar-admin.html:926
+#: templates/core/calendar-admin.html:995
+#: templates/core/calendar-admin.html:1064
+#: templates/core/calendar-admin.html:1133
+#: templates/core/calendar-admin.html:1202
+#: templates/core/calendar-worker.html:402
+#: templates/core/calendar-worker.html:424
+#: templates/core/calendar-worker.html:446
+#: templates/core/calendar-worker.html:469
+#: templates/core/calendar-worker.html:491
+#: templates/core/calendar-worker.html:513
+#: templates/core/calendar-worker.html:536
+#: templates/core/calendar-worker.html:558
+#: templates/core/calendar-worker.html:580
+#: templates/core/calendar-worker.html:602
+#: templates/core/calendar-worker.html:624
+#: templates/core/calendar-worker.html:646
+msgid "Lu"
+msgstr "Mo"
+
+#: templates/core/calendar-admin.html:426
+#: templates/core/calendar-admin.html:495
+#: templates/core/calendar-admin.html:564
+#: templates/core/calendar-admin.html:642
+#: templates/core/calendar-admin.html:711
+#: templates/core/calendar-admin.html:780
+#: templates/core/calendar-admin.html:858
+#: templates/core/calendar-admin.html:927
+#: templates/core/calendar-admin.html:996
+#: templates/core/calendar-admin.html:1065
+#: templates/core/calendar-admin.html:1134
+#: templates/core/calendar-admin.html:1203
+#: templates/core/calendar-worker.html:402
+#: templates/core/calendar-worker.html:424
+#: templates/core/calendar-worker.html:446
+#: templates/core/calendar-worker.html:469
+#: templates/core/calendar-worker.html:491
+#: templates/core/calendar-worker.html:513
+#: templates/core/calendar-worker.html:536
+#: templates/core/calendar-worker.html:558
+#: templates/core/calendar-worker.html:580
+#: templates/core/calendar-worker.html:602
+#: templates/core/calendar-worker.html:624
+#: templates/core/calendar-worker.html:646
+msgid "Ma"
+msgstr "Tu"
+
+#: templates/core/calendar-admin.html:427
+#: templates/core/calendar-admin.html:496
+#: templates/core/calendar-admin.html:565
+#: templates/core/calendar-admin.html:643
+#: templates/core/calendar-admin.html:712
+#: templates/core/calendar-admin.html:781
+#: templates/core/calendar-admin.html:859
+#: templates/core/calendar-admin.html:928
+#: templates/core/calendar-admin.html:997
+#: templates/core/calendar-admin.html:1066
+#: templates/core/calendar-admin.html:1135
+#: templates/core/calendar-admin.html:1204
+#: templates/core/calendar-worker.html:402
+#: templates/core/calendar-worker.html:424
+#: templates/core/calendar-worker.html:446
+#: templates/core/calendar-worker.html:469
+#: templates/core/calendar-worker.html:491
+#: templates/core/calendar-worker.html:513
+#: templates/core/calendar-worker.html:536
+#: templates/core/calendar-worker.html:558
+#: templates/core/calendar-worker.html:580
+#: templates/core/calendar-worker.html:602
+#: templates/core/calendar-worker.html:624
+#: templates/core/calendar-worker.html:646
+msgid "Mi"
+msgstr "We"
+
+#: templates/core/calendar-admin.html:428
+#: templates/core/calendar-admin.html:497
+#: templates/core/calendar-admin.html:566
+#: templates/core/calendar-admin.html:644
+#: templates/core/calendar-admin.html:713
+#: templates/core/calendar-admin.html:782
+#: templates/core/calendar-admin.html:860
+#: templates/core/calendar-admin.html:929
+#: templates/core/calendar-admin.html:998
+#: templates/core/calendar-admin.html:1067
+#: templates/core/calendar-admin.html:1136
+#: templates/core/calendar-admin.html:1205
+#: templates/core/calendar-worker.html:402
+#: templates/core/calendar-worker.html:424
+#: templates/core/calendar-worker.html:446
+#: templates/core/calendar-worker.html:469
+#: templates/core/calendar-worker.html:491
+#: templates/core/calendar-worker.html:513
+#: templates/core/calendar-worker.html:536
+#: templates/core/calendar-worker.html:558
+#: templates/core/calendar-worker.html:580
+#: templates/core/calendar-worker.html:602
+#: templates/core/calendar-worker.html:624
+#: templates/core/calendar-worker.html:646
+msgid "Jo"
+msgstr "Th"
+
+#: templates/core/calendar-admin.html:429
+#: templates/core/calendar-admin.html:498
+#: templates/core/calendar-admin.html:567
+#: templates/core/calendar-admin.html:645
+#: templates/core/calendar-admin.html:714
+#: templates/core/calendar-admin.html:783
+#: templates/core/calendar-admin.html:861
+#: templates/core/calendar-admin.html:930
+#: templates/core/calendar-admin.html:999
+#: templates/core/calendar-admin.html:1068
+#: templates/core/calendar-admin.html:1137
+#: templates/core/calendar-admin.html:1206
+#: templates/core/calendar-worker.html:402
+#: templates/core/calendar-worker.html:424
+#: templates/core/calendar-worker.html:446
+#: templates/core/calendar-worker.html:469
+#: templates/core/calendar-worker.html:491
+#: templates/core/calendar-worker.html:513
+#: templates/core/calendar-worker.html:536
+#: templates/core/calendar-worker.html:558
+#: templates/core/calendar-worker.html:580
+#: templates/core/calendar-worker.html:602
+#: templates/core/calendar-worker.html:624
+#: templates/core/calendar-worker.html:646
+msgid "Vi"
+msgstr "Fr"
+
+#: templates/core/calendar-admin.html:430
+#: templates/core/calendar-admin.html:499
+#: templates/core/calendar-admin.html:568
+#: templates/core/calendar-admin.html:646
+#: templates/core/calendar-admin.html:715
+#: templates/core/calendar-admin.html:784
+#: templates/core/calendar-admin.html:862
+#: templates/core/calendar-admin.html:931
+#: templates/core/calendar-admin.html:1000
+#: templates/core/calendar-admin.html:1069
+#: templates/core/calendar-admin.html:1138
+#: templates/core/calendar-admin.html:1207
+#: templates/core/calendar-worker.html:402
+#: templates/core/calendar-worker.html:424
+#: templates/core/calendar-worker.html:446
+#: templates/core/calendar-worker.html:469
+#: templates/core/calendar-worker.html:491
+#: templates/core/calendar-worker.html:513
+#: templates/core/calendar-worker.html:536
+#: templates/core/calendar-worker.html:558
+#: templates/core/calendar-worker.html:580
+#: templates/core/calendar-worker.html:602
+#: templates/core/calendar-worker.html:624
+#: templates/core/calendar-worker.html:646
+msgid "Sa"
+msgstr "Sa"
+
+#: templates/core/calendar-admin.html:431
+#: templates/core/calendar-admin.html:500
+#: templates/core/calendar-admin.html:569
+#: templates/core/calendar-admin.html:647
+#: templates/core/calendar-admin.html:716
+#: templates/core/calendar-admin.html:785
+#: templates/core/calendar-admin.html:863
+#: templates/core/calendar-admin.html:932
+#: templates/core/calendar-admin.html:1001
+#: templates/core/calendar-admin.html:1070
+#: templates/core/calendar-admin.html:1139
+#: templates/core/calendar-admin.html:1208
+#: templates/core/calendar-worker.html:402
+#: templates/core/calendar-worker.html:424
+#: templates/core/calendar-worker.html:446
+#: templates/core/calendar-worker.html:469
+#: templates/core/calendar-worker.html:491
+#: templates/core/calendar-worker.html:513
+#: templates/core/calendar-worker.html:536
+#: templates/core/calendar-worker.html:558
+#: templates/core/calendar-worker.html:580
+#: templates/core/calendar-worker.html:602
+#: templates/core/calendar-worker.html:624
+#: templates/core/calendar-worker.html:646
+msgid "Du"
+msgstr "Su"
+
+#: templates/core/calendar-admin.html:483
+#: templates/core/calendar-admin.html:552
+#: templates/core/calendar-admin.html:630
+#: templates/core/calendar-admin.html:699
+#: templates/core/calendar-admin.html:768
+#: templates/core/calendar-admin.html:846
+#: templates/core/calendar-admin.html:915
+#: templates/core/calendar-admin.html:984
+#: templates/core/calendar-admin.html:1053
+#: templates/core/calendar-admin.html:1122
+#: templates/core/calendar-admin.html:1191
+#: templates/core/calendar-admin.html:1260
+#: templates/core/calendar-worker.html:414
+#: templates/core/calendar-worker.html:436
+#: templates/core/calendar-worker.html:459
+#: templates/core/calendar-worker.html:481
+#: templates/core/calendar-worker.html:503
+#: templates/core/calendar-worker.html:526
+#: templates/core/calendar-worker.html:548
+#: templates/core/calendar-worker.html:570
+#: templates/core/calendar-worker.html:592
+#: templates/core/calendar-worker.html:614
+#: templates/core/calendar-worker.html:636
+#: templates/core/calendar-worker.html:658
+msgid "Zile lucrătoare:"
+msgstr "Working days:"
+
+#: templates/core/calendar-admin.html:484
+#: templates/core/calendar-admin.html:553
+#: templates/core/calendar-admin.html:631
+#: templates/core/calendar-admin.html:700
+#: templates/core/calendar-admin.html:769
+#: templates/core/calendar-admin.html:847
+#: templates/core/calendar-admin.html:916
+#: templates/core/calendar-admin.html:985
+#: templates/core/calendar-admin.html:1054
+#: templates/core/calendar-admin.html:1123
+#: templates/core/calendar-admin.html:1192
+#: templates/core/calendar-admin.html:1261
+#: templates/core/calendar-worker.html:414
+#: templates/core/calendar-worker.html:436
+#: templates/core/calendar-worker.html:459
+#: templates/core/calendar-worker.html:481
+#: templates/core/calendar-worker.html:503
+#: templates/core/calendar-worker.html:526
+#: templates/core/calendar-worker.html:548
+#: templates/core/calendar-worker.html:570
+#: templates/core/calendar-worker.html:592
+#: templates/core/calendar-worker.html:614
+#: templates/core/calendar-worker.html:636
+#: templates/core/calendar-worker.html:658
+msgid "Zile nelucrătoare:"
+msgstr "Non-working days:"
+
+#: templates/core/calendar-admin.html:490
+#: templates/core/calendar-worker.html:420
+msgid "Februarie"
+msgstr "February"
+
+#: templates/core/calendar-admin.html:559
+#: templates/core/calendar-worker.html:442
+msgid "Martie"
+msgstr "March"
+
+#: templates/core/calendar-admin.html:637
+#: templates/core/calendar-worker.html:465
+msgid "Aprilie"
+msgstr "April"
+
+#: templates/core/calendar-admin.html:706
+#: templates/core/calendar-worker.html:487 templates/core/team-filter.html:489
+msgid "Mai"
+msgstr "May"
+
+#: templates/core/calendar-admin.html:775
+#: templates/core/calendar-worker.html:509
+msgid "Iunie"
+msgstr "June"
+
+#: templates/core/calendar-admin.html:853
+#: templates/core/calendar-worker.html:532
+msgid "Iulie"
+msgstr "July"
+
+#: templates/core/calendar-admin.html:922
+#: templates/core/calendar-worker.html:554
+msgid "August"
+msgstr "August"
+
+#: templates/core/calendar-admin.html:991
+#: templates/core/calendar-worker.html:576
+msgid "Septembrie"
+msgstr "September"
+
+#: templates/core/calendar-admin.html:1060
+#: templates/core/calendar-worker.html:598 templates/core/team-filter.html:488
+msgid "Octombrie"
+msgstr "October"
+
+#: templates/core/calendar-admin.html:1129
+#: templates/core/calendar-worker.html:620
+msgid "Noiembrie"
+msgstr "November"
+
+#: templates/core/calendar-admin.html:1198
+#: templates/core/calendar-worker.html:642
+msgid "Decembrie"
+msgstr "December"
+
+#: templates/core/calendar-holiday-requests-admin.html:8
+#: templates/core/calendar-holiday-requests-admin.html:465
+#: templates/core/dashboard.html:381
+msgid "Cereri concediu"
+msgstr "Leave requests"
+
+#: templates/core/calendar-holiday-requests-admin.html:467
+#: templates/core/tasks-admin.html:250 templates/core/tasks-admin.html:259
+msgid "Export CSV"
+msgstr "Export CSV"
+
+#: templates/core/calendar-holiday-requests-admin.html:477
+#: templates/core/calendar-see-holidays-request-admin.html:300
+#: templates/core/profile-public.html:92 templates/core/team.html:441
+msgid "Membru"
+msgstr "Member"
+
+#: templates/core/calendar-holiday-requests-admin.html:485
+msgid "luate"
+msgstr "taken"
+
+#: templates/core/calendar-holiday-requests-admin.html:486
+msgid "în așteptare"
+msgstr "pending"
+
+#: templates/core/calendar-holiday-requests-admin.html:487
+msgid "rămase"
+msgstr "remaining"
+
+#: templates/core/calendar-holiday-requests-admin.html:517
+#: templates/core/submissions-admin.html:129
+msgid "Aprobă"
+msgstr "Approve"
+
+#: templates/core/calendar-holiday-requests-admin.html:524
+#: templates/core/submissions-admin.html:130
+msgid "Respinge"
+msgstr "Reject"
+
+#: templates/core/calendar-holiday-requests-admin.html:542
+msgid "Motiv admin:"
+msgstr "Admin reason:"
+
+#: templates/core/calendar-holiday-requests-admin.html:547
+msgid "Nu există cereri."
+msgstr "No requests."
+
+#: templates/core/calendar-holiday-requests-admin.html:557
+msgid "Motiv respingere"
+msgstr "Rejection reason"
+
+#: templates/core/calendar-holiday-requests-admin.html:559
+msgid "Completează motivul pentru care respingi cererea."
+msgstr "Provide the reason for rejecting the request."
+
+#: templates/core/calendar-holiday-requests-admin.html:563
+msgid "Ex: Perioadă suprapusă cu proiect critic"
+msgstr "e.g., Overlaps with a critical project"
+
+#: templates/core/calendar-holiday-requests-admin.html:571
+#: templates/core/calendar-info-admin.html:231
+#: templates/core/profile-admin.html:455 templates/core/profile-worker.html:594
+msgid "Anulează"
+msgstr "Cancel"
+
+#: templates/core/calendar-holiday-requests-admin.html:607
+msgid "Adaugă motivul respingerii obligatoriu."
+msgstr "Add the rejection reason."
+
+#: templates/core/calendar-info-admin.html:8
+#: templates/core/calendar-info-admin.html:128
+#: templates/core/calendar-info-worker.html:8
+#: templates/core/calendar-info-worker.html:217
+msgid "Informații concedii"
+msgstr "Leave info"
+
+#: templates/core/calendar-info-admin.html:150
+msgid "Editează informația"
+msgstr "Edit information"
+
+#: templates/core/calendar-info-admin.html:155
+msgid ""
+"Având în vedere că suntem în secolul concediilor de odihnă, am strâns cele "
+"mai importante prevederi legale din <strong>Codul Muncii</strong> "
+"referitoare la concediul de odihnă anual pe care trebuie să le cunoașteți ca "
+"angajați."
+msgstr ""
+"Given that we are in the era of annual leave, we gathered the most important "
+"legal provisions from the <strong>Labor Code</strong> regarding annual leave "
+"that you need to know as employees."
+
+#: templates/core/calendar-info-admin.html:161
+msgid ""
+"<strong>Prevederile Codului Muncii</strong> în care se reglementează "
+"concediul de odihnă anual:"
+msgstr "The <strong>Labor Code provisions</strong> regulating annual leave:"
+
+#: templates/core/calendar-info-admin.html:167
+msgid ""
+"Concediul de odihnă anual este un drept garantat pentru angajații care "
+"lucrează în baza contractului individual de muncă, indiferent de durata "
+"acestuia (art. 112 alin. (1) CM)."
+msgstr ""
+"Annual leave is a guaranteed right for employees who work under an "
+"individual employment contract, regardless of its duration (art. 112(1) LC)."
+
+#: templates/core/calendar-info-admin.html:168
+msgid ""
+"Concediul de odihnă pentru primul an de muncă poate fi acordat după 6 luni "
+"de muncă în unitate (art. 113 alin. (1) CM)."
+msgstr ""
+"Annual leave for the first year of work may be granted after 6 months of "
+"work in the unit (art. 113(1) LC)."
+
+#: templates/core/calendar-info-admin.html:169
+msgid ""
+"Durata concediului anual de odihnă, de regulă, este de 28 de zile "
+"calendaristice, cu excepția zilelor de sărbătoare nelucrătoare (art. 115 CM)."
+msgstr ""
+"The duration of annual leave is, as a rule, 28 calendar days, excluding non-"
+"working public holidays (art. 115 LC)."
+
+#: templates/core/calendar-info-admin.html:170
+msgid ""
+"Angajatorul poate acorda concediu integral sau fracționat, însă în baza "
+"cererii salariatului și cu acordul scris al angajatorului, din care se "
+"reiese că salariatul a beneficiat de cel puțin 14 zile calendaristice de "
+"concediu anual (art. 116 pct.3 CM)."
+msgstr ""
+"The employer may grant leave in full or in parts, based on the employee's "
+"request and with the employer's written consent, showing that the employee "
+"has taken at least 14 calendar days of annual leave (art. 116 p.3 LC)."
+
+#: templates/core/calendar-info-admin.html:174
+msgid ""
+"<strong>IMPORTANT!</strong> Este interzisă neacordarea concediului de odihnă "
+"anual timp de doi ani consecutivi – amendă de la 200 la 350 unități "
+"convenționale (art. 55 Cod contravențional)."
+msgstr ""
+"<strong>IMPORTANT!</strong> It is forbidden not to grant annual leave for "
+"two consecutive years – a fine from 200 to 350 conventional units (art. 55 "
+"Contravention Code)."
+
+#: templates/core/calendar-info-admin.html:180
+msgid ""
+"<strong>!!!</strong> Nu se admite neacordarea concediului anual de odihnă "
+"nefolosit prin compensare în bani."
+msgstr ""
+"<strong>!!!</strong> It is not allowed to replace unused annual leave with "
+"monetary compensation."
+
+#: templates/core/calendar-info-admin.html:186
+msgid ""
+"<strong>!!!</strong> În cazul încetării contractului individual de muncă, "
+"Codul Muncii prevede dreptul la compensarea tuturor zilelor de concediu "
+"nefolosit (art. 119, 121 CM)."
+msgstr ""
+"<strong>!!!</strong> In case of termination of the individual employment "
+"contract, the Labor Code provides the right to compensation for all unused "
+"leave days (art. 119, 121 LC)."
+
+#: templates/core/calendar-info-admin.html:192
+msgid ""
+"Cel mai mare număr de zile de concediu de odihnă anual în Republica Moldova "
+"este de 62 de zile – pentru dreptul la compensarea tuturor zilelor de "
+"concediu nefolosit în instituțiile de învățământ superior, colegii, gimnazii "
+"și școli de cultură generală."
+msgstr ""
+"The largest number of annual leave days in the Republic of Moldova is 62 "
+"days – for the right to compensation for all unused leave days in higher "
+"education institutions, colleges, gymnasiums and general education schools."
+
+#: templates/core/calendar-info-admin.html:206
+msgid "Editează informațiile despre concedii"
+msgstr "Edit leave information"
+
+#: templates/core/calendar-info-admin.html:211
+msgid ""
+"Având în vedere că suntem în secolul concediilor de odihnă, am strâns cele "
+"mai importante prevederi legale din Codul Muncii referitoare la concediul de "
+"odihnă anual pe care trebuie să le cunoașteți ca angajați. Prevederile "
+"Codului Muncii în care se reglementează concediul de odihnă anual: • "
+"Concediul de odihnă anual este un drept garantat pentru angajații care "
+"lucrează în baza contractului individual de muncă, indiferent de durata "
+"acestuia (art. 112 alin. (1) CM). • Concediul de odihnă pentru primul an de "
+"muncă poate fi acordat după 6 luni de muncă în unitate (art. 113 alin. (1) "
+"CM). • Durata concediului anual de odihnă, de regulă, este de 28 de zile "
+"calendaristice, cu excepția zilelor de sărbătoare nelucrătoare (art. 115 "
+"CM). • Angajatorul poate acorda concediu integral sau fracționat, însă în "
+"baza cererii salariatului și cu acordul scris al angajatorului, din care se "
+"reiese că salariatul a beneficiat de cel puțin 14 zile calendaristice de "
+"concediu anual (art. 116 pct.3 CM). IMPORTANT! Este interzisă neacordarea "
+"concediului de odihnă anual timp de doi ani consecutivi – amendă de la 200 "
+"la 350 unități convenționale (art. 55 Cod contravențional). !!! Nu se admite "
+"neacordarea concediului anual de odihnă nefolosit prin compensare în bani. "
+"În cazul încetării contractului individual de muncă, Codul Muncii prevede "
+"dreptul la compensarea tuturor zilelor de concediu nefolosit (art. 119, 121 "
+"CM). Cel mai mare număr de zile de concediu de odihnă anual în Republica "
+"Moldova este de 62 de zile – pentru dreptul la compensarea tuturor zilelor "
+"de concediu nefolosit în instituțiile de învățământ superior, colegii, "
+"gimnazii și școli de cultură generală."
+msgstr ""
+"Given that we are in the era of annual leave, we gathered the most important "
+"legal provisions from the Labor Code regarding annual leave that you need to "
+"know as employees. The Labor Code provisions regulating annual leave: • "
+"Annual leave is a guaranteed right for employees who work under an "
+"individual employment contract, regardless of its duration (art. 112(1) LC). "
+"• Annual leave for the first year of work may be granted after 6 months of "
+"work in the unit (art. 113(1) LC). • The duration of annual leave is, as a "
+"rule, 28 calendar days, excluding non-working public holidays (art. 115 LC). "
+"• The employer may grant leave in full or in parts, based on the employee's "
+"request and with the employer's written consent, showing that the employee "
+"has taken at least 14 calendar days of annual leave (art. 116 p.3 LC). "
+"IMPORTANT! It is forbidden not to grant annual leave for two consecutive "
+"years – a fine from 200 to 350 conventional units (art. 55 Contravention "
+"Code). !!! It is not allowed to replace unused annual leave with monetary "
+"compensation. In case of termination of the individual employment contract, "
+"the Labor Code provides the right to compensation for all unused leave days "
+"(art. 119, 121 LC). The largest number of annual leave days in the Republic "
+"of Moldova is 62 days – for the right to compensation for all unused leave "
+"days in higher education institutions, colleges, gymnasiums and general "
+"education schools."
+
+#: templates/core/calendar-info-admin.html:232
+#: templates/core/profile-admin.html:456 templates/core/profile-worker.html:595
+msgid "Salvează modificările"
+msgstr "Save changes"
+
+#: templates/core/calendar-info-admin.html:247
+msgid ""
+"Informațiile au fost salvate! (Simulare – în realitate se salvează pe server)"
+msgstr "Information saved! (Simulation – in reality it is saved on the server)"
+
+#: templates/core/calendar-info-worker.html:8
+#: templates/core/calendar-worker-pending.html:8
+#: templates/core/calendar-worker.html:8 templates/core/profile-worker.html:8
+#: templates/core/task-main-worker.html:8
+msgid "Worker"
+msgstr "Worker"
+
+#: templates/core/calendar-info-worker.html:240
+msgid ""
+"Având în vedere că suntem în sezonul concediilor de odihnă, am strâns cele "
+"mai importante prevederi legale din <strong>Codul Muncii</strong> "
+"referitoare la concediul de odihnă anual ca să cunoașteți ce drepturi aveți."
+msgstr ""
+"Given that we are in the annual leave season, we gathered the most important "
+"legal provisions from the <strong>Labor Code</strong> regarding annual leave "
+"so you know your rights."
+
+#: templates/core/calendar-info-worker.html:245
+msgid "Prevederile Codului Muncii"
+msgstr "Labor Code provisions"
+
+#: templates/core/calendar-info-worker.html:247
+msgid ""
+"<strong>Concediul de odihnă anual</strong> este un drept garantat pentru "
+"toți angajații care lucrează în baza contractului individual de muncă (art. "
+"112 din Codul Muncii)."
+msgstr ""
+"<strong>Annual leave</strong> is a guaranteed right for all employees who "
+"work under an individual employment contract (art. 112 of the Labor Code)."
+
+#: templates/core/calendar-info-worker.html:248
+msgid ""
+"Concediul de odihnă anual este de <strong>28 de zile calendaristice</strong> "
+"(art. 115 alin. (1) din Codul Muncii), indiferent de durata timpului de "
+"muncă zilnică sau săptămânală."
+msgstr ""
+"Annual leave is <strong>28 calendar days</strong> (art. 115(1) of the Labor "
+"Code), regardless of daily or weekly working time."
+
+#: templates/core/calendar-info-worker.html:249
+msgid ""
+"În cazul în care durata concediului anual este mai mare de 28 de zile "
+"calendaristice (de exemplu, pentru anumite categorii de angajați – minori, "
+"persoane cu dizabilități, profesii cu condiții vătămătoare), concediul se "
+"acordă în mărime sporită (art. 115 alin. (2))."
+msgstr ""
+"If the annual leave duration is longer than 28 calendar days (for example, "
+"for certain categories of employees – minors, people with disabilities, or "
+"hazardous occupations), the leave is granted in an increased amount (art. "
+"115(2))."
+
+#: templates/core/calendar-info-worker.html:250
+msgid ""
+"Concediul de odihnă se acordă <strong>într-o perioadă neîntreruptă</strong>, "
+"cu excepția cazurilor în care, la cererea salariatului și cu acordul "
+"angajatorului, concediul poate fi fractionat în părți (art. 119)."
+msgstr ""
+"Annual leave is granted in an <strong>uninterrupted period</strong>, except "
+"when, at the employee's request and with the employer's consent, it can be "
+"split into parts (art. 119)."
+
+#: templates/core/calendar-info-worker.html:251
+msgid ""
+"Angajatorul este obligat să acorde concediul anual de odihnă în anul "
+"calendaristic respectiv. Amânarea concediului este permisă doar în cazuri "
+"excepționale (art. 120)."
+msgstr ""
+"The employer is obliged to grant annual leave in the respective calendar "
+"year. Postponing leave is allowed only in exceptional cases (art. 120)."
+
+#: templates/core/calendar-info-worker.html:252
+msgid ""
+"Concediul de odihnă se plătește cu cel puțin <strong>3 zile calendaristice "
+"înainte de începerea acestuia</strong> (art. 118)."
+msgstr ""
+"Annual leave is paid at least <strong>3 calendar days before it starts</"
+"strong> (art. 118)."
+
+#: templates/core/calendar-info-worker.html:253
+msgid ""
+"În cazul în care salariatul se îmbolnăvește în perioada concediului de "
+"odihnă, concediul se prelungește sau se reportează pentru perioada de "
+"incapacitate temporară de muncă (art. 121)."
+msgstr ""
+"If the employee becomes ill during annual leave, the leave is extended or "
+"postponed for the period of temporary incapacity for work (art. 121)."
+
+#: templates/core/calendar-info-worker.html:257
+msgid ""
+"<strong>IMPORTANT!</strong> Este interzisă neacordarea concediului anual de "
+"odihnă timp de doi ani consecutivi (art. 120 alin. (2))."
+msgstr ""
+"<strong>IMPORTANT!</strong> It is forbidden not to grant annual leave for "
+"two consecutive years (art. 120(2))."
+
+#: templates/core/calendar-info-worker.html:263
+msgid ""
+"!!! Nu se admite neacordarea concediului anual de odihnă timp de doi ani "
+"consecutivi – amendă de la 200 la 350 unități convenționale aplicată "
+"persoanei juridice."
+msgstr ""
+"!!! It is not allowed to deny annual leave for two consecutive years – a "
+"fine of 200 to 350 conventional units applied to the legal entity."
+
+#: templates/core/calendar-info-worker.html:269
+msgid ""
+"!!! În cazul în care contractul individual de muncă încetează, salariatul "
+"are dreptul la compensația bănească pentru concediul anual de odihnă "
+"neutilizat (art. 119 alin. (3))."
+msgstr ""
+"!!! If the individual employment contract ends, the employee has the right "
+"to monetary compensation for unused annual leave (art. 119(3))."
+
+#: templates/core/calendar-info-worker.html:275
+msgid ""
+"<strong>Cel mai mare număr de zile de concediu anual de odihnă</strong> în "
+"Republica Moldova este de 62 de zile – pentru cadrele didactice din "
+"instituțiile de învățământ superior, colegii, gimnazii și școli de cultură "
+"generală."
+msgstr ""
+"The <strong>largest number of annual leave days</strong> in the Republic of "
+"Moldova is 62 days – for teaching staff in higher education institutions, "
+"colleges, gymnasiums and general education schools."
+
+#: templates/core/calendar-see-holidays-request-admin.html:8
+msgid "Concedii curente"
+msgstr "Current leaves"
+
+#: templates/core/calendar-see-holidays-request-admin.html:303
+msgid "Urmează să plece"
+msgstr "Upcoming leave"
+
+#: templates/core/calendar-see-holidays-request-admin.html:304
+msgid "Vezi cereri"
+msgstr "View requests"
+
+#: templates/core/calendar-see-holidays-request-admin.html:320
+msgid "Nu există concedii programate în următoarele 14 zile."
+msgstr "No leave scheduled in the next 14 days."
+
+#: templates/core/calendar-see-holidays-request-admin.html:327
+#: templates/core/dashboard.html:441
+msgid "În concediu"
+msgstr "On leave"
+
+#: templates/core/calendar-see-holidays-request-admin.html:343
+msgid "Nimeni nu este acum în concediu."
+msgstr "No one is on leave right now."
+
+#: templates/core/calendar-worker-pending.html:437
+msgid "Alege concediul"
+msgstr "Select leave"
+
+#: templates/core/calendar-worker-pending.html:462
+msgid "Tip concediu"
+msgstr "Leave type"
+
+#: templates/core/calendar-worker-pending.html:481
+msgid "Alege datele"
+msgstr "Select dates"
+
+#: templates/core/calendar-worker-pending.html:491
+#: templates/core/profile-worker.html:467
+msgid "Alocate"
+msgstr "Allocated"
+
+#: templates/core/calendar-worker-pending.html:495
+#: templates/core/profile-worker.html:471
+msgid "Aprobate"
+msgstr "Approved"
+
+#: templates/core/calendar-worker-pending.html:503
+msgid "Disponibile"
+msgstr "Available"
+
+#: templates/core/calendar-worker-pending.html:515
+msgid "LUN"
+msgstr "MON"
+
+#: templates/core/calendar-worker-pending.html:515
+msgid "MAR"
+msgstr "TUE"
+
+#: templates/core/calendar-worker-pending.html:515
+msgid "MIE"
+msgstr "WED"
+
+#: templates/core/calendar-worker-pending.html:515
+msgid "JOI"
+msgstr "THU"
+
+#: templates/core/calendar-worker-pending.html:515
+msgid "VIN"
+msgstr "FRI"
+
+#: templates/core/calendar-worker-pending.html:515
+msgid "SÂM"
+msgstr "SAT"
+
+#: templates/core/calendar-worker-pending.html:515
+msgid "DUM"
+msgstr "SUN"
+
+#: templates/core/calendar-worker-pending.html:536
+msgid "Comentariu (opțional)"
+msgstr "Optional comment"
+
+#: templates/core/calendar-worker-pending.html:537
+msgid "Adaugă o notă pentru manager..."
+msgstr "Add a note for the manager..."
+
+#: templates/core/calendar-worker-pending.html:540
+#: templates/core/see-completed-submission-admin.html:480
+msgid "Trimite cererea"
+msgstr "Send request"
+
+#: templates/core/calendar-worker-pending.html:546
+msgid "Cererile mele de concediu"
+msgstr "My leave requests"
+
+#: templates/core/calendar-worker-pending.html:560
+msgid "Motiv"
+msgstr "Reason"
+
+#: templates/core/calendar-worker-pending.html:568
+msgid "Nu ai cereri încă."
+msgstr "You have no requests yet."
+
+#: templates/core/calendar-worker.html:391
+msgid "Cere concediu"
+msgstr "Request leave"
+
+#: templates/core/chat.html:8
+msgid "Mesaje"
+msgstr "Messages"
+
+#: templates/core/chat.html:641
+msgid "Niciun mesaj încă"
+msgstr "No messages yet"
+
+#: templates/core/chat.html:650
+msgid "Nicio conversație"
+msgstr "No threads"
+
+#: templates/core/chat.html:663
+msgid "Chat de echipă"
+msgstr "Team Chat"
+
+#: templates/core/chat.html:674
+msgid "Activ"
+msgstr "Unmute"
+
+#: templates/core/chat.html:675
+msgid "Mut 1h"
+msgstr "Mute 1h"
+
+#: templates/core/chat.html:676
+msgid "Mut 8h"
+msgstr "Mute 8h"
+
+#: templates/core/chat.html:677
+msgid "Mut 24h"
+msgstr "Mute 24h"
+
+#: templates/core/chat.html:678
+msgid "Mut permanent"
+msgstr "Mute forever"
+
+#: templates/core/chat.html:680
+msgid "Aplică"
+msgstr "Apply"
+
+#: templates/core/chat.html:707 templates/core/chat.html:873
+msgid "Livrat"
+msgstr "Delivered"
+
+#: templates/core/chat.html:713
+msgid "Niciun mesaj încă."
+msgstr "No messages yet."
+
+#: templates/core/chat.html:732
+msgid "Scrie mesajul..."
+msgstr "Type your message..."
+
+#: templates/core/chat.html:872
+msgid "Văzut"
+msgstr "Seen"
+
+#: templates/core/chat.html:874
+msgid "Văzut de toți"
+msgstr "Seen by all"
+
+#: templates/core/chat.html:875
+msgid "Văzut de"
+msgstr "Seen by"
+
+#: templates/core/dashboard.html:365
+msgid "Activitate săptămânală"
+msgstr "Weekly activity"
+
+#: templates/core/dashboard.html:373
+msgid "Proiecte active"
+msgstr "Active projects"
+
+#: templates/core/dashboard.html:391
+msgid "Meeting-uri viitoare"
+msgstr "Upcoming meetings"
+
+#: templates/core/dashboard.html:427
+msgid "Ștergi acest meeting?"
+msgstr "Delete this meeting?"
+
+#: templates/core/dashboard.html:429 templates/core/tasks-admin.html:265
+msgid "Șterge"
+msgstr "Delete"
+
+#: templates/core/dashboard.html:434
+msgid "Nu există meeting-uri viitoare."
+msgstr "No upcoming meetings."
+
+#: templates/core/dashboard.html:455
+msgid "Nimeni nu este în concediu."
+msgstr "No one is on leave."
+
+#: templates/core/index.html:8
+msgid "Înregistrare în panel"
+msgstr "Sign up to the panel"
+
+#: templates/core/index.html:16
+msgid "Înregistrare în"
+msgstr "Sign up to the"
+
+#: templates/core/index.html:16 templates/registration/login.html:62
+msgid "panel"
+msgstr "panel"
+
+#: templates/core/index.html:25
+msgid "Înregistrare admin"
+msgstr "Sign up as admin"
+
+#: templates/core/index.html:26
+msgid "Înregistrare worker"
+msgstr "Sign up as worker"
+
+#: templates/core/index.html:34
+msgid "Prenume"
+msgstr "First name"
+
+#: templates/core/index.html:38 templates/core/team-filter.html:394
+#: templates/core/team.html:418
+msgid "Nume"
+msgstr "Name"
+
+#: templates/core/index.html:45 templates/core/profile-admin.html:421
+#: templates/core/profile-worker.html:558
+msgid "Email"
+msgstr "Email"
+
+#: templates/core/index.html:49
+msgid "Telefon"
+msgstr "Phone number"
+
+#: templates/core/index.html:55 templates/registration/login.html:39
+msgid "Parolă"
+msgstr "Password"
+
+#: templates/core/index.html:60
+msgid "Confirmă parola"
+msgstr "Confirm password"
+
+#: templates/core/index.html:67
+msgid ""
+"Sunt de acord cu <a href=\"#\">Termenii</a> și <a href=\"#\">Politica de "
+"confidențialitate</a>"
+msgstr ""
+"I agree to the <a href=\"#\">Terms</a> and <a href=\"#\">Privacy Policy</a>"
+
+#: templates/core/index.html:71 templates/registration/login.html:53
+msgid "Înregistrare"
+msgstr "Sign up"
+
+#: templates/core/index.html:75
+msgid "Ai deja cont?"
+msgstr "Already have an account?"
+
+#: templates/core/open-task-ask-chat.html:8
+#: templates/core/open-task-worker.html:8
+msgid "Task deschis"
+msgstr "Open task"
+
+#: templates/core/open-task-ask-chat.html:8
+#: templates/core/open-task-ask-chat.html:418
+#: templates/core/open-task-worker.html:348
+msgid "Întreabă managerul"
+msgstr "Ask the manager"
+
+#: templates/core/open-task-ask-chat.html:395
+#: templates/core/open-task-worker.html:325 templates/core/projects.html:312
+#: templates/core/see-completed-submission-admin.html:383
+#: templates/core/see-completed-submission.html:291
+msgid "Miercuri, 10 Noiembrie, 2025"
+msgstr "Wednesday, 10 November, 2025"
+
+#: templates/core/open-task-ask-chat.html:414
+#: templates/core/open-task-worker.html:344
+msgid "Informații task"
+msgstr "Task information"
+
+#: templates/core/open-task-ask-chat.html:423
+#: templates/core/open-task-worker.html:353
+#: templates/core/see-completed-submission-admin.html:408
+msgid ""
+"Scrie un email pentru a afla cât lucrează oamenii din compania parteneră."
+msgstr "Write an email to find out how much the partner company team works."
+
+#: templates/core/open-task-ask-chat.html:427
+#: templates/core/open-task-ask-chat.html:428
+#: templates/core/open-task-ask-chat.html:429
+#: templates/core/open-task-worker.html:357
+#: templates/core/open-task-worker.html:358
+#: templates/core/open-task-worker.html:359
+#: templates/core/see-completed-submission-admin.html:412
+#: templates/core/see-completed-submission-admin.html:413
+#: templates/core/see-completed-submission-admin.html:414
+msgid "Trebuie să conțină: adresă, lucru, orice altă informație..."
+msgstr "Must include: address, work, any other information..."
+
+#: templates/core/open-task-ask-chat.html:434
+#: templates/core/open-task-worker.html:364
+#: templates/core/see-completed-submission-admin.html:418
+msgid "Oameni în proiect"
+msgstr "People in the project"
+
+#: templates/core/open-task-ask-chat.html:439
+#: templates/core/open-task-worker.html:369
+#: templates/core/see-completed-submission-admin.html:423
+msgid "Proiectul necesită"
+msgstr "Project requires"
+
+#: templates/core/open-task-ask-chat.html:444
+#: templates/core/open-task-worker.html:374
+#: templates/core/see-completed-submission-admin.html:428
+msgid "Managerul proiectului"
+msgstr "Project manager"
+
+#: templates/core/open-task-ask-chat.html:449
+#: templates/core/open-task-worker.html:379
+msgid "Data start → Data limită"
+msgstr "Start date → Due date"
+
+#: templates/core/open-task-ask-chat.html:456
+msgid "Chat cu managerul"
+msgstr "Chat with the manager"
+
+#: templates/core/open-task-ask-chat.html:460
+msgid "Salut! Cum te pot ajuta cu acest task?"
+msgstr "Hello! How can I help you with this task?"
+
+#: templates/core/open-task-ask-chat.html:465
+msgid "Scrie întrebarea ta..."
+msgstr "Type your question..."
+
+#: templates/core/open-task-ask-chat.html:472
+#: templates/core/open-task-worker.html:386
+msgid "Comentarii"
+msgstr "Comments"
+
+#: templates/core/open-task-ask-chat.html:475
+#: templates/core/open-task-worker.html:389
+msgid "Scrie un comentariu..."
+msgstr "Write a comment..."
+
+#: templates/core/profile-admin.html:362 templates/core/profile-worker.html:458
+msgid "Completează funcția"
+msgstr "Fill in the role"
+
+#: templates/core/profile-admin.html:368 templates/core/profile-admin.html:400
+#: templates/core/profile-worker.html:486
+#: templates/core/profile-worker.html:537
+msgid "Editează profilul"
+msgstr "Edit profile"
+
+#: templates/core/profile-admin.html:370 templates/core/profile-public.html:100
+#: templates/core/profile-worker.html:488
+msgid "Despre"
+msgstr "About"
+
+#: templates/core/profile-admin.html:371 templates/core/profile-worker.html:489
+msgid "Completează o descriere despre tine."
+msgstr "Add a description about yourself."
+
+#: templates/core/profile-admin.html:375 templates/core/profile-worker.html:508
+msgid "Skill-uri și limbi"
+msgstr "Skills & languages"
+
+#: templates/core/profile-admin.html:384 templates/core/profile-worker.html:521
+msgid "Adaugă skill-urile și limbile pe care le cunoști."
+msgstr "Add the skills and languages you know."
+
+#: templates/core/profile-admin.html:410 templates/core/profile-worker.html:547
+msgid "Schimbă fotografia"
+msgstr "Change photo"
+
+#: templates/core/profile-admin.html:417 templates/core/profile-worker.html:554
+msgid "Nume complet"
+msgstr "Full name"
+
+#: templates/core/profile-admin.html:425 templates/core/profile-worker.html:562
+msgid "Funcție / Poziție"
+msgstr "Function / Position"
+
+#: templates/core/profile-admin.html:429 templates/core/profile-worker.html:566
+msgid "Despre mine"
+msgstr "About me"
+
+#: templates/core/profile-admin.html:436 templates/core/profile-public.html:104
+#: templates/core/profile-worker.html:573
+msgid "Limbi"
+msgstr "Languages"
+
+#: templates/core/profile-admin.html:440 templates/core/profile-worker.html:577
+msgid "Skill-uri (separate prin virgulă)"
+msgstr "Skills (comma separated)"
+
+#: templates/core/profile-admin.html:444 templates/core/profile-public.html:102
+#: templates/core/profile-worker.html:501
+#: templates/core/profile-worker.html:588
+msgid "Educație"
+msgstr "Education"
+
+#: templates/core/profile-admin.html:448 templates/core/profile-public.html:101
+#: templates/core/profile-worker.html:494
+#: templates/core/profile-worker.html:583 templates/core/team-filter.html:418
+#: templates/core/team-filter.html:488
+msgid "Experiență"
+msgstr "Experience"
+
+#: templates/core/profile-admin.html:495
+msgid ""
+"Profil admin salvat cu succes! (Simulare – în realitate se trimite pe server)"
+msgstr ""
+"Admin profile saved successfully! (Simulation – actually sent to server)"
+
+#: templates/core/profile-public.html:61
+msgid "Informații profil"
+msgstr "Profile information"
+
+#: templates/core/profile-public.html:62
+msgid "Profil public"
+msgstr "Public profile"
+
+#: templates/core/profile-public.html:103
+msgid "Skill-uri"
+msgstr "Skills"
+
+#: templates/core/profile-worker.html:464
+msgid "Concediu anual"
+msgstr "Annual leave"
+
+#: templates/core/profile-worker.html:479
+msgid "Rămase"
+msgstr "Remaining"
+
+#: templates/core/profile-worker.html:498
+msgid "Adaugă experiența ta."
+msgstr "Add your experience."
+
+#: templates/core/profile-worker.html:505
+msgid "Adaugă educația ta."
+msgstr "Add your education."
+
+#: templates/core/profile-worker.html:634
+msgid "Profil salvat cu succes! (În realitate se trimite către server)"
+msgstr "Profile saved successfully! (Actually sent to server)"
+
+#: templates/core/projects.html:8
+msgid "Proiecte"
+msgstr "Projects"
+
+#: templates/core/projects.html:330 templates/core/tasks-admin.html:141
+msgid "Creează un task"
+msgstr "Create a task"
+
+#: templates/core/projects.html:334 templates/core/tasks-admin.html:145
+msgid "Nume task"
+msgstr "Task name"
+
+#: templates/core/projects.html:335
+msgid "Task: Web design"
+msgstr "Task: Web design"
+
+#: templates/core/projects.html:339 templates/core/projects.html:340
+#: templates/core/tasks-admin.html:149
+msgid "Descriere task"
+msgstr "Task description"
+
+#: templates/core/projects.html:344 templates/core/task-main-worker.html:379
+#: templates/core/task-main-worker.html:409
+#: templates/core/task-main-worker.html:440
+#: templates/core/task-main-worker.html:471 templates/core/tasks-admin.html:153
+#: templates/core/tasks-admin.html:224 templates/core/tasks-admin.html:237
+msgid "Tehnologii"
+msgstr "Technologies"
+
+#: templates/core/projects.html:350 templates/core/tasks-admin.html:158
+msgid "Data start"
+msgstr "Start date"
+
+#: templates/core/projects.html:354
+msgid "Data limită"
+msgstr "Due date"
+
+#: templates/core/projects.html:360
+msgid "Cine execută task-ul"
+msgstr "Who completes the task"
+
+#: templates/core/projects.html:361
+msgid "Maria"
+msgstr "Maria"
+
+#: templates/core/projects.html:364 templates/core/task-main-worker.html:360
+#: templates/core/tasks-admin.html:195
+msgid "Adaugă task"
+msgstr "Add task"
+
+#: templates/core/projects.html:369 templates/core/tasks-admin.html:200
+msgid "Activități"
+msgstr "Activities"
+
+#: templates/core/projects.html:373 templates/core/projects.html:381
+#: templates/core/projects.html:390
+msgid "Maria lucrează la proiect: Web design"
+msgstr "Maria is working on project: Web design"
+
+#: templates/core/projects.html:375 templates/core/projects.html:392
+msgid "În progres"
+msgstr "In progress"
+
+#: templates/core/projects.html:376 templates/core/projects.html:384
+#: templates/core/projects.html:393
+msgid "Verifică"
+msgstr "Check"
+
+#: templates/core/see-completed-submission-admin.html:8
+#: templates/core/see-completed-submission.html:8
+msgid "Vezi predarea finalizată"
+msgstr "View completed submission"
+
+#: templates/core/see-completed-submission-admin.html:433
+msgid "De la"
+msgstr "From"
+
+#: templates/core/see-completed-submission-admin.html:434
+msgid "5 Nov până la 25 Nov"
+msgstr "Nov 5 to Nov 25"
+
+#: templates/core/see-completed-submission-admin.html:445
+#: templates/core/see-completed-submission.html:321
+#: templates/core/see-submission.html:311
+msgid "Fișiere predare"
+msgstr "Submission files"
+
+#: templates/core/see-completed-submission-admin.html:460
+#: templates/core/see-completed-submission-admin.html:473
+#: templates/core/see-completed-submission.html:336
+msgid "Editează predarea"
+msgstr "Edit submission"
+
+#: templates/core/see-completed-submission-admin.html:461
+msgid "Marchează ca finalizat"
+msgstr "Mark as complete"
+
+#: templates/core/see-completed-submission-admin.html:477
+msgid "Lasă un comentariu despre ce trebuie modificat:"
+msgstr "Leave a comment about what needs to be changed:"
+
+#: templates/core/see-completed-submission-admin.html:478
+msgid "Descrie ce trebuie editat..."
+msgstr "Describe what should be edited..."
+
+#: templates/core/see-completed-submission-admin.html:487
+msgid "Task finalizat!"
+msgstr "Task completed!"
+
+#: templates/core/see-completed-submission-admin.html:488
+msgid "Predarea a fost marcată ca finalizată cu succes."
+msgstr "The submission has been marked as complete successfully."
+
+#: templates/core/see-completed-submission-admin.html:489
+msgid "Închide"
+msgstr "Close"
+
+#: templates/core/see-completed-submission-admin.html:504
+msgid "Cererea de editare a fost trimisă! Managerul va verifica comentariul."
+msgstr "The edit request was sent! The manager will review your comment."
+
+#: templates/core/see-completed-submission.html:337
+msgid "Înapoi la taskuri"
+msgstr "Back to tasks"
+
+#: templates/core/see-submission.html:8
+#: templates/core/task-main-worker.html:388
+#: templates/core/task-main-worker.html:419
+#: templates/core/task-main-worker.html:450
+#: templates/core/task-main-worker.html:481
+msgid "Vezi predarea"
+msgstr "View submission"
+
+#: templates/core/see-submission.html:321
+#: templates/core/submissions-admin.html:99
+#: templates/core/task-main-worker.html:331 templates/core/tasks-admin.html:179
+msgid "Status"
+msgstr "Status"
+
+#: templates/core/see-submission.html:323
+msgid "Nu există predare încă."
+msgstr "No submission yet."
+
+#: templates/core/submissions-admin.html:8
+msgid "Predări"
+msgstr "Submission"
+
+#: templates/core/submissions-admin.html:71
+msgid "Gestionare predări"
+msgstr "Submission management"
+
+#: templates/core/submissions-admin.html:72
+msgid "Aprobă sau respinge predările taskurilor"
+msgstr "Approve or reject task submissions"
+
+#: templates/core/submissions-admin.html:96
+msgid "Autor"
+msgstr "Author"
+
+#: templates/core/submissions-admin.html:98
+msgid "Fișier"
+msgstr "File"
+
+#: templates/core/submissions-admin.html:100
+msgid "Comentariu reviewer"
+msgstr "Reviewer comment"
+
+#: templates/core/submissions-admin.html:101
+msgid "Acțiuni"
+msgstr "Actions"
+
+#: templates/core/submissions-admin.html:112
+msgid "Atașament"
+msgstr "Attachment"
+
+#: templates/core/submissions-admin.html:125
+msgid "Comentariu opțional"
+msgstr "Optional comment"
+
+#: templates/core/submissions-admin.html:134
+msgid "Nu există predări încă."
+msgstr "No submissions yet."
+
+#: templates/core/task-main-worker.html:324
+msgid "Titlu task"
+msgstr "Task title"
+
+#: templates/core/task-main-worker.html:327 templates/core/tasks-admin.html:162
+msgid "Termen limită"
+msgstr "Due date"
+
+#: templates/core/task-main-worker.html:339 templates/core/tasks-admin.html:187
+msgid "Prioritate"
+msgstr "Priority"
+
+#: templates/core/task-main-worker.html:347 templates/core/tasks-admin.html:222
+#: templates/core/tasks-admin.html:235
+msgid "Responsabil"
+msgstr "Assignee"
+
+#: templates/core/task-main-worker.html:349 templates/core/tasks-admin.html:235
+msgid "Neasignat"
+msgstr "Unassigned"
+
+#: templates/core/task-main-worker.html:357
+msgid "Detalii opționale"
+msgstr "Optional details"
+
+#: templates/core/task-main-worker.html:372
+msgid "DE FĂCUT"
+msgstr "TO DO"
+
+#: templates/core/task-main-worker.html:396
+#: templates/core/task-main-worker.html:427
+#: templates/core/task-main-worker.html:458
+#: templates/core/task-main-worker.html:489
+msgid "Nu există taskuri"
+msgstr "No tasks"
+
+#: templates/core/task-main-worker.html:402
+msgid "ÎN REVIZIE"
+msgstr "IN REVISION"
+
+#: templates/core/task-main-worker.html:433
+msgid "FINALIZATE"
+msgstr "DONE"
+
+#: templates/core/task-main-worker.html:464
+msgid "ARHIVATE"
+msgstr "ARCHIVED"
+
+#: templates/core/tasks-admin.html:119
+msgid "Panou proiecte"
+msgstr "Projects dashboard"
+
+#: templates/core/tasks-admin.html:120
+msgid "Control taskuri admin"
+msgstr "Admin task control"
+
+#: templates/core/tasks-admin.html:146
+msgid "Web design"
+msgstr "Web design"
+
+#: templates/core/tasks-admin.html:150
+msgid "Landing page, flow autentificare..."
+msgstr "Landing page, authentication flow..."
+
+#: templates/core/tasks-admin.html:154
+msgid "HTML, CSS, JS"
+msgstr "HTML, CSS, JS"
+
+#: templates/core/tasks-admin.html:167
+msgid "Asignează"
+msgstr "Assign to"
+
+#: templates/core/tasks-admin.html:175
+msgid "Bifează unul sau mai mulți utilizatori."
+msgstr "Select one or more users."
+
+#: templates/core/tasks-admin.html:203
+msgid "Nu există taskuri încă"
+msgstr "No tasks yet"
+
+#: templates/core/tasks-admin.html:206
+msgid "Caută task sau assignee"
+msgstr "Search task or assignee"
+
+#: templates/core/tasks-admin.html:207 templates/core/team.html:500
+msgid "Toate"
+msgstr "All"
+
+#: templates/core/tasks-admin.html:210
+msgid "Finalizate"
+msgstr "Done"
+
+#: templates/core/tasks-admin.html:211
+msgid "Arhivate"
+msgstr "Archived"
+
+#: templates/core/tasks-admin.html:222 templates/core/tasks-admin.html:235
+msgid "Termen"
+msgstr "Due"
+
+#: templates/core/tasks-admin.html:251
+msgid "Dezarhivează"
+msgstr "Unarchive"
+
+#: templates/core/tasks-admin.html:261
+msgid "Bifează"
+msgstr "Check"
+
+#: templates/core/tasks-admin.html:263
+msgid "Arhivează"
+msgstr "Archive"
+
+#: templates/core/tasks-admin.html:265
+msgid "Ștergi task-ul?"
+msgstr "Delete the task?"
+
+#: templates/core/team-filter.html:8 templates/core/team-filter.html:371
+msgid "Filtru echipă"
+msgstr "Team filter"
+
+#: templates/core/team-filter.html:377
+msgid "Filtrează oameni"
+msgstr "Filter people"
+
+#: templates/core/team-filter.html:384
+msgid "Toți oamenii"
+msgstr "All people"
+
+#: templates/core/team-filter.html:388
+msgid "Găsește persoană"
+msgstr "Find person"
+
+#: templates/core/team-filter.html:398
+msgid "Andrew Solgado..."
+msgstr "Andrew Solgado..."
+
+#: templates/core/team-filter.html:403
+msgid "SAU"
+msgstr "OR"
+
+#: templates/core/team-filter.html:406
+msgid "Competențe"
+msgstr "Capabilities"
+
+#: templates/core/team-filter.html:409 templates/core/team-filter.html:436
+msgid "Tehnologie"
+msgstr "Technology"
+
+#: templates/core/team-filter.html:412
+msgid "Instrumente"
+msgstr "Tools"
+
+#: templates/core/team-filter.html:422
+msgid "web design, UI/UX..."
+msgstr "web design, UI/UX..."
+
+#: templates/core/team-filter.html:427 templates/core/team.html:423
+msgid "Specialitate"
+msgstr "Specialty"
+
+#: templates/core/team-filter.html:431
+msgid "UX design, Figma..."
+msgstr "UX design, Figma..."
+
+#: templates/core/team-filter.html:440
+msgid "Java, React, Node.js..."
+msgstr "Java, React, Node.js..."
+
+#: templates/core/team-filter.html:445
+msgid "Caută"
+msgstr "Search"
+
+#: templates/core/team-filter.html:451
+msgid "Rezultate găsite"
+msgstr "Results found"
+
+#: templates/core/team-filter.html:462 templates/core/team-filter.html:484
+#: templates/core/team-filter.html:506
+msgid "Designer vizual junior"
+msgstr "Junior visual designer"
+
+#: templates/core/team-filter.html:466 templates/core/team-filter.html:510
+msgid "Cunoștințe industrie"
+msgstr "Industry knowledge"
+
+#: templates/core/team-filter.html:467 templates/core/team-filter.html:511
+msgid "UX Design"
+msgstr "UX Design"
+
+#: templates/core/team-filter.html:468 templates/core/team-filter.html:512
+msgid "Figma"
+msgstr "Figma"
+
+#: templates/core/team-filter.html:471 templates/core/team-filter.html:493
+#: templates/core/team-filter.html:515
+msgid "Scrie un mesaj"
+msgstr "Write a message"
+
+#: templates/core/team-filter.html:488
+msgid "Companie"
+msgstr "Company"
+
+#: templates/core/team-filter.html:491
+msgid "Design blog, Photoshop, Illustrator, Figma"
+msgstr "Blog design, Photoshop, Illustrator, Figma"
+
+#: templates/core/team.html:349
+msgid "Echipa ta"
+msgstr "Your team"
+
+#: templates/core/team.html:355
+msgid "Caută după nume / rol / user"
+msgstr "Search by name / role / user"
+
+#: templates/core/team.html:357
+msgid "Toți membrii"
+msgstr "All members"
+
+#: templates/core/team.html:358
+msgid "Filtrează"
+msgstr "Filter"
+
+#: templates/core/team.html:366
+msgid "Sortează: Nume (A-Z)"
+msgstr "Sort: Name (A-Z)"
+
+#: templates/core/team.html:367
+msgid "Sortează: Rol"
+msgstr "Sort: Role"
+
+#: templates/core/team.html:368
+msgid "Sortează: Random"
+msgstr "Sort: Random"
+
+#: templates/core/team.html:370
+msgid "Carduri"
+msgstr "Cards"
+
+#: templates/core/team.html:371
+msgid "Listă"
+msgstr "List"
+
+#: templates/core/team.html:377
+msgid "Membri totali"
+msgstr "Total members"
+
+#: templates/core/team.html:379
+msgid "toți colegii din platformă"
+msgstr "all colleagues on the platform"
+
+#: templates/core/team.html:382
+msgid "Specialități"
+msgstr "Specialties"
+
+#: templates/core/team.html:384
+msgid "domenii diferite"
+msgstr "different domains"
+
+#: templates/core/team.html:387
+msgid "Rezultate căutare"
+msgstr "Search results"
+
+#: templates/core/team.html:389
+msgid "după filtrele curente"
+msgstr "based on current filters"
+
+#: templates/core/team.html:397
+msgid "Alege specialitatea"
+msgstr "Choose specialty"
+
+#: templates/core/team.html:402
+msgid "Membri"
+msgstr "Members"
+
+#: templates/core/team.html:413
+msgid "Filtrează echipa"
+msgstr "Filter team"
+
+#: templates/core/team.html:419
+msgid "Ana Maria..."
+msgstr "Ana Maria..."
+
+#: templates/core/team.html:428
+msgid "Tehnologii (exemplu)"
+msgstr "Technologies (example)"
+
+#: templates/core/team.html:438
+msgid "Aplică filtre"
+msgstr "Apply filters"
+
+#: templates/core/team.html:442
+msgid "General"
+msgstr "General"
+
+#: templates/core/team.html:445
+msgid "Altele"
+msgstr "Other"
+
+#: templates/core/team.html:446
+#| msgid "Niciun mesaj încă."
+msgid "Niciun membru găsit."
+msgstr "No members found."
+
+#: templates/core/team.html:447
+#| msgid "Mesaje"
+msgid "Mesaj"
+msgstr "Message"
+
+#: templates/registration/login.html:8
+msgid "Autentificare în panel"
+msgstr "Login to the panel"
+
+#: templates/registration/login.html:17 templates/registration/login.html:61
+#: templates/registration/login.html:62
+msgid "Te rugăm să te autentifici pentru a accesa"
+msgstr "Please sign in to access"
+
+#: templates/registration/login.html:18 templates/registration/login.html:61
+#: templates/registration/login.html:62
+msgid "panoul"
+msgstr "the panel"
+
+#: templates/registration/login.html:18 templates/registration/login.html:61
+msgid "administrativ"
+msgstr "administrative"
+
+#: templates/registration/login.html:22
+msgid "Username sau parolă greșită."
+msgstr "Incorrect username or password."
+
+#: templates/registration/login.html:26
+msgid "Autentificare admin"
+msgstr "Login as admin"
+
+#: templates/registration/login.html:27
+msgid "Autentificare worker"
+msgstr "Login as worker"
+
+#: templates/registration/login.html:34
+msgid "Username sau Email"
+msgstr "Username or Email"
+
+#: templates/registration/login.html:41
+msgid "Ai uitat parola?"
+msgstr "Forgot Password?"
+
+#: templates/registration/login.html:46
+msgid "Ține-mă minte"
+msgstr "Remember me"
+
+#: templates/registration/login.html:53
+msgid "Nu ai cont?"
+msgstr "Don't have an account?"
+
+# Notifications
+msgid "Task fără titlu"
+msgstr "Untitled task"
+
+msgid "Reminder: '%(title)s' are deadline mâine (%(date)s)."
+msgstr "Reminder: '%(title)s' is due tomorrow (%(date)s)."
+
+msgid "Reminder: '%(title)s' are deadline azi (%(date)s)."
+msgstr "Reminder: '%(title)s' is due today (%(date)s)."
+
+msgid "Întârziat: '%(title)s' are termen depășit (%(date)s)."
+msgstr "Overdue: '%(title)s' is past deadline (%(date)s)."
+
+msgid "Meeting nou: %(title)s pe %(date)s la %(time)s"
+msgstr "New meeting: %(title)s on %(date)s at %(time)s"
+
+msgid "Meeting nou: %(title)s pe %(date)s"
+msgstr "New meeting: %(title)s on %(date)s"
+
+msgid "Meeting anulat: %(title)s"
+msgstr "Meeting canceled: %(title)s"
+
+msgid "Reminder: %(message)s"
+msgstr "Reminder: %(message)s"
+
+msgid "Task nou: %(title)s"
+msgstr "New task: %(title)s"
+
+msgid "Cerere concediu %(status)s"
+msgstr "Leave request %(status)s"
+
+msgid "Comentariu nou la %(title)s: %(message)s"
+msgstr "New comment on %(title)s: %(message)s"
+
+msgid "a trimis un fișier"
+msgstr "sent a file"
+
+msgid "mesaj nou"
+msgstr "new message"
+
+msgid "%(sender)s: %(preview)s"
+msgstr "%(sender)s: %(preview)s"

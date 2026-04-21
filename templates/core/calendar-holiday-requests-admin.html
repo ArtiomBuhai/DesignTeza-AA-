@@ -1,9 +1,11 @@
 <!doctype html>
-<html lang="ro">
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Holiday Requests - Admin</title>
+    <title>{% trans "Cereri concediu" %} - {% trans "Admin" %}</title>
     <style>
       * {
         margin: 0;
@@ -182,7 +184,7 @@
       }
       .request-row {
         display: grid;
-        grid-template-columns: 170px 140px 260px 230px 260px 380px;
+        grid-template-columns: 170px 140px 260px 230px minmax(280px, 1fr);
         gap: 16px;
         align-items: center;
         background: #fff;
@@ -192,10 +194,14 @@
         box-shadow: 0 8px 20px rgba(15, 23, 42, 0.06);
       }
       .request-row .request-actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
         justify-content: flex-start;
-        gap: 12px;
+        gap: 10px;
         justify-self: start;
-        min-width: 240px;
+        min-width: 0;
+        width: auto;
       }
       .request-row .request-actions form {
         margin: 0;
@@ -358,13 +364,16 @@
         padding: 6px 10px;
         font-size: 0.9rem;
         text-align: left;
-        max-width: 260px;
+        max-width: 100%;
         line-height: 1.3;
+        white-space: normal;
+        overflow-wrap: anywhere;
+        margin: 0;
       }
 
       .decline-btn,
       .accept-btn {
-        flex: 1;
+        flex: 0 0 auto;
         padding: 12px 18px;
         border-radius: 12px;
         font-size: 0.95rem;
@@ -414,7 +423,13 @@
         .main {
           margin-left: 80px;
         }
-        .request-list {
+        .request-row {
+          grid-template-columns: repeat(2, minmax(220px, 1fr));
+          align-items: start;
+        }
+      }
+      @media (max-width: 720px) {
+        .request-row {
           grid-template-columns: 1fr;
         }
       }
@@ -425,15 +440,15 @@
     <div class="dashboard">
       <!-- Sidebar -->
       <aside class="sidebar">
-        <div class="sidebar-logo">Panel</div>
+        <div class="sidebar-logo">{% trans "Panel" %}</div>
 
         <nav class="sidebar-nav">
-          <a href="{% url 'dashboard' %}">Dashboard</a>
-          <a href="{% url 'tasks' %}">Tasks</a>
-          <a href="{% url 'calendar' %}" class="active">Calendar</a>
-          <a href="{% url 'team' %}">Team</a>
-          <a href="{% url 'chat' %}">Chat</a>
-          <a href="{% url 'profile' %}">Profile</a>
+          <a href="{% url 'dashboard' %}">{% trans "Panou" %}</a>
+          <a href="{% url 'tasks' %}">{% trans "Taskuri" %}</a>
+          <a href="{% url 'calendar' %}" class="active">{% trans "Calendar" %}</a>
+          <a href="{% url 'team' %}">{% trans "Echipă" %}</a>
+          <a href="{% url 'chat' %}">{% trans "Chat" %}</a>
+          <a href="{% url 'profile' %}">{% trans "Profil" %}</a>
         </nav>
       </aside>
 
@@ -442,16 +457,17 @@
         <!-- Header -->
         <header class="header">
           <div class="header-left">
-            <h1>Today</h1>
+            <h1>{% trans "Astăzi" %}</h1>
             <p class="date">{% now "l, d F, Y" %}</p>
           </div>
 
           <div class="header-right">
             {% include 'core/_header_search.html' %}
+            {% include 'core/_language_select.html' %}
             <div class="user">
               <div class="avatar">{{ user.username|first|upper }}</div>
               <span>@{{ user.username }}</span>
-              <a href="{% url 'logout' %}" style="margin-left:10px; color:#2563eb; font-weight:600; text-decoration:none;">Logout</a>
+              <a href="{% url 'logout' %}" style="margin-left:10px; color:#2563eb; font-weight:600; text-decoration:none;">{% trans "Ieșire" %}</a>
             </div>
           </div>
         </header>
@@ -459,43 +475,35 @@
         <!-- Holiday requests -->
         <section class="requests-section">
           <div class="requests-header">
-            <h2 class="requests-title">Holiday requests</h2>
+            <h2 class="requests-title">{% trans "Cereri concediu" %}</h2>
             <div style="display:flex; gap:10px; align-items:center;">
-              <a class="export-btn" href="{% url 'export_holiday_requests_csv' %}">Export CSV</a>
+              <a class="export-btn" href="{% url 'export_holiday_requests_csv' %}">{% trans "Export CSV" %}</a>
               <button
                 class="see-current-btn"
                 onclick="window.location.href='{% url 'calendar_current_holidays_admin' %}'"
               >
-                See current holidays
+                {% trans "Vezi concediile curente" %}
               </button>
             </div>
           </div>
 
+          {% trans "Membru" as member_label %}
           <div class="request-list">
             {% for r in requests %}
             <div class="request-row">
               <div>
                 {{ r.user.get_full_name|default:r.user.username }}
                 <div class="leave-mini">
-                  <strong>Concediu {{ r.leave_balance.year }}:</strong>
-                  {{ r.leave_balance.approved }} luate ·
-                  {{ r.leave_balance.pending }} pending ·
-                  {{ r.leave_balance.remaining }} rămase
+                  <strong>{% trans "Concediu" %} {{ r.leave_balance.year }}:</strong>
+                  {{ r.leave_balance.approved }} {% trans "luate" %} ·
+                  {{ r.leave_balance.pending }} {% trans "în așteptare" %} ·
+                  {{ r.leave_balance.remaining }} {% trans "rămase" %}
                 </div>
               </div>
-              <div>{{ r.user.profile.function|default:'Member' }}</div>
+              <div>{{ r.user.profile.function|default:member_label }}</div>
               <div>{{ r.get_holiday_type_display }}</div>
               <div>{{ r.start_date }} → {{ r.end_date }}</div>
-              <div
-                class="request-actions"
-                style="
-                  display: inline-flex;
-                  gap: 12px;
-                  align-items: center;
-                  justify-content: flex-start;
-                  min-width: 200px;
-                "
-              >
+              <div class="request-actions">
                 <div
                   class="request-status {% if r.status == 'pending' %}status-pending{% elif r.status == 'approved' %}status-approved{% else %}status-rejected{% endif %}"
                 >
@@ -510,37 +518,24 @@
                   <input type="hidden" name="req_id" value="{{ r.id }}" />
                   <input type="hidden" name="action" value="approved" />
                   <input type="hidden" name="admin_note" value="" />
-                  <button class="accept-btn" type="submit">Approve</button>
+                  <button class="accept-btn" type="submit">{% trans "Aprobă" %}</button>
                 </form>
                 <button
                   class="decline-btn"
                   type="button"
                   onclick="openDeclineModal('{{ r.id }}')"
                 >
-                  Reject
+                  {% trans "Respinge" %}
                 </button>
+                {% if r.admin_note %}
+                <div class="note-badge">
+                  <strong>{% trans "Motiv admin:" %}</strong> {{ r.admin_note }}
+                </div>
+                {% endif %}
               </div>
-              {% if r.admin_note %}
-              <div
-                class="note-badge"
-                style="
-                  grid-column: 6 / 7;
-                  text-align: left;
-                  max-width: 360px;
-                  word-break: break-word;
-                  white-space: normal;
-                  align-self: center;
-                  justify-self: start;
-                  margin-left: 70px;
-                  padding: 6px 10px;
-                "
-              >
-                <strong>Motiv admin:</strong> {{ r.admin_note }}
-              </div>
-              {% endif %}
             </div>
             {% empty %}
-            <p style="color: #94a3b8">No requests.</p>
+            <p style="color: #94a3b8">{% trans "Nu există cereri." %}</p>
             {% endfor %}
           </div>
         </section>
@@ -550,13 +545,13 @@
     <!-- Modal pentru motivul de reject -->
     <div id="declineModal">
       <div class="modal-card">
-        <h3 style="margin: 0">Motiv respingere</h3>
+        <h3 style="margin: 0">{% trans "Motiv respingere" %}</h3>
         <p style="color: #64748b">
-          Completează motivul pentru care respingi cererea.
+          {% trans "Completează motivul pentru care respingi cererea." %}
         </p>
         <textarea
           id="declineNote"
-          placeholder="Ex: Perioadă suprapusă cu proiect critic"
+          placeholder="{% trans 'Ex: Perioadă suprapusă cu proiect critic' %}"
         ></textarea>
         <div class="modal-actions">
           <button
@@ -564,10 +559,10 @@
             type="button"
             onclick="closeDeclineModal()"
           >
-            Anulează
+            {% trans "Anulează" %}
           </button>
           <button class="modal-confirm" type="button" onclick="submitDecline()">
-            Trimite
+            {% trans "Trimite" %}
           </button>
         </div>
         <form
@@ -600,7 +595,7 @@
       function submitDecline() {
         const note = document.getElementById("declineNote").value.trim();
         if (!note) {
-          alert("Adaugă motivul respingerii obligatoriu.");
+          alert("{% trans 'Adaugă motivul respingerii obligatoriu.' %}");
           return;
         }
         if (!declineTarget) return;

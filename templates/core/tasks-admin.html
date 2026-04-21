@@ -1,10 +1,11 @@
-{% load static %}
+{% load static i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tasks - Admin</title>
+  <title>{% trans "Taskuri" %} - {% trans "Admin" %}</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
@@ -63,23 +64,25 @@
     .filter-pill.active { background:#2563eb; color:#fff; border-color:#2563eb; }
     .activity-search { flex:1; min-width:280px; display:flex; align-items:center; gap:8px; border:1px solid #e2e8f0; border-radius:10px; padding:8px 10px; background:#fff; }
     .activity-search input { border:none; outline:none; width:100%; font-size:0.95rem; }
-    .activity-item { display:flex; justify-content:space-between; align-items:center; gap:14px; background:#f9fafc; border:1px solid #e2e8f0; border-radius:12px; padding:12px 14px; }
-    .activity-main { display:flex; align-items:center; gap:12px; flex:1; min-width:0; }
+    .activity-item { display:grid; grid-template-columns:minmax(0, 1fr) minmax(320px, 380px); align-items:start; gap:14px; background:#f9fafc; border:1px solid #e2e8f0; border-radius:12px; padding:12px 14px; }
+    .activity-main { display:flex; align-items:flex-start; gap:12px; min-width:0; }
     .activity-content { min-width:0; }
-    .activity-right { display:flex; align-items:center; justify-content:flex-end; gap:10px; flex-wrap:wrap; }
+    .activity-right { display:grid; grid-template-columns:1fr 1fr; align-content:start; gap:8px 10px; min-width:0; }
     .avatar-mini { width:32px; height:32px; border-radius:10px; background:#e0e7ff; color:#4338ca; display:flex; align-items:center; justify-content:center; font-weight:700; }
     .task-title { font-size:1.1rem; font-weight:700; color:#0f172a; margin-bottom:2px; line-height:1.25; }
     .task-meta { color:#64748b; font-size:0.92rem; margin-bottom:4px; line-height:1.3; }
     .task-desc { color:#334155; font-size:0.92rem; line-height:1.35; overflow-wrap:anywhere; }
+    .task-tech { color:#334155; font-size:0.92rem; line-height:1.35; margin-top:4px; overflow-wrap:anywhere; }
     .status-chip { padding:6px 10px; border-radius:10px; font-weight:700; font-size:0.9rem; text-align:center; }
     .status-todo { background:#fef9c3; color:#92400e; }
     .status-revision { background:#e0f2fe; color:#075985; }
     .status-done { background:#dcfce7; color:#166534; }
     .priority-pill { padding:6px 10px; border-radius:10px; font-weight:700; font-size:0.85rem; text-align:center; border:1px solid #e2e8f0; color:#0f172a; min-width:120px; }
-    .status-chip { min-width:120px; }
+    .status-chip { min-width:120px; width:100%; }
+    .priority-pill { min-width:120px; width:100%; }
     .priority-medium { color:#c2410c; }
     .priority-high { color:#b91c1c; }
-    .check-btn { background:#2563eb; color:#fff; border:none; padding:8px 12px; border-radius:10px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; text-decoration:none; }
+    .check-btn { background:#2563eb; color:#fff; border:none; padding:8px 12px; border-radius:10px; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; text-decoration:none; min-width:120px; white-space:nowrap; }
     .check-btn:hover { background:#1d4ed8; }
     .action-export { background:#475569; }
     .action-export:hover { background:#334155; }
@@ -87,12 +90,13 @@
     .action-archive:hover { background:#0284c7; }
     .action-delete { background:#ef4444; }
     .action-delete:hover { background:#dc2626; }
-    .activity-actions { display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
+    .activity-actions { grid-column:1 / -1; display:grid; grid-template-columns:repeat(3, minmax(120px, 1fr)); align-items:center; gap:8px; }
     .archived-label { color:#94a3b8; font-weight:700; font-size:0.9rem; }
     @media (max-width: 1280px) {
-      .activity-item { align-items:flex-start; flex-direction:column; }
+      .activity-item { grid-template-columns:1fr; }
       .activity-main { width:100%; }
-      .activity-right { width:100%; justify-content:flex-start; padding-left:44px; }
+      .activity-right { width:100%; grid-template-columns:repeat(auto-fit, minmax(120px, 1fr)); }
+      .activity-actions { grid-template-columns:repeat(auto-fit, minmax(120px, 1fr)); }
     }
     .empty-state { padding:24px; text-align:center; color:#94a3b8; }
   </style>
@@ -101,24 +105,25 @@
 <body>
 <div class="dashboard-layout">
   <aside class="sidebar">
-    <div class="sidebar-logo">Panel</div>
+    <div class="sidebar-logo">{% trans "Panel" %}</div>
     <nav class="sidebar-nav">
-      <a href="{% url 'dashboard' %}">Dashboard</a>
-      <a href="{% url 'tasks' %}" class="active">Tasks</a>
-      <a href="{% url 'calendar' %}">Calendar</a>
-      <a href="{% url 'team' %}">Team</a>
-      <a href="{% url 'chat' %}">Chat</a>
-      <a href="{% url 'profile' %}">Profile</a>
+      <a href="{% url 'dashboard' %}">{% trans "Panou" %}</a>
+      <a href="{% url 'tasks' %}" class="active">{% trans "Taskuri" %}</a>
+      <a href="{% url 'calendar' %}">{% trans "Calendar" %}</a>
+      <a href="{% url 'team' %}">{% trans "Echipă" %}</a>
+      <a href="{% url 'chat' %}">{% trans "Chat" %}</a>
+      <a href="{% url 'profile' %}">{% trans "Profil" %}</a>
     </nav>
   </aside>
   <main class="main-content">
     <header class="header">
       <div>
-        <h2>Projects Dashboard</h2>
-        <p style="color:#64748b">Admin task control</p>
+        <h2>{% trans "Panou proiecte" %}</h2>
+        <p style="color:#64748b">{% trans "Control taskuri admin" %}</p>
       </div>
       <div class="header-right">
         {% include 'core/_header_search.html' %}
+        {% include 'core/_language_select.html' %}
         <div class="user-info">
           <div class="avatar">
             {% if user.profile.avatar %}
@@ -128,40 +133,40 @@
             {% endif %}
           </div>
           <span>@{{ user.username }}</span>
-          <a class="logout-link" href="{% url 'logout' %}">Logout</a>
+          <a class="logout-link" href="{% url 'logout' %}">{% trans "Ieșire" %}</a>
         </div>
       </div>
     </header>
 
     <section class="projects-dashboard">
       <div class="card" style="flex:1.1">
-        <h3 class="card-title">Create a task</h3>
+        <h3 class="card-title">{% trans "Creează un task" %}</h3>
         <form method="post" action="{% url 'tasks' %}">
           {% csrf_token %}
           <div class="form-group">
-            <label>Task Name</label>
-            <input name="title" type="text" placeholder="Web design" required />
+            <label>{% trans "Nume task" %}</label>
+            <input name="title" type="text" placeholder="{% trans 'Web design' %}" required />
           </div>
           <div class="form-group">
-            <label>Description task</label>
-            <textarea name="description" placeholder="Landing page, auth flow..."></textarea>
+            <label>{% trans "Descriere task" %}</label>
+            <textarea name="description" placeholder="{% trans 'Landing page, flow autentificare...' %}"></textarea>
           </div>
           <div class="form-group">
-            <label>Technologies</label>
-            <input name="technologies" type="text" placeholder="HTML, CSS, JS" />
+            <label>{% trans "Tehnologii" %}</label>
+            <input name="technologies" type="text" placeholder="{% trans 'HTML, CSS, JS' %}" />
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label>Start Date</label>
-              <input name="start_date" type="date" />
+              <label>{% trans "Data start" %}</label>
+              <input name="start_date" type="date" lang="{{ LANGUAGE_CODE }}" />
             </div>
             <div class="form-group">
-              <label>Due Date</label>
-              <input name="due_date" type="date" />
+              <label>{% trans "Termen limită" %}</label>
+              <input name="due_date" type="date" lang="{{ LANGUAGE_CODE }}" />
             </div>
           </div>
           <div class="form-group">
-            <label>Assign to</label>
+            <label>{% trans "Asignează" %}</label>
             <div style="border:1px solid #cbd5e1; border-radius:12px; padding:10px 12px; max-height:170px; overflow-y:auto; display:flex; flex-direction:column; gap:8px;">
               {% for u in users %}
               <label style="display:flex; align-items:center; gap:10px; font-weight:500; color:#334155; font-size:0.95rem;">
@@ -169,11 +174,11 @@
               </label>
               {% endfor %}
             </div>
-            <small style="color:#64748b; display:block; margin-top:6px;">Bifează unul sau mai mulți utilizatori.</small>
+            <small style="color:#64748b; display:block; margin-top:6px;">{% trans "Bifează unul sau mai mulți utilizatori." %}</small>
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label>Status</label>
+              <label>{% trans "Status" %}</label>
               <select name="status">
                 {% for val,label in task.STATUS_CHOICES %}
                 <option value="{{ val }}">{{ label }}</option>
@@ -181,7 +186,7 @@
               </select>
             </div>
             <div class="form-group">
-              <label>Priority</label>
+              <label>{% trans "Prioritate" %}</label>
               <select name="priority">
                 {% for val,label in task.PRIORITY_CHOICES %}
                 <option value="{{ val }}">{{ label }}</option>
@@ -189,23 +194,23 @@
               </select>
             </div>
           </div>
-          <button type="submit" class="primary-btn">Add task</button>
+          <button type="submit" class="primary-btn">{% trans "Adaugă task" %}</button>
         </form>
       </div>
 
       <div class="card" style="flex:1.4">
-        <h3 class="card-title">Activities</h3>
+        <h3 class="card-title">{% trans "Activități" %}</h3>
         <div class="activities">
           {% if not tasks_list %}
-            <div class="empty-state">No tasks yet</div>
+            <div class="empty-state">{% trans "Nu există taskuri încă" %}</div>
           {% endif %}
           <div class="activities-controls">
-            <div class="activity-search"><input id="activitySearch" type="text" placeholder="Caută task sau assignee" oninput="filterActivities()"></div>
-            <button class="filter-pill active" data-filter="all" onclick="setFilter('all')">All</button>
-            <button class="filter-pill" data-filter="todo" onclick="setFilter('todo')">To Do</button>
-            <button class="filter-pill" data-filter="revision" onclick="setFilter('revision')">In Revision</button>
-            <button class="filter-pill" data-filter="done" onclick="setFilter('done')">Done</button>
-            <button class="filter-pill" data-filter="archived" onclick="setFilter('archived')">Archived</button>
+            <div class="activity-search"><input id="activitySearch" type="text" placeholder="{% trans 'Caută task sau assignee' %}" oninput="filterActivities()"></div>
+            <button class="filter-pill active" data-filter="all" onclick="setFilter('all')">{% trans "Toate" %}</button>
+            <button class="filter-pill" data-filter="todo" onclick="setFilter('todo')">{% trans "De făcut" %}</button>
+            <button class="filter-pill" data-filter="revision" onclick="setFilter('revision')">{% trans "În revizie" %}</button>
+            <button class="filter-pill" data-filter="done" onclick="setFilter('done')">{% trans "Finalizate" %}</button>
+            <button class="filter-pill" data-filter="archived" onclick="setFilter('archived')">{% trans "Arhivate" %}</button>
           </div>
           {% for t in tasks_list %}
           {% with assignee=t.assignee %}
@@ -216,8 +221,9 @@
                   <div class="avatar-mini">{{ display|default:"?"|slice:':1'|upper }}</div>
                   <div class="activity-content">
                     <div class="task-title">{{ t.title }}</div>
-                    <div class="task-meta">Assignee: {{ display }} · Due: {{ t.due_date|default:'n/a' }}</div>
-                    {% if t.description %}<div class="task-desc">{{ t.description|linebreaksbr }}</div>{% endif %}
+                    <div class="task-meta">{% trans "Responsabil" %}: {{ display }} · {% trans "Termen" %}: {% if t.due_date %}{{ t.due_date|date:"d.m.Y" }}{% else %}-{% endif %}</div>
+                    {% if t.display_description %}<div class="task-desc">{{ t.display_description|linebreaksbr }}</div>{% endif %}
+                    {% if t.display_technologies %}<div class="task-tech">{% trans "Tehnologii" %}: {{ t.display_technologies }}</div>{% endif %}
                     {% include 'core/_task_comments.html' with task=t %}
                   </div>
                 </div>
@@ -228,8 +234,9 @@
                   <div class="avatar-mini">?</div>
                   <div class="activity-content">
                     <div class="task-title">{{ t.title }}</div>
-                    <div class="task-meta">Assignee: Unassigned · Due: {{ t.due_date|default:'n/a' }}</div>
-                    {% if t.description %}<div class="task-desc">{{ t.description|linebreaksbr }}</div>{% endif %}
+                    <div class="task-meta">{% trans "Responsabil" %}: {% trans "Neasignat" %} · {% trans "Termen" %}: {% if t.due_date %}{{ t.due_date|date:"d.m.Y" }}{% else %}-{% endif %}</div>
+                    {% if t.display_description %}<div class="task-desc">{{ t.display_description|linebreaksbr }}</div>{% endif %}
+                    {% if t.display_technologies %}<div class="task-tech">{% trans "Tehnologii" %}: {{ t.display_technologies }}</div>{% endif %}
                     {% include 'core/_task_comments.html' with task=t %}
                   </div>
                 </div>
@@ -241,9 +248,9 @@
               </span>
               {% if t.status == 'archived' %}
                 <div class="activity-actions">
-                  <span class="archived-label">Archived</span>
-                  <a class="check-btn action-export" href="{% url 'export_task_csv' t.id %}">Export CSV</a>
-                  <button class="check-btn" onclick="document.getElementById('unarchive-{{ t.id }}').submit(); return false;">Unarchive</button>
+                  <span class="archived-label">{% trans "Arhivat" %}</span>
+                  <a class="check-btn action-export" href="{% url 'export_task_csv' t.id %}">{% trans "Export CSV" %}</a>
+                  <button class="check-btn" onclick="document.getElementById('unarchive-{{ t.id }}').submit(); return false;">{% trans "Dezarhivează" %}</button>
                 </div>
                 <form id="unarchive-{{ t.id }}" method="post" action="{% url 'tasks' %}" style="display:none;">
                   {% csrf_token %}
@@ -251,13 +258,13 @@
                 </form>
               {% else %}
                 <div class="activity-actions">
-                  <a class="check-btn action-export" href="{% url 'export_task_csv' t.id %}">Export CSV</a>
+                  <a class="check-btn action-export" href="{% url 'export_task_csv' t.id %}">{% trans "Export CSV" %}</a>
                   <button class="check-btn" {% if t.status == 'done' %}disabled{% endif %}
-                    onclick="document.getElementById('mark-done-{{ t.id }}').submit();">Check</button>
+                    onclick="document.getElementById('mark-done-{{ t.id }}').submit();">{% trans "Bifează" %}</button>
                   {% if t.status == 'done' %}
-                    <button class="check-btn action-archive" onclick="document.getElementById('archive-{{ t.id }}').submit(); return false;">Archive</button>
+                    <button class="check-btn action-archive" onclick="document.getElementById('archive-{{ t.id }}').submit(); return false;">{% trans "Arhivează" %}</button>
                   {% endif %}
-                  <button class="check-btn action-delete" onclick="if(confirm('Ștergi task-ul?')) document.getElementById('delete-{{ t.id }}').submit(); return false;">Delete</button>
+                  <button class="check-btn action-delete" onclick="if(confirm('{% trans "Ștergi task-ul?" %}')) document.getElementById('delete-{{ t.id }}').submit(); return false;">{% trans "Șterge" %}</button>
                 </div>
                 <form id="mark-done-{{ t.id }}" method="post" action="{% url 'tasks' %}" style="display:none;">
                   {% csrf_token %}

@@ -1,9 +1,11 @@
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>See Completed Submission - Panel</title>
+  <title>{% trans "Vezi predarea finalizată" %} - {% trans "Panel" %}</title>
   <style>
     * {
       margin: 0;
@@ -123,7 +125,7 @@
       font-weight: 600;
     }
 
-    /* Submission card */
+    /* Predare card */
     .submission-card {
       background: white;
       border-radius: 24px;
@@ -266,16 +268,16 @@
   <!-- Sidebar -->
   <aside class="sidebar">
     <div class="sidebar-logo">
-      Panel
+      {% trans "Panel" %}
     </div>
 
     <nav class="sidebar-nav">
-      <a href="dashboard.html">Dashboard</a>
-      <a href="#" class="active">Tasks</a>
-      <a href="#">Calendar</a>
-      <a href="#">Team</a>
-      <a href="#">Chat</a>
-      <a href="#">Profile</a>
+      <a href="dashboard.html">{% trans "Panou" %}</a>
+      <a href="#" class="active">{% trans "Taskuri" %}</a>
+      <a href="#">{% trans "Calendar" %}</a>
+      <a href="#">{% trans "Echipă" %}</a>
+      <a href="#">{% trans "Chat" %}</a>
+      <a href="#">{% trans "Profil" %}</a>
     </nav>
   </aside>
 
@@ -285,14 +287,15 @@
     <!-- Header -->
     <header class="header">
       <div class="header-left">
-        <h2>Today</h2>
-        <p class="date">Wednesday, 10 November, 2025</p>
+        <h2>{% trans "Astăzi" %}</h2>
+        <p class="date">{% trans "Miercuri, 10 Noiembrie, 2025" %}</p>
       </div>
 
       <div class="header-right">
         <div class="search-bar">
-          <input type="text" placeholder="Search people">
+          <input type="text" placeholder="{% trans 'Caută persoane' %}">
         </div>
+        {% include 'core/_language_select.html' %}
         <div class="user-info">
           <div class="avatar">A</div>
           <span>@AdeliUser</span>
@@ -300,22 +303,22 @@
       </div>
     </header>
 
-    <!-- Submission card -->
+    <!-- Predare card -->
     <section class="submission-card">
       <div class="submission-header">
         <div style="display: flex; align-items: center;">
           <span class="back-arrow" onclick="history.back()">←</span>
-          <h2 class="submission-title">Task SUBMISSION</h2>
+          <h2 class="submission-title">{% trans "Predare task" %}</h2>
         </div>
       </div>
 
       <div class="form-group">
-        <label>Submission description</label>
+        <label>{% trans "Descriere predare" %}</label>
         <textarea readonly>Here is the task, I implemented SQL, HTTP. Also made a proxy app.</textarea>
       </div>
 
       <div class="form-group">
-        <label>File submissions</label>
+        <label>{% trans "Fișiere predare" %}</label>
         <div class="file-list">
           <div class="file-item">
             <span class="file-icon">📄</span>
@@ -330,8 +333,8 @@
       </div>
 
       <div class="action-buttons">
-        <button class="edit-btn">Edit submission</button>
-        <button class="return-btn">Return to tasks</button>
+        <button class="edit-btn">{% trans "Editează predarea" %}</button>
+        <button class="return-btn">{% trans "Înapoi la taskuri" %}</button>
       </div>
     </section>
 

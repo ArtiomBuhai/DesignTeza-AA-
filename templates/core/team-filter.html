@@ -1,9 +1,11 @@
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 <!doctype html>
-<html lang="ro">
+<html lang="{{ LANGUAGE_CODE }}">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Team Filter - Panel</title>
+    <title>{% trans "Filtru echipă" %} - {% trans "Panel" %}</title>
     <style>
       * {
         margin: 0;
@@ -344,14 +346,14 @@
     <div class="dashboard">
       <!-- Sidebar -->
       <aside class="sidebar">
-        <div class="sidebar-logo">Panel</div>
+        <div class="sidebar-logo">{% trans "Panel" %}</div>
         <nav class="sidebar-nav">
-          <a href="#">Dashboard</a>
-          <a href="#">Tasks</a>
-          <a href="#">Calendar</a>
-          <a href="#" class="active">Team</a>
-          <a href="#">Chat</a>
-          <a href="#">Profile</a>
+          <a href="#">{% trans "Panou" %}</a>
+          <a href="#">{% trans "Taskuri" %}</a>
+          <a href="#">{% trans "Calendar" %}</a>
+          <a href="#" class="active">{% trans "Echipă" %}</a>
+          <a href="#">{% trans "Chat" %}</a>
+          <a href="#">{% trans "Profil" %}</a>
         </nav>
       </aside>
 
@@ -359,93 +361,94 @@
       <main class="main">
         <!-- Doar avatar + username în dreapta sus -->
         <div class="header">
+          {% include 'core/_language_select.html' %}
           <div class="user-info">
             <div class="avatar">A</div>
             <span class="username">@AdeliUser</span>
           </div>
         </div>
 
-        <h1 class="page-title">Team Filter</h1>
+        <h1 class="page-title">{% trans "Filtru echipă" %}</h1>
 
         <div class="content-wrapper">
           <!-- Filter Section (stânga) -->
           <div class="filter-section">
             <div class="filter-header">
-              <h2 class="filter-title">Filter People</h2>
+              <h2 class="filter-title">{% trans "Filtrează oameni" %}</h2>
             </div>
 
             <div class="filter-body">
               <div class="filter-controls">
                 <button class="all-people-btn">
                   <span class="people-icon">👥</span>
-                  All people
+                  {% trans "Toți oamenii" %}
                 </button>
                 <button class="find-person-btn">
                   <span class="search-icon">🔍</span>
-                  Find person
+                  {% trans "Găsește persoană" %}
                 </button>
               </div>
 
               <div class="form-grid">
                 <div class="form-group">
-                  <label class="filter-label">Name</label>
+                  <label class="filter-label">{% trans "Nume" %}</label>
                   <input
                     type="text"
                     class="form-input"
-                    placeholder="Andrew Solgado..."
+                    placeholder="{% trans 'Andrew Solgado...' %}"
                   />
                 </div>
 
                 <div class="form-group">
-                  <label class="filter-label">OR</label>
+                  <label class="filter-label">{% trans "SAU" %}</label>
                   <div class="checkbox-group">
                     <label class="checkbox-label"
-                      ><input type="checkbox" checked /> Capability</label
+                      ><input type="checkbox" checked /> {% trans "Competențe" %}</label
                     >
                     <label class="checkbox-label"
-                      ><input type="checkbox" checked /> Technology</label
+                      ><input type="checkbox" checked /> {% trans "Tehnologie" %}</label
                     >
                     <label class="checkbox-label"
-                      ><input type="checkbox" checked /> Tools</label
+                      ><input type="checkbox" checked /> {% trans "Instrumente" %}</label
                     >
                   </div>
                 </div>
 
                 <div class="form-group">
-                  <label class="filter-label">Experience</label>
+                  <label class="filter-label">{% trans "Experiență" %}</label>
                   <input
                     type="text"
                     class="form-input"
-                    placeholder="web design, UI/UX..."
+                    placeholder="{% trans 'web design, UI/UX...' %}"
                   />
                 </div>
 
                 <div class="form-group">
-                  <label class="filter-label">Speciality</label>
+                  <label class="filter-label">{% trans "Specialitate" %}</label>
                   <input
                     type="text"
                     class="form-input"
-                    placeholder="UX design, Figma..."
+                    placeholder="{% trans 'UX design, Figma...' %}"
                   />
                 </div>
 
                 <div class="form-group">
-                  <label class="filter-label">Technology</label>
+                  <label class="filter-label">{% trans "Tehnologie" %}</label>
                   <input
                     type="text"
                     class="form-input"
-                    placeholder="Java, React, Node.js..."
+                    placeholder="{% trans 'Java, React, Node.js...' %}"
                   />
                 </div>
               </div>
 
-              <button class="search-btn">Search</button>
+              <button class="search-btn">{% trans "Caută" %}</button>
             </div>
           </div>
 
           <!-- Results Section (dreapta) -->
           <div class="results-section">
-            <h2 class="results-title">Who is found</h2>
+            <h2 class="results-title">{% trans "Rezultate găsite" %}</h2>
 
             <div class="result-card">
               <div class="result-header">
@@ -456,16 +459,16 @@
                 />
                 <div class="result-info">
                   <div class="result-name">Andrew Solgado</div>
-                  <div class="result-role">Learning Visual Designer</div>
+                  <div class="result-role">{% trans "Designer vizual junior" %}</div>
                 </div>
               </div>
               <div class="result-tags">
-                <span class="tag">Industry Knowledge</span>
-                <span class="tag">UX Design</span>
-                <span class="tag">Figma</span>
+                <span class="tag">{% trans "Cunoștințe industrie" %}</span>
+                <span class="tag">{% trans "UX Design" %}</span>
+                <span class="tag">{% trans "Figma" %}</span>
               </div>
               <div class="result-actions">
-                <button class="result-message">Write a message</button>
+                <button class="result-message">{% trans "Scrie un mesaj" %}</button>
               </div>
             </div>
 
@@ -478,16 +481,16 @@
                 />
                 <div class="result-info">
                   <div class="result-name">Andrew Solgado</div>
-                  <div class="result-role">Learning Visual Designer</div>
+                  <div class="result-role">{% trans "Designer vizual junior" %}</div>
                 </div>
               </div>
               <p>
-                <strong>Experience:</strong> Company: Avel - Remote, October
-                2021 - May 2023
+                <strong>{% trans "Experiență" %}:</strong> {% trans "Companie" %}: Avel - Remote, {% trans "Octombrie" %}
+                2021 - {% trans "Mai" %} 2023
               </p>
-              <p>Blog design, Photoshop, Illustrator, Figma</p>
+              <p>{% trans "Design blog, Photoshop, Illustrator, Figma" %}</p>
               <div class="result-actions">
-                <button class="result-message">Write a message</button>
+                <button class="result-message">{% trans "Scrie un mesaj" %}</button>
               </div>
             </div>
 
@@ -500,16 +503,16 @@
                 />
                 <div class="result-info">
                   <div class="result-name">Andrew Solgado</div>
-                  <div class="result-role">Learning Visual Designer</div>
+                  <div class="result-role">{% trans "Designer vizual junior" %}</div>
                 </div>
               </div>
               <div class="result-tags">
-                <span class="tag">Industry Knowledge</span>
-                <span class="tag">UX Design</span>
-                <span class="tag">Figma</span>
+                <span class="tag">{% trans "Cunoștințe industrie" %}</span>
+                <span class="tag">{% trans "UX Design" %}</span>
+                <span class="tag">{% trans "Figma" %}</span>
               </div>
               <div class="result-actions">
-                <button class="result-message">Write a message</button>
+                <button class="result-message">{% trans "Scrie un mesaj" %}</button>
               </div>
             </div>
           </div>

@@ -9,6 +9,7 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.translation import gettext as _
 from django.http import JsonResponse, HttpResponse, Http404
 from datetime import date, datetime, timedelta, timezone as dt_timezone
 import re
@@ -93,9 +94,9 @@ BOT_FAQ = [
     {
         'topic': 'submissions',
         'keys': ['submission', 'submit', 'review', 'rejected', 'approved', 'predare', 'trimis', 'upload'],
-        'short': "Submissions: intra pe task si trimite submission. Adminul le aproba/respinge.",
+        'short': "Predări: intră pe task și trimite predarea. Adminul o aprobă/respinge.",
         'long': (
-            "Deschizi task -> `Submit` -> optional fisier si descriere. Adminul vede submission-ul si poate aproba/respinge."
+            "Deschizi task -> `Submit` -> opțional fișier și descriere. Adminul vede predarea și poate aproba/respinge."
         ),
     },
     {
@@ -324,11 +325,11 @@ def _bot_dynamic_answer(topic, request, detailed=False):
     if topic == 'submissions':
         if _is_admin_user(user):
             pending = Submission.objects.filter(status='pending').count()
-            return f"Submissions in asteptare (admin): {pending}."
+            return f"Predări în așteptare (admin): {pending}."
         my_pending = Submission.objects.filter(author=user, status='pending').count()
         my_approved = Submission.objects.filter(author=user, status='approved').count()
         my_rejected = Submission.objects.filter(author=user, status='rejected').count()
-        return f"Submissions: pending {my_pending}, approved {my_approved}, rejected {my_rejected}."
+        return f"Predări: în așteptare {my_pending}, aprobate {my_approved}, respinse {my_rejected}."
 
     if topic == 'chat':
         threads = ChatThread.objects.filter(participants=user).count()
@@ -408,11 +409,11 @@ def _bot_latest_submissions(user):
         return None
     qs = Submission.objects.order_by('-created_at')[:5]
     if not qs.exists():
-        return "Nu exista submissions."
+        return "Nu există predări."
     lines = []
     for s in qs:
         lines.append(f"{s.task.title} de {s.author.username} ({s.get_status_display()})")
-    return "Ultimele submissions:\n" + _bot_structured_lines(lines)
+    return "Ultimele predări:\n" + _bot_structured_lines(lines)
 
 def _bot_structured_lines(lines):
     # Ensure consistent bullet formatting
@@ -430,7 +431,7 @@ def _bot_suggestions_for_topic(topic):
     if topic == 'holidays':
         return ["Cine e in concediu acum?", "Concediu anual ramas"]
     if topic == 'submissions':
-        return ["Ultimele submissions", "Submissions pending"]
+        return ["Ultimele predări", "Predări în așteptare"]
     if topic == 'chat':
         return ["Cum trimit mesaj?", "Cum dau mute?"]
     return base
@@ -617,7 +618,7 @@ def _bot_answer(text, request=None):
     help_keys = ['ajutor', 'help', 'comenzi', 'ce poti', 'ce stii', 'capabilitati']
     if any(k in query for k in help_keys):
         return (
-            "Pot ajuta cu: taskuri, meeting-uri, chat, notificari, concedii, submissions, export CSV, "
+            "Pot ajuta cu: taskuri, meeting-uri, chat, notificări, concedii, predări, export CSV, "
             "rezumat azi, taskuri intarziate, prioritate mare, concedii acum, reminder. "
             "Exemple: 'taskuri', 'meeting', 'concediu', 'rezumat azi', 'aminteste-mi peste 2 ore'."
         )
@@ -642,8 +643,8 @@ def _bot_answer(text, request=None):
         if request and request.user.is_authenticated:
             return _bot_people_on_leave(request.user)
 
-    # Latest submissions (admin)
-    if 'ultimele' in query and 'submission' in query:
+    # Latest submissions/predari (admin)
+    if 'ultimele' in query and ('submission' in query or 'predare' in query or 'predari' in query):
         if request and request.user.is_authenticated:
             resp = _bot_latest_submissions(request.user)
             if resp:
@@ -731,7 +732,7 @@ def _bot_answer(text, request=None):
         return item['short']
 
     return (
-        "Pot ajuta cu: taskuri, meeting-uri, chat, notificari, concedii, submissions, export CSV. "
+        "Pot ajuta cu: taskuri, meeting-uri, chat, notificări, concedii, predări, export CSV. "
         "Scrie una din aceste teme."
     )
 
@@ -987,12 +988,71 @@ def _task_reminder_type_for_date(due_date, today):
 
 def _task_reminder_text(task, reminder_type):
     due_txt = task.due_date.strftime('%d.%m.%Y') if task.due_date else ''
-    title_txt = task.title or 'Untitled task'
+    title_txt = task.title or _('Task fără titlu')
     if reminder_type == 'due_24h':
-        return f"Reminder: '{title_txt}' are deadline maine ({due_txt})."
+        return _("Reminder: '%(title)s' are deadline mâine (%(date)s).") % {'title': title_txt, 'date': due_txt}
     if reminder_type == 'due_today':
-        return f"Reminder: '{title_txt}' are deadline azi ({due_txt})."
-    return f"Overdue: '{title_txt}' are deadline depasit ({due_txt})."
+        return _("Reminder: '%(title)s' are deadline azi (%(date)s).") % {'title': title_txt, 'date': due_txt}
+    return _("Întârziat: '%(title)s' are termen depășit (%(date)s).") % {'title': title_txt, 'date': due_txt}
+
+
+def _localize_notification_message(raw_text):
+    text = (raw_text or '').strip()
+    if not text:
+        return text
+
+    m = re.match(r"^Reminder: '(.+?)' are deadline (?:maine|mâine) \(([^)]+)\)\.$", text)
+    if m:
+        return _("Reminder: '%(title)s' are deadline mâine (%(date)s).") % {'title': m.group(1), 'date': m.group(2)}
+
+    m = re.match(r"^Reminder: '(.+?)' are deadline azi \(([^)]+)\)\.$", text)
+    if m:
+        return _("Reminder: '%(title)s' are deadline azi (%(date)s).") % {'title': m.group(1), 'date': m.group(2)}
+
+    m = re.match(r"^(?:Overdue|Întârziat): '(.+?)' are (?:deadline depasit|deadline depășit|termen depășit) \(([^)]+)\)\.$", text)
+    if m:
+        return _("Întârziat: '%(title)s' are termen depășit (%(date)s).") % {'title': m.group(1), 'date': m.group(2)}
+
+    m = re.match(r"^Meeting nou: (.+?) pe (\d{2}\.\d{2}\.\d{4}) la (\d{2}:\d{2})$", text)
+    if m:
+        return _("Meeting nou: %(title)s pe %(date)s la %(time)s") % {'title': m.group(1), 'date': m.group(2), 'time': m.group(3)}
+
+    m = re.match(r"^Meeting nou: (.+?) pe (\d{2}\.\d{2}\.\d{4})$", text)
+    if m:
+        return _("Meeting nou: %(title)s pe %(date)s") % {'title': m.group(1), 'date': m.group(2)}
+
+    m = re.match(r"^Meeting anulat: (.+)$", text)
+    if m:
+        return _("Meeting anulat: %(title)s") % {'title': m.group(1)}
+
+    m = re.match(r"^Reminder: (.+)$", text)
+    if m:
+        return _("Reminder: %(message)s") % {'message': m.group(1)}
+
+    m = re.match(r"^Task nou: (.+)$", text)
+    if m:
+        return _("Task nou: %(title)s") % {'title': m.group(1)}
+
+    m = re.match(r"^(?:Cereră|Cerere) concediu (.+)$", text)
+    if m:
+        return _("Cerere concediu %(status)s") % {'status': m.group(1)}
+
+    m = re.match(r"^Comentariu nou la (.+?): (.+)$", text)
+    if m:
+        return _("Comentariu nou la %(title)s: %(message)s") % {'title': m.group(1), 'message': m.group(2)}
+
+    m = re.match(r"^([^:]+):\s(.+)$", text)
+    if m:
+        sender = m.group(1)
+        preview = m.group(2).strip()
+        if preview in ('a trimis un fișier', 'sent a file'):
+            preview = _("a trimis un fișier")
+            return _("%(sender)s: %(preview)s") % {'sender': sender, 'preview': preview}
+        if preview in ('mesaj nou', 'new message'):
+            preview = _("mesaj nou")
+            return _("%(sender)s: %(preview)s") % {'sender': sender, 'preview': preview}
+
+    return text
 
 
 def _generate_task_reminders_for_user(user):
@@ -1154,9 +1214,13 @@ def add_meeting(request):
             try:
                 date_txt = meeting.date.strftime('%d.%m.%Y')
                 if meeting.time:
-                    message = f"Meeting nou: {meeting.title} pe {date_txt} la {meeting.time.strftime('%H:%M')}"
+                    message = _("Meeting nou: %(title)s pe %(date)s la %(time)s") % {
+                        'title': meeting.title,
+                        'date': date_txt,
+                        'time': meeting.time.strftime('%H:%M'),
+                    }
                 else:
-                    message = f"Meeting nou: {meeting.title} pe {date_txt}"
+                    message = _("Meeting nou: %(title)s pe %(date)s") % {'title': meeting.title, 'date': date_txt}
                 users = User.objects.filter(is_active=True).only('id')
                 Notification.objects.bulk_create([
                     Notification(
@@ -1174,9 +1238,12 @@ def add_meeting(request):
                 ok, err = _sync_meeting_to_google(meeting)
                 if not ok:
                     err_txt = (err or 'unknown_error')
-                    messages.warning(request, f'Meeting salvat, dar sincronizarea Google Calendar a eșuat: {err_txt}')
+                    messages.warning(
+                        request,
+                        _('Meeting salvat, dar sincronizarea Google Calendar a eșuat: %(error)s') % {'error': err_txt},
+                    )
             else:
-                messages.info(request, 'Meeting salvat local. Conectează Google Calendar pentru sincronizare.')
+                messages.info(request, _('Meeting salvat local. Conectează Google Calendar pentru sincronizare.'))
             return redirect('home')
 
     # calendar data for current month
@@ -1208,7 +1275,7 @@ def delete_meeting(request, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id)
     can_delete = (meeting.created_by_id == request.user.id) or _is_admin_user(request.user)
     if not can_delete:
-        messages.error(request, "Nu ai permisiunea să ștergi acest meeting.")
+        messages.error(request, _("Nu ai permisiunea să ștergi acest meeting."))
         return redirect('dashboard')
 
     meeting_title = meeting.title
@@ -1221,7 +1288,7 @@ def delete_meeting(request, meeting_id):
         Notification.objects.bulk_create([
             Notification(
                 user=u,
-                message=f"Meeting anulat: {meeting_title}"[:255],
+                message=(_("Meeting anulat: %(title)s") % {'title': meeting_title})[:255],
                 url=reverse('dashboard'),
                 notif_type='other',
             )
@@ -1233,7 +1300,7 @@ def delete_meeting(request, meeting_id):
     if google_event_id:
         ok, _ = _delete_meeting_from_google(meeting_owner, google_event_id)
         if not ok:
-            messages.warning(request, 'Meeting șters local, dar ștergerea din Google Calendar a eșuat.')
+            messages.warning(request, _('Meeting șters local, dar ștergerea din Google Calendar a eșuat.'))
 
     return redirect('dashboard')
 
@@ -1323,7 +1390,7 @@ def regenerate_calendar_feed_token(request):
     if request.method == 'POST':
         prof.calendar_feed_token = uuid.uuid4()
         prof.save(update_fields=['calendar_feed_token'])
-        messages.success(request, 'Calendar sync link regenerated.')
+        messages.success(request, _('Linkul de sincronizare a fost regenerat.'))
     next_url = request.POST.get('next') or request.GET.get('next') or reverse('dashboard')
     return redirect(next_url)
 
@@ -1332,7 +1399,7 @@ def regenerate_calendar_feed_token(request):
 def google_calendar_connect(request):
     next_url = request.GET.get('next') or request.POST.get('next') or reverse('dashboard')
     if not _google_oauth_ready():
-        messages.error(request, 'Google Calendar nu este configurat pe server.')
+        messages.error(request, _('Google Calendar nu este configurat pe server.'))
         return redirect(next_url)
 
     client_id, _ = _google_oauth_credentials()
@@ -1362,23 +1429,23 @@ def google_calendar_callback(request):
     expected_state = request.session.pop('google_oauth_state', '')
     state = (request.GET.get('state') or '').strip()
     if not expected_state or state != expected_state:
-        messages.error(request, 'Google connect failed: invalid state.')
+        messages.error(request, _('Conectarea Google a eșuat: stare invalidă.'))
         return redirect(next_url)
 
     error = (request.GET.get('error') or '').strip()
     if error:
-        messages.error(request, f'Google connect failed: {error}')
+        messages.error(request, _('Conectarea Google a eșuat: %(error)s') % {'error': error})
         return redirect(next_url)
 
     code = (request.GET.get('code') or '').strip()
     if not code:
-        messages.error(request, 'Google connect failed: missing authorization code.')
+        messages.error(request, _('Conectarea Google a eșuat: lipsește codul de autorizare.'))
         return redirect(next_url)
 
     client_id, client_secret = _google_oauth_credentials()
     redirect_uri = _google_redirect_uri(request)
     if not (client_id and client_secret):
-        messages.error(request, 'Google Calendar nu este configurat pe server.')
+        messages.error(request, _('Google Calendar nu este configurat pe server.'))
         return redirect(next_url)
 
     try:
@@ -1390,20 +1457,20 @@ def google_calendar_callback(request):
             'grant_type': 'authorization_code',
         })
     except Exception as exc:
-        messages.error(request, f'Google connect failed: {exc}')
+        messages.error(request, _('Conectarea Google a eșuat: %(error)s') % {'error': exc})
         return redirect(next_url)
 
     access_token = (data.get('access_token') or '').strip()
     refresh_token = (data.get('refresh_token') or '').strip()
     if not access_token:
-        messages.error(request, 'Google connect failed: no access token returned.')
+        messages.error(request, _('Conectarea Google a eșuat: nu a fost returnat access token.'))
         return redirect(next_url)
 
     conn, _ = GoogleCalendarConnection.objects.get_or_create(user=request.user)
     if refresh_token:
         conn.refresh_token = refresh_token
     elif not conn.refresh_token:
-        messages.error(request, 'Google nu a trimis refresh token. Șterge access-ul aplicației și reconectează.')
+        messages.error(request, _('Google nu a trimis refresh token. Șterge accesul aplicației și reconectează.'))
         return redirect(next_url)
 
     expires_in = int(data.get('expires_in') or 3600)
@@ -1427,9 +1494,12 @@ def google_calendar_callback(request):
         else:
             failed += 1
 
-    messages.success(request, f'Google Calendar connected. Synced {synced} meeting(s).')
+    messages.success(
+        request,
+        _('Google Calendar conectat. S-au sincronizat %(count)s meeting-uri.') % {'count': synced},
+    )
     if failed:
-        messages.warning(request, f'{failed} meeting(s) could not be synced.')
+        messages.warning(request, _('%(count)s meeting-uri nu au putut fi sincronizate.') % {'count': failed})
     return redirect(next_url)
 
 
@@ -1439,7 +1509,7 @@ def google_calendar_disconnect(request):
     if request.method == 'POST':
         GoogleCalendarConnection.objects.filter(user=request.user).delete()
         Meeting.objects.filter(created_by=request.user).update(google_event_id='')
-        messages.success(request, 'Google Calendar disconnected.')
+        messages.success(request, _('Google Calendar deconectat.'))
     return redirect(next_url)
 
 
@@ -1505,7 +1575,7 @@ def submissions_admin(request):
             if comment:
                 sub.reviewer_comment = comment
             sub.save(update_fields=['status', 'reviewer_comment', 'updated_at'])
-            messages.success(request, 'Submission updated')
+            messages.success(request, _('Predare actualizată.'))
         return redirect('submissions_admin')
 
     return render(request, 'core/submissions-admin.html', {
@@ -1523,17 +1593,17 @@ def profile_public(request, user_id):
     can_edit_function = (_is_admin_user(request.user) or request.user.id == target_user.id)
     if request.method == 'POST':
         if not can_edit_function:
-            messages.error(request, "Nu ai permisiunea să modifici funcția acestui user.")
+            messages.error(request, _("Nu ai permisiunea să modifici funcția acestui user."))
             return redirect('profile_public', user_id=target_user.id)
 
         new_function = (request.POST.get('function') or '').strip()
         if not new_function:
-            messages.error(request, "Funcția nu poate fi goală.")
+            messages.error(request, _("Funcția nu poate fi goală."))
             return redirect('profile_public', user_id=target_user.id)
 
         prof.function = new_function[:100]
         prof.save(update_fields=['function'])
-        messages.success(request, "Funcția a fost actualizată.")
+        messages.success(request, _("Funcția a fost actualizată."))
         return redirect('profile_public', user_id=target_user.id)
 
     skills_list = [s.strip() for s in (prof.skills or '').split(',') if prof and prof.skills] if prof else []
@@ -1592,7 +1662,7 @@ def notifications_api(request):
                 Notification.objects.bulk_create([
                     Notification(
                         user=request.user,
-                        message=f"Reminder: {r.message}"[:255],
+                        message=(_("Reminder: %(message)s") % {'message': r.message})[:255],
                         url='',
                         notif_type='other',
                     )
@@ -1615,7 +1685,7 @@ def notifications_api(request):
         for n in qs:
             results.append({
                 'id': n.id,
-                'text': n.message,
+                'text': _localize_notification_message(n.message),
                 'url': n.url or '',
                 'time': _local_hhmm(n.created_at),
                 'is_read': n.is_read,
@@ -1630,7 +1700,7 @@ def notifications_api(request):
             for t in t_qs:
                 results.append({
                     'id': f'task-{t.id}',
-                    'text': f'Task nou: {t.title}',
+                    'text': _("Task nou: %(title)s") % {'title': t.title},
                     'url': '/tasks/',
                     'time': _local_hhmm(t.created_at),
                     'is_read': False,
@@ -1641,7 +1711,7 @@ def notifications_api(request):
             for h in h_qs:
                 results.append({
                     'id': f'holiday-{h.id}',
-                    'text': f'Cereră concediu {h.get_status_display()}',
+                    'text': _("Cerere concediu %(status)s") % {'status': h.get_status_display()},
                     'url': '/calendar/requests/',
                     'time': _local_hhmm(h.updated_at) if hasattr(h, 'updated_at') else '',
                     'is_read': False,
@@ -1733,15 +1803,15 @@ def signup(request):
         role = request.POST.get('role', 'worker')
 
         if not all([first, last, email, password1, password2]):
-            messages.error(request, "Completează toate câmpurile.")
+            messages.error(request, _("Completează toate câmpurile."))
             return render(request, 'core/index.html')
 
         if password1 != password2:
-            messages.error(request, "Parolele nu coincid.")
+            messages.error(request, _("Parolele nu coincid."))
             return render(request, 'core/index.html')
 
         if User.objects.filter(email=email).exists():
-            messages.error(request, "Există deja un cont cu acest email.")
+            messages.error(request, _("Există deja un cont cu acest email."))
             return render(request, 'core/index.html')
 
         base_username = email if email else f"{first}{last}".lower()
@@ -1773,10 +1843,10 @@ def signup(request):
         auth_user = authenticate(username=username, password=password1)
         if auth_user:
             login(request, auth_user)
-            messages.success(request, "Cont creat și autentificat cu succes.")
+            messages.success(request, _("Cont creat și autentificat cu succes."))
             return redirect('team')
 
-        messages.success(request, "Cont creat. Autentifică-te.")
+        messages.success(request, _("Cont creat. Autentifică-te."))
         return redirect('login')
 
     return render(request, 'core/index.html')
@@ -1971,7 +2041,7 @@ def export_task_csv(request, task_id):
         writer.writerow(['', 'No comments', ''])
 
     writer.writerow([])
-    writer.writerow(['Submissions'])
+    writer.writerow(['Predări'])
     writer.writerow(['Author', 'Status', 'Description', 'File', 'Created At'])
     submissions_qs = task.submissions.all()
     if submissions_qs:
@@ -1988,6 +2058,41 @@ def export_task_csv(request, task_id):
         writer.writerow(['', 'No submissions', '', '', ''])
 
     return response
+
+
+_TASK_TECH_PREFIXES = ('technologies:', 'tehnologii:', 'технологии:')
+
+
+def _split_task_description(raw_text):
+    text = (raw_text or '').replace('\r\n', '\n').replace('\r', '\n')
+    if not text:
+        return '', ''
+
+    description_lines = []
+    technologies_value = ''
+    for line in text.split('\n'):
+        stripped = line.strip()
+        if not stripped:
+            description_lines.append('')
+            continue
+
+        lowered = stripped.lower()
+        if not technologies_value:
+            for prefix in _TASK_TECH_PREFIXES:
+                if lowered.startswith(prefix):
+                    technologies_value = stripped[len(prefix):].strip()
+                    break
+            if technologies_value:
+                continue
+
+        description_lines.append(line)
+
+    while description_lines and not description_lines[0].strip():
+        description_lines.pop(0)
+    while description_lines and not description_lines[-1].strip():
+        description_lines.pop()
+
+    return '\n'.join(description_lines).strip(), technologies_value
 
 
 @login_required
@@ -2028,7 +2133,7 @@ def tasks(request):
                     Notification.objects.bulk_create([
                         Notification(
                             user=u,
-                            message=f"Comentariu nou la {title_txt}: {msg_txt}"[:255],
+                            message=(_("Comentariu nou la %(title)s: %(message)s") % {'title': title_txt, 'message': msg_txt})[:255],
                             url=reverse('tasks'),
                             notif_type='task',
                         )
@@ -2104,11 +2209,17 @@ def tasks(request):
             )
         return redirect('tasks')
 
+    tasks_list = list(qs)
+    for task_obj in tasks_list:
+        display_description, technologies_text = _split_task_description(task_obj.description)
+        task_obj.display_description = display_description
+        task_obj.display_technologies = technologies_text
+
     tasks_by_status = {
-        'todo': qs.filter(status='todo'),
-        'revision': qs.filter(status='revision'),
-        'done': qs.filter(status='done'),
-        'archived': qs.filter(status='archived'),
+        'todo': [task_obj for task_obj in tasks_list if task_obj.status == 'todo'],
+        'revision': [task_obj for task_obj in tasks_list if task_obj.status == 'revision'],
+        'done': [task_obj for task_obj in tasks_list if task_obj.status == 'done'],
+        'archived': [task_obj for task_obj in tasks_list if task_obj.status == 'archived'],
     }
 
     board_cols = [
@@ -2122,7 +2233,7 @@ def tasks(request):
     users = get_user_model().objects.all()
     if is_admin:
         return render(request, 'core/tasks-admin.html', {
-            'tasks_list': qs,
+            'tasks_list': tasks_list,
             'users': users,
             'task': Task,  # for choices
             'board_cols': board_cols,
@@ -2338,10 +2449,10 @@ def chat(request):
                 if preview:
                     preview = preview[:60] + ('…' if len(preview) > 60 else '')
                 elif msg.file:
-                    preview = "a trimis un fișier"
+                    preview = _("a trimis un fișier")
                 else:
-                    preview = "mesaj nou"
-                text = f"{msg.sender.username}: {preview}"
+                    preview = _("mesaj nou")
+                text = _("%(sender)s: %(preview)s") % {'sender': msg.sender.username, 'preview': preview}
                 Notification.objects.bulk_create([
                     Notification(
                         user=u,

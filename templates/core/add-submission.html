@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="ro">
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Add Submission - Panel</title>
+  <title>{% trans "Adaugă predare" %} - {% trans "Panel" %}</title>
   <style>
     * {
       margin: 0;
@@ -121,7 +123,7 @@
       font-weight: 600;
     }
 
-    /* Submission card */
+    /* Predare card */
     .submission-card {
       background: white;
       border-radius: 24px;
@@ -262,16 +264,16 @@
   <!-- Sidebar -->
   <aside class="sidebar">
     <div class="sidebar-logo">
-      Panel
+      {% trans "Panel" %}
     </div>
 
     <nav class="sidebar-nav">
-      <a href="{% url 'dashboard' %}">Dashboard</a>
-      <a href="{% url 'tasks' %}" class="active">Tasks</a>
-      <a href="{% url 'calendar' %}">Calendar</a>
-      <a href="{% url 'team' %}">Team</a>
-      <a href="{% url 'chat' %}">Chat</a>
-      <a href="{% url 'profile' %}">Profile</a>
+      <a href="{% url 'dashboard' %}">{% trans "Panou" %}</a>
+      <a href="{% url 'tasks' %}" class="active">{% trans "Taskuri" %}</a>
+      <a href="{% url 'calendar' %}">{% trans "Calendar" %}</a>
+      <a href="{% url 'team' %}">{% trans "Echipă" %}</a>
+      <a href="{% url 'chat' %}">{% trans "Chat" %}</a>
+      <a href="{% url 'profile' %}">{% trans "Profil" %}</a>
     </nav>
   </aside>
 
@@ -281,12 +283,13 @@
     <!-- Header -->
     <header class="header">
       <div class="header-left">
-        <h2>Add submission</h2>
+        <h2>{% trans "Adaugă predare" %}</h2>
         <p class="date">{{ task.title }}</p>
       </div>
 
       <div class="header-right">
         {% include 'core/_header_search.html' %}
+        {% include 'core/_language_select.html' %}
         <div class="user-info">
           <div class="avatar">
             {% if user.profile.avatar %}
@@ -296,17 +299,17 @@
             {% endif %}
           </div>
           <span>@{{ user.username }}</span>
-          <a href="{% url 'logout' %}" style="margin-left:12px; color:#2563eb; font-weight:600; text-decoration:none;">Logout</a>
+          <a href="{% url 'logout' %}" style="margin-left:12px; color:#2563eb; font-weight:600; text-decoration:none;">{% trans "Ieșire" %}</a>
         </div>
       </div>
     </header>
 
-    <!-- Submission card -->
+    <!-- Predare card -->
     <section class="submission-card">
       <div class="submission-header">
         <div style="display: flex; align-items: center;">
           <span class="back-arrow" onclick="history.back()">←</span>
-          <h2 class="submission-title">Task submission</h2>
+          <h2 class="submission-title">{% trans "Predare task" %}</h2>
         </div>
       </div>
 
@@ -315,22 +318,22 @@
       <form class="submission-form" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="form-group">
-          <label>Submission description</label>
-          <textarea name="description" placeholder="Describe your submission here...">{{ request.POST.description }}</textarea>
+          <label>{% trans "Descriere predare" %}</label>
+          <textarea name="description" placeholder="{% trans 'Descrie predarea aici...' %}">{{ request.POST.description }}</textarea>
         </div>
 
         <div class="form-group">
-          <label>File submissions</label>
+          <label>{% trans "Fișier predare" %}</label>
           <label class="file-upload-area" id="fileUploadArea">
             <i style="font-size: 4rem; color: #64748b; margin-bottom: 20px;">↓</i>
-            <p>You can drag and drop files here to add them</p>
-            <p class="file-types">Accepted file types: Archive (ZIP), PDF Document</p>
+            <p>{% trans "Poți trage fișiere aici pentru a le adăuga" %}</p>
+            <p class="file-types">{% trans "Tipuri acceptate: arhivă (ZIP), document PDF" %}</p>
             <input id="submissionFileInput" type="file" name="file" style="display:none;">
           </label>
           <div id="selectedFileName" class="file-selected-name"></div>
         </div>
 
-        <button type="submit" class="save-btn">Send submission</button>
+        <button type="submit" class="save-btn">{% trans "Trimite predarea" %}</button>
       </form>
     </section>
 

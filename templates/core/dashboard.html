@@ -1,9 +1,11 @@
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dashboard - Panel</title>
+  <title>{% trans "Panou" %} - {% trans "Panel" %}</title>
   <style>
     * {
       margin: 0;
@@ -314,16 +316,16 @@
   <!-- Sidebar -->
   <aside class="sidebar">
     <div class="sidebar-logo">
-      <a href="{% url 'home' %}" style="text-decoration:none;color:#2563eb;">Panel</a>
+      <a href="{% url 'home' %}" style="text-decoration:none;color:#2563eb;">{% trans "Panel" %}</a>
     </div>
 
     <nav class="sidebar-nav">
-      <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Dashboard</a>
-      <a href="{% url 'tasks' %}" class="{% if request.resolver_match.url_name == 'tasks' %}active{% endif %}">Tasks</a>
-      <a href="{% url 'calendar' %}" class="{% if request.resolver_match.url_name == 'calendar' %}active{% endif %}">Calendar</a>
-      <a href="{% url 'team' %}" class="{% if request.resolver_match.url_name == 'team' %}active{% endif %}">Team</a>
-      <a href="{% url 'chat' %}" class="{% if request.resolver_match.url_name == 'chat' %}active{% endif %}">Chat</a>
-      <a href="{% url 'profile' %}" class="{% if request.resolver_match.url_name == 'profile' %}active{% endif %}">Profile</a>
+      <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">{% trans "Panou" %}</a>
+      <a href="{% url 'tasks' %}" class="{% if request.resolver_match.url_name == 'tasks' %}active{% endif %}">{% trans "Taskuri" %}</a>
+      <a href="{% url 'calendar' %}" class="{% if request.resolver_match.url_name == 'calendar' %}active{% endif %}">{% trans "Calendar" %}</a>
+      <a href="{% url 'team' %}" class="{% if request.resolver_match.url_name == 'team' %}active{% endif %}">{% trans "Echipă" %}</a>
+      <a href="{% url 'chat' %}" class="{% if request.resolver_match.url_name == 'chat' %}active{% endif %}">{% trans "Chat" %}</a>
+      <a href="{% url 'profile' %}" class="{% if request.resolver_match.url_name == 'profile' %}active{% endif %}">{% trans "Profil" %}</a>
     </nav>
   </aside>
 
@@ -334,12 +336,13 @@
     <!-- Header -->
     <header class="header">
       <div class="header-left">
-        <h2>Today</h2>
+        <h2>{% trans "Astăzi" %}</h2>
         <p class="date">{% now "l, d F, Y" %}</p>
       </div>
 
       <div class="header-right">
         {% include 'core/_header_search.html' %}
+        {% include 'core/_language_select.html' %}
         <div class="user-info">
           <div class="avatar">
             {% if user.profile.avatar %}
@@ -349,7 +352,7 @@
             {% endif %}
           </div>
           <span>@{{ user.username }}</span>
-          <a href="{% url 'logout' %}" style="margin-left:12px; color:#2563eb; font-weight:600; text-decoration:none;">Logout</a>
+          <a href="{% url 'logout' %}" style="margin-left:12px; color:#2563eb; font-weight:600; text-decoration:none;">{% trans "Ieșire" %}</a>
         </div>
       </div>
     </header>
@@ -359,7 +362,7 @@
       <div class="stat-card">
         <div class="stat-icon">📈</div>
         <div class="stat-content">
-          <h3>Weekly Activity</h3>
+          <h3>{% trans "Activitate săptămânală" %}</h3>
           <p class="big-number">{{ weekly_activity }}%</p>
         </div>
       </div>
@@ -367,7 +370,7 @@
       <div class="stat-card">
         <div class="stat-icon">📁</div>
         <div class="stat-content">
-          <h3>Projects now</h3>
+          <h3>{% trans "Proiecte active" %}</h3>
           <p class="big-number">{{ total_tasks }}</p>
         </div>
       </div>
@@ -375,7 +378,7 @@
       <div class="stat-card">
         <div class="stat-icon">✈️</div>
         <div class="stat-content">
-          <h3>Leave Request</h3>
+          <h3>{% trans "Cereri concediu" %}</h3>
           <p class="big-number">{{ vacation_people|length }}</p>
         </div>
       </div>
@@ -385,22 +388,22 @@
     <section style="display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); column-gap:16px; row-gap:16px; align-items:stretch; margin-top:16px;">
       <div class="meetings-section" style="grid-column:1 / span 2; margin:0; padding:24px;">
         <div class="section-header">
-          <h2>Upcoming meetings</h2>
+          <h2>{% trans "Meeting-uri viitoare" %}</h2>
           <div class="section-actions">
             {% if google_calendar_ready %}
               {% if google_calendar_connected %}
                 <form method="post" action="{% url 'google_calendar_disconnect' %}" style="margin:0;">
                   {% csrf_token %}
                   <input type="hidden" name="next" value="{{ request.path }}">
-                  <button type="submit" class="sync-btn">Disconnect Google</button>
+                  <button type="submit" class="sync-btn">{% trans "Deconectează Google" %}</button>
                 </form>
               {% else %}
-                <a class="sync-btn" href="{% url 'google_calendar_connect' %}?next={{ request.path|urlencode }}">Connect Google</a>
+                <a class="sync-btn" href="{% url 'google_calendar_connect' %}?next={{ request.path|urlencode }}">{% trans "Conectează Google" %}</a>
               {% endif %}
             {% else %}
-              <span class="sync-btn" style="opacity:.6;cursor:not-allowed;">Google not configured</span>
+              <span class="sync-btn" style="opacity:.6;cursor:not-allowed;">{% trans "Google nu este configurat" %}</span>
             {% endif %}
-            <a class="add-btn" href="{% url 'add_meeting' %}">+ Add meeting</a>
+            <a class="add-btn" href="{% url 'add_meeting' %}">+ {% trans "Adaugă meeting" %}</a>
           </div>
         </div>
 
@@ -421,21 +424,21 @@
               </div>
             </div>
             {% if can_manage_meetings or user.id == m.created_by_id %}
-            <form method="post" action="{% url 'delete_meeting' m.id %}" onsubmit="return confirm('Delete this meeting?');">
+            <form method="post" action="{% url 'delete_meeting' m.id %}" onsubmit="return confirm('{% trans "Ștergi acest meeting?" %}');">
               {% csrf_token %}
-              <button type="submit" class="delete-meeting-btn">Delete</button>
+              <button type="submit" class="delete-meeting-btn">{% trans "Șterge" %}</button>
             </form>
             {% endif %}
           </div>
           {% empty %}
-          <p style="color:#94a3b8;">No upcoming meetings.</p>
+          <p style="color:#94a3b8;">{% trans "Nu există meeting-uri viitoare." %}</p>
           {% endfor %}
         </div>
       </div>
 
       <div class="meetings-section" style="grid-column:3 / span 1; margin:0; padding:24px;">
         <div class="section-header">
-          <h2>On vacation</h2>
+          <h2>{% trans "În concediu" %}</h2>
         </div>
         <div class="meetings-list">
           {% if vacation_people %}
@@ -445,11 +448,11 @@
                 <h4>{{ person.user.get_full_name|default:person.user.username }}</h4>
                 <p>{{ person.function }}</p>
               </div>
-              <span style="background:#eff6ff;color:#2563eb;padding:6px 12px;border-radius:10px;font-weight:600;">Vacation</span>
+              <span style="background:#eff6ff;color:#2563eb;padding:6px 12px;border-radius:10px;font-weight:600;">{% trans "Concediu" %}</span>
             </div>
             {% endfor %}
           {% else %}
-            <p style="color:#94a3b8;">No one is on vacation.</p>
+            <p style="color:#94a3b8;">{% trans "Nimeni nu este în concediu." %}</p>
           {% endif %}
         </div>
       </div>

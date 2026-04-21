@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 import uuid
 
 
@@ -25,15 +26,15 @@ class Profile(models.Model):
 
 class Task(models.Model):
     STATUS_CHOICES = [
-        ('todo', 'To Do'),
-        ('revision', 'In Revision'),
-        ('done', 'Done'),
-        ('archived', 'Archived'),
+        ('todo', _('De făcut')),
+        ('revision', _('În revizie')),
+        ('done', _('Finalizat')),
+        ('archived', _('Arhivat')),
     ]
     PRIORITY_CHOICES = [
-        ('low', 'Low'),
-        ('medium', 'Medium'),
-        ('high', 'High'),
+        ('low', _('Scăzută')),
+        ('medium', _('Medie')),
+        ('high', _('Ridicată')),
     ]
 
     title = models.CharField(max_length=200)
@@ -68,9 +69,9 @@ class TaskComment(models.Model):
 
 class TaskReminderLog(models.Model):
     REMINDER_TYPES = [
-        ('due_24h', 'Due in 24h'),
-        ('due_today', 'Due today'),
-        ('overdue', 'Overdue'),
+        ('due_24h', _('Termen în 24h')),
+        ('due_today', _('Termen astăzi')),
+        ('overdue', _('Întârziat')),
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='task_reminder_logs')
@@ -89,8 +90,8 @@ class TaskReminderLog(models.Model):
 
 class ChatThread(models.Model):
     THREAD_TYPES = (
-        ('group', 'Group'),
-        ('dm', 'Direct'),
+        ('group', _('Grup')),
+        ('dm', _('Direct')),
     )
     thread_type = models.CharField(max_length=10, choices=THREAD_TYPES, default='group')
     name = models.CharField(max_length=120, blank=True)
@@ -171,9 +172,9 @@ class Meeting(models.Model):
 
 class Submission(models.Model):
     STATUS_CHOICES = [
-        ('pending', 'Pending'),
-        ('approved', 'Approved'),
-        ('rejected', 'Rejected'),
+        ('pending', _('În așteptare')),
+        ('approved', _('Aprobat')),
+        ('rejected', _('Respins')),
     ]
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='submissions')
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='submissions')
@@ -192,10 +193,10 @@ class Submission(models.Model):
 
 class Notification(models.Model):
     NOTIF_TYPES = [
-        ('chat', 'Chat'),
-        ('task', 'Task'),
-        ('holiday', 'Holiday'),
-        ('other', 'Other'),
+        ('chat', _('Chat')),
+        ('task', _('Task')),
+        ('holiday', _('Concediu')),
+        ('other', _('Altul')),
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
@@ -214,21 +215,21 @@ class Notification(models.Model):
 
 class HolidayRequest(models.Model):
     HOLIDAY_TYPES = [
-        ('annual', 'Concediu de odihnă anual'),
-        ('medical', 'Concediu medical'),
-        ('maternity', 'Concediu de maternitate'),
-        ('paternal', 'Concediu paternal'),
-        ('study', 'Concediu de studii'),
-        ('partial_child', 'Concediu parțial plătit pentru îngrijirea copilului'),
-        ('supp_unpaid_child', 'Concediu suplimentar neplătit pentru îngrijirea copilului'),
-        ('care_family', 'Concediu pentru îngrijirea unui membru bolnav al familiei'),
-        ('child_disability', 'Concediu pentru îngrijirea copilului cu dizabilități'),
-        ('unpaid_personal', 'Concediu neplătit din cont propriu'),
+        ('annual', _('Concediu de odihnă anual')),
+        ('medical', _('Concediu medical')),
+        ('maternity', _('Concediu de maternitate')),
+        ('paternal', _('Concediu paternal')),
+        ('study', _('Concediu de studii')),
+        ('partial_child', _('Concediu parțial plătit pentru îngrijirea copilului')),
+        ('supp_unpaid_child', _('Concediu suplimentar neplătit pentru îngrijirea copilului')),
+        ('care_family', _('Concediu pentru îngrijirea unui membru bolnav al familiei')),
+        ('child_disability', _('Concediu pentru îngrijirea copilului cu dizabilități')),
+        ('unpaid_personal', _('Concediu neplătit din cont propriu')),
     ]
     STATUS_CHOICES = [
-        ('pending', 'Pending'),
-        ('approved', 'Approved'),
-        ('rejected', 'Rejected'),
+        ('pending', _('În așteptare')),
+        ('approved', _('Aprobat')),
+        ('rejected', _('Respins')),
     ]
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='holiday_requests')
     holiday_type = models.CharField(max_length=20, choices=HOLIDAY_TYPES, default='annual')
@@ -279,8 +280,8 @@ class BotReminder(models.Model):
 
 class BotMessage(models.Model):
     ROLE_CHOICES = [
-        ('user', 'User'),
-        ('assistant', 'Assistant'),
+        ('user', _('Utilizator')),
+        ('assistant', _('Asistent')),
     ]
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bot_messages')
     role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='user')

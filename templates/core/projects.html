@@ -1,9 +1,11 @@
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Projects - Panel</title>
+  <title>{% trans "Proiecte" %} - {% trans "Panel" %}</title>
   <style>
     * {
       margin: 0;
@@ -287,16 +289,16 @@
   <!-- Sidebar -->
   <aside class="sidebar">
     <div class="sidebar-logo">
-      Panel
+      {% trans "Panel" %}
     </div>
 
     <nav class="sidebar-nav">
-      <a href="dashboard.html">Dashboard</a>
-      <a href="#" class="active">Tasks</a>
-      <a href="#">Calendar</a>
-      <a href="#">Team</a>
-      <a href="#">Chat</a>
-      <a href="#">Profile</a>
+      <a href="dashboard.html">{% trans "Panou" %}</a>
+      <a href="#" class="active">{% trans "Taskuri" %}</a>
+      <a href="#">{% trans "Calendar" %}</a>
+      <a href="#">{% trans "Echipă" %}</a>
+      <a href="#">{% trans "Chat" %}</a>
+      <a href="#">{% trans "Profil" %}</a>
     </nav>
   </aside>
 
@@ -306,14 +308,15 @@
     <!-- Header -->
     <header class="header">
       <div class="header-left">
-        <h2>Today</h2>
-        <p class="date">Wednesday, 10 November, 2025</p>
+        <h2>{% trans "Astăzi" %}</h2>
+        <p class="date">{% trans "Miercuri, 10 Noiembrie, 2025" %}</p>
       </div>
 
       <div class="header-right">
         <div class="search-bar">
-          <input type="text" placeholder="Search people">
+          <input type="text" placeholder="{% trans 'Caută persoane' %}">
         </div>
+        {% include 'core/_language_select.html' %}
         <div class="user-info">
           <div class="avatar">A</div>
           <span>@AdeliUser</span>
@@ -324,70 +327,70 @@
     <!-- Projects Dashboard -->
     <section class="projects-dashboard">
       <div class="create-task-card">
-        <h2 class="card-title">Create a task</h2>
+        <h2 class="card-title">{% trans "Creează un task" %}</h2>
 
         <form>
           <div class="form-group">
-            <label>Task Name</label>
-            <input type="text" placeholder="Task: Web design" required>
+            <label>{% trans "Nume task" %}</label>
+            <input type="text" placeholder="{% trans 'Task: Web design' %}" required>
           </div>
 
           <div class="form-group">
-            <label>Description task</label>
-            <textarea placeholder="Description task"></textarea>
+            <label>{% trans "Descriere task" %}</label>
+            <textarea placeholder="{% trans 'Descriere task' %}"></textarea>
           </div>
 
           <div class="form-group">
-            <label>Technologies</label>
+            <label>{% trans "Tehnologii" %}</label>
             <input type="text" placeholder="HTML, CSS, JS">
           </div>
 
           <div class="form-row">
             <div class="form-group">
-              <label>Start Date</label>
-              <input type="date">
+              <label>{% trans "Data start" %}</label>
+              <input type="date" lang="{{ LANGUAGE_CODE }}">
             </div>
             <div class="form-group">
-              <label>Due Date</label>
-              <input type="date">
+              <label>{% trans "Data limită" %}</label>
+              <input type="date" lang="{{ LANGUAGE_CODE }}">
             </div>
           </div>
 
           <div class="form-group">
-            <label>Who accomplishes the task</label>
-            <input type="text" placeholder="Maria" required>
+            <label>{% trans "Cine execută task-ul" %}</label>
+            <input type="text" placeholder="{% trans 'Maria' %}" required>
           </div>
 
-          <button type="submit" class="add-task-btn">Add task</button>
+          <button type="submit" class="add-task-btn">{% trans "Adaugă task" %}</button>
         </form>
       </div>
 
       <div class="activities-card">
-        <h2 class="card-title">Activities</h2>
+        <h2 class="card-title">{% trans "Activități" %}</h2>
 
         <div class="activity-item">
           <div class="activity-info">
-            <p>Maria is working on project: Web design</p>
+            <p>{% trans "Maria lucrează la proiect: Web design" %}</p>
           </div>
-          <span class="status status-in-progress">In Progress</span>
-          <button class="check-btn">Check</button>
+          <span class="status status-in-progress">{% trans "În progres" %}</span>
+          <button class="check-btn">{% trans "Verifică" %}</button>
         </div>
 
         <div class="activity-item">
           <div class="activity-info">
-            <p>Maria is working on project: Web design</p>
+            <p>{% trans "Maria lucrează la proiect: Web design" %}</p>
           </div>
-          <span class="status status-complete">Complete</span>
-          <button class="check-btn">Check</button>
+          <span class="status status-complete">{% trans "Finalizat" %}</span>
+          <button class="check-btn">{% trans "Verifică" %}</button>
         </div>
 
         <!-- Repetă blocul pentru mai multe activități -->
         <div class="activity-item">
           <div class="activity-info">
-            <p>Maria is working on project: Web design</p>
+            <p>{% trans "Maria lucrează la proiect: Web design" %}</p>
           </div>
-          <span class="status status-in-progress">In Progress</span>
-          <button class="check-btn">Check</button>
+          <span class="status status-in-progress">{% trans "În progres" %}</span>
+          <button class="check-btn">{% trans "Verifică" %}</button>
         </div>
       </div>
     </section>

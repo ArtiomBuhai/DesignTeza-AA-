@@ -1,10 +1,11 @@
 <!doctype html>
-{% load static %}
-<html lang="ro">
+{% load static i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Calendar - Admin</title>
+    <title>{% trans "Calendar" %} - {% trans "Admin" %}</title>
     <style>
       * {
         margin: 0;
@@ -251,6 +252,12 @@
         font-weight: 500;
       }
 
+      td.today {
+        background: #dbeafe;
+        color: #1d4ed8;
+        font-weight: 700;
+      }
+
       .month-stats {
         margin-top: 20px;
         text-align: center;
@@ -312,15 +319,15 @@
     <div class="dashboard">
       <!-- Sidebar -->
       <aside class="sidebar">
-        <div class="sidebar-logo">Panel</div>
+        <div class="sidebar-logo">{% trans "Panel" %}</div>
 
         <nav class="sidebar-nav">
-          <a href="{% url 'dashboard' %}">Dashboard</a>
-          <a href="{% url 'tasks' %}">Tasks</a>
-          <a href="{% url 'calendar' %}" class="active">Calendar</a>
-          <a href="{% url 'team' %}">Team</a>
-          <a href="{% url 'chat' %}">Chat</a>
-          <a href="{% url 'profile' %}">Profile</a>
+          <a href="{% url 'dashboard' %}">{% trans "Panou" %}</a>
+          <a href="{% url 'tasks' %}">{% trans "Taskuri" %}</a>
+          <a href="{% url 'calendar' %}" class="active">{% trans "Calendar" %}</a>
+          <a href="{% url 'team' %}">{% trans "Echipă" %}</a>
+          <a href="{% url 'chat' %}">{% trans "Chat" %}</a>
+          <a href="{% url 'profile' %}">{% trans "Profil" %}</a>
         </nav>
       </aside>
 
@@ -329,12 +336,13 @@
         <!-- Header -->
         <header class="header">
           <div class="header-left">
-            <h1>Today</h1>
+            <h1>{% trans "Astăzi" %}</h1>
             <p class="date">{% now "l, d F, Y" %}</p>
           </div>
 
           <div class="header-right">
             {% include 'core/_header_search.html' %}
+            {% include 'core/_language_select.html' %}
             <div
               class="user"
               style="display: flex; align-items: center; gap: 10px"
@@ -357,7 +365,7 @@
                   font-weight: 600;
                   text-decoration: none;
                 "
-                >Logout</a
+                >{% trans "Ieșire" %}</a
               >
             </div>
           </div>
@@ -368,7 +376,7 @@
           <span class="working">247</span>
           <span class="separator">|</span>
           <span class="non-working">118</span>
-          <span class="stats-text">working days | non-working days</span>
+          <span class="stats-text">{% trans "zile lucrătoare" %} | {% trans "zile nelucrătoare" %}</span>
         </div>
 
         <!-- Butoane acțiuni -->
@@ -379,36 +387,36 @@
                 {% csrf_token %}
                 <input type="hidden" name="next" value="{{ request.path }}">
                 <button class="btn btn-outline" type="submit">
-                  Disconnect Google
+                  {% trans "Deconectează Google" %}
                 </button>
               </form>
             {% else %}
               <a class="btn btn-outline" href="{% url 'google_calendar_connect' %}?next={{ request.path|urlencode }}">
-                Connect Google
+                {% trans "Conectează Google" %}
               </a>
             {% endif %}
           {% else %}
             <span class="btn btn-outline" style="opacity:.6;cursor:not-allowed;">
-              Google not configured
+              {% trans "Google nu este configurat" %}
             </span>
           {% endif %}
           <button
             class="btn btn-outline"
             onclick="window.location.href='{% url 'calendar_info_admin' %}'"
           >
-            Read about holidays
+            {% trans "Citește despre concedii" %}
           </button>
           <button
             class="btn btn-primary"
             onclick="window.location.href='{% url 'calendar_holiday_requests_admin' %}'"
           >
-            See holidays request
+            {% trans "Vezi cereri de concediu" %}
           </button>
           <button
             class="btn btn-primary"
             onclick="window.location.href='{% url 'calendar_current_holidays_admin' %}'"
           >
-            See current holidays
+            {% trans "Vezi concediile curente" %}
           </button>
         </div>
 
@@ -416,17 +424,17 @@
         <div class="calendar-grid">
           <!-- Ianuarie -->
           <div class="month">
-            <h2 class="month-title">January</h2>
+            <h2 class="month-title">{% trans "Ianuarie" %}</h2>
             <table>
               <thead>
                 <tr>
-                  <th>Mo</th>
-                  <th>Tu</th>
-                  <th>We</th>
-                  <th>Th</th>
-                  <th>Fr</th>
-                  <th>Sa</th>
-                  <th>Su</th>
+                  <th>{% trans "Lu" %}</th>
+                  <th>{% trans "Ma" %}</th>
+                  <th>{% trans "Mi" %}</th>
+                  <th>{% trans "Jo" %}</th>
+                  <th>{% trans "Vi" %}</th>
+                  <th>{% trans "Sa" %}</th>
+                  <th>{% trans "Du" %}</th>
                 </tr>
               </thead>
               <tbody>
@@ -460,7 +468,7 @@
                 <tr>
                   <td>20</td>
                   <td>21</td>
-                  <td class="working">22</td>
+                  <td>22</td>
                   <td>23</td>
                   <td>24</td>
                   <td>25</td>
@@ -478,24 +486,24 @@
               </tbody>
             </table>
             <div class="month-stats">
-              <strong class="working">Working days: 22</strong> |
-              <strong class="non-working">Non-working days: 9</strong>
+              <strong class="working">{% trans "Zile lucrătoare:" %} 22</strong> |
+              <strong class="non-working">{% trans "Zile nelucrătoare:" %} 9</strong>
             </div>
           </div>
 
           <!-- Februarie -->
           <div class="month">
-            <h2 class="month-title">February</h2>
+            <h2 class="month-title">{% trans "Februarie" %}</h2>
             <table>
               <thead>
                 <tr>
-                  <th>Mo</th>
-                  <th>Tu</th>
-                  <th>We</th>
-                  <th>Th</th>
-                  <th>Fr</th>
-                  <th>Sa</th>
-                  <th>Su</th>
+                  <th>{% trans "Lu" %}</th>
+                  <th>{% trans "Ma" %}</th>
+                  <th>{% trans "Mi" %}</th>
+                  <th>{% trans "Jo" %}</th>
+                  <th>{% trans "Vi" %}</th>
+                  <th>{% trans "Sa" %}</th>
+                  <th>{% trans "Du" %}</th>
                 </tr>
               </thead>
               <tbody>
@@ -547,24 +555,24 @@
               </tbody>
             </table>
             <div class="month-stats">
-              <strong class="working">Working days: 20</strong> |
-              <strong class="non-working">Non-working days: 8</strong>
+              <strong class="working">{% trans "Zile lucrătoare:" %} 20</strong> |
+              <strong class="non-working">{% trans "Zile nelucrătoare:" %} 8</strong>
             </div>
           </div>
 
           <!-- Martie -->
           <div class="month">
-            <h2 class="month-title">March</h2>
+            <h2 class="month-title">{% trans "Martie" %}</h2>
             <table>
               <thead>
                 <tr>
-                  <th>Mo</th>
-                  <th>Tu</th>
-                  <th>We</th>
-                  <th>Th</th>
-                  <th>Fr</th>
-                  <th>Sa</th>
-                  <th>Su</th>
+                  <th>{% trans "Lu" %}</th>
+                  <th>{% trans "Ma" %}</th>
+                  <th>{% trans "Mi" %}</th>
+                  <th>{% trans "Jo" %}</th>
+                  <th>{% trans "Vi" %}</th>
+                  <th>{% trans "Sa" %}</th>
+                  <th>{% trans "Du" %}</th>
                 </tr>
               </thead>
               <tbody>
@@ -625,24 +633,24 @@
               </tbody>
             </table>
             <div class="month-stats">
-              <strong class="working">Working days: 21</strong> |
-              <strong class="non-working">Non-working days: 10</strong>
+              <strong class="working">{% trans "Zile lucrătoare:" %} 21</strong> |
+              <strong class="non-working">{% trans "Zile nelucrătoare:" %} 10</strong>
             </div>
           </div>
 
           <!-- Aprilie -->
           <div class="month">
-            <h2 class="month-title">April</h2>
+            <h2 class="month-title">{% trans "Aprilie" %}</h2>
             <table>
               <thead>
                 <tr>
-                  <th>Mo</th>
-                  <th>Tu</th>
-                  <th>We</th>
-                  <th>Th</th>
-                  <th>Fr</th>
-                  <th>Sa</th>
-                  <th>Su</th>
+                  <th>{% trans "Lu" %}</th>
+                  <th>{% trans "Ma" %}</th>
+                  <th>{% trans "Mi" %}</th>
+                  <th>{% trans "Jo" %}</th>
+                  <th>{% trans "Vi" %}</th>
+                  <th>{% trans "Sa" %}</th>
+                  <th>{% trans "Du" %}</th>
                 </tr>
               </thead>
               <tbody>
@@ -694,24 +702,24 @@
               </tbody>
             </table>
             <div class="month-stats">
-              <strong class="working">Working days: 22</strong> |
-              <strong class="non-working">Non-working days: 8</strong>
+              <strong class="working">{% trans "Zile lucrătoare:" %} 22</strong> |
+              <strong class="non-working">{% trans "Zile nelucrătoare:" %} 8</strong>
             </div>
           </div>
 
           <!-- Mai -->
           <div class="month">
-            <h2 class="month-title">May</h2>
+            <h2 class="month-title">{% trans "Mai" %}</h2>
             <table>
               <thead>
                 <tr>
-                  <th>Mo</th>
-                  <th>Tu</th>
-                  <th>We</th>
-                  <th>Th</th>
-                  <th>Fr</th>
-                  <th>Sa</th>
-                  <th>Su</th>
+                  <th>{% trans "Lu" %}</th>
+                  <th>{% trans "Ma" %}</th>
+                  <th>{% trans "Mi" %}</th>
+                  <th>{% trans "Jo" %}</th>
+                  <th>{% trans "Vi" %}</th>
+                  <th>{% trans "Sa" %}</th>
+                  <th>{% trans "Du" %}</th>
                 </tr>
               </thead>
               <tbody>
@@ -763,24 +771,24 @@
               </tbody>
             </table>
             <div class="month-stats">
-              <strong class="working">Working days: 22</strong> |
-              <strong class="non-working">Non-working days: 9</strong>
+              <strong class="working">{% trans "Zile lucrătoare:" %} 22</strong> |
+              <strong class="non-working">{% trans "Zile nelucrătoare:" %} 9</strong>
             </div>
           </div>
 
           <!-- Iunie -->
           <div class="month">
-            <h2 class="month-title">June</h2>
+            <h2 class="month-title">{% trans "Iunie" %}</h2>
             <table>
               <thead>
                 <tr>
-                  <th>Mo</th>
-                  <th>Tu</th>
-                  <th>We</th>
-                  <th>Th</th>
-                  <th>Fr</th>
-                  <th>Sa</th>
-                  <th>Su</th>
+                  <th>{% trans "Lu" %}</th>
+                  <th>{% trans "Ma" %}</th>
+                  <th>{% trans "Mi" %}</th>
+                  <th>{% trans "Jo" %}</th>
+                  <th>{% trans "Vi" %}</th>
+                  <th>{% trans "Sa" %}</th>
+                  <th>{% trans "Du" %}</th>
                 </tr>
               </thead>
               <tbody>
@@ -841,24 +849,24 @@
               </tbody>
             </table>
             <div class="month-stats">
-              <strong class="working">Working days: 21</strong> |
-              <strong class="non-working">Non-working days: 9</strong>
+              <strong class="working">{% trans "Zile lucrătoare:" %} 21</strong> |
+              <strong class="non-working">{% trans "Zile nelucrătoare:" %} 9</strong>
             </div>
           </div>
 
           <!-- Iulie -->
           <div class="month">
-            <h2 class="month-title">July</h2>
+            <h2 class="month-title">{% trans "Iulie" %}</h2>
             <table>
               <thead>
                 <tr>
-                  <th>Mo</th>
-                  <th>Tu</th>
-                  <th>We</th>
-                  <th>Th</th>
-                  <th>Fr</th>
-                  <th>Sa</th>
-                  <th>Su</th>
+                  <th>{% trans "Lu" %}</th>
+                  <th>{% trans "Ma" %}</th>
+                  <th>{% trans "Mi" %}</th>
+                  <th>{% trans "Jo" %}</th>
+                  <th>{% trans "Vi" %}</th>
+                  <th>{% trans "Sa" %}</th>
+                  <th>{% trans "Du" %}</th>
                 </tr>
               </thead>
               <tbody>
@@ -910,24 +918,24 @@
               </tbody>
             </table>
             <div class="month-stats">
-              <strong class="working">Working days: 23</strong> |
-              <strong class="non-working">Non-working days: 8</strong>
+              <strong class="working">{% trans "Zile lucrătoare:" %} 23</strong> |
+              <strong class="non-working">{% trans "Zile nelucrătoare:" %} 8</strong>
             </div>
           </div>
 
           <!-- August -->
           <div class="month">
-            <h2 class="month-title">August</h2>
+            <h2 class="month-title">{% trans "August" %}</h2>
             <table>
               <thead>
                 <tr>
-                  <th>Mo</th>
-                  <th>Tu</th>
-                  <th>We</th>
-                  <th>Th</th>
-                  <th>Fr</th>
-                  <th>Sa</th>
-                  <th>Su</th>
+                  <th>{% trans "Lu" %}</th>
+                  <th>{% trans "Ma" %}</th>
+                  <th>{% trans "Mi" %}</th>
+                  <th>{% trans "Jo" %}</th>
+                  <th>{% trans "Vi" %}</th>
+                  <th>{% trans "Sa" %}</th>
+                  <th>{% trans "Du" %}</th>
                 </tr>
               </thead>
               <tbody>
@@ -979,24 +987,24 @@
               </tbody>
             </table>
             <div class="month-stats">
-              <strong class="working">Working days: 21</strong> |
-              <strong class="non-working">Non-working days: 10</strong>
+              <strong class="working">{% trans "Zile lucrătoare:" %} 21</strong> |
+              <strong class="non-working">{% trans "Zile nelucrătoare:" %} 10</strong>
             </div>
           </div>
 
           <!-- Septembrie -->
           <div class="month">
-            <h2 class="month-title">September</h2>
+            <h2 class="month-title">{% trans "Septembrie" %}</h2>
             <table>
               <thead>
                 <tr>
-                  <th>Mo</th>
-                  <th>Tu</th>
-                  <th>We</th>
-                  <th>Th</th>
-                  <th>Fr</th>
-                  <th>Sa</th>
-                  <th>Su</th>
+                  <th>{% trans "Lu" %}</th>
+                  <th>{% trans "Ma" %}</th>
+                  <th>{% trans "Mi" %}</th>
+                  <th>{% trans "Jo" %}</th>
+                  <th>{% trans "Vi" %}</th>
+                  <th>{% trans "Sa" %}</th>
+                  <th>{% trans "Du" %}</th>
                 </tr>
               </thead>
               <tbody>
@@ -1048,24 +1056,24 @@
               </tbody>
             </table>
             <div class="month-stats">
-              <strong class="working">Working days: 22</strong> |
-              <strong class="non-working">Non-working days: 8</strong>
+              <strong class="working">{% trans "Zile lucrătoare:" %} 22</strong> |
+              <strong class="non-working">{% trans "Zile nelucrătoare:" %} 8</strong>
             </div>
           </div>
 
           <!-- Octombrie -->
           <div class="month">
-            <h2 class="month-title">October</h2>
+            <h2 class="month-title">{% trans "Octombrie" %}</h2>
             <table>
               <thead>
                 <tr>
-                  <th>Mo</th>
-                  <th>Tu</th>
-                  <th>We</th>
-                  <th>Th</th>
-                  <th>Fr</th>
-                  <th>Sa</th>
-                  <th>Su</th>
+                  <th>{% trans "Lu" %}</th>
+                  <th>{% trans "Ma" %}</th>
+                  <th>{% trans "Mi" %}</th>
+                  <th>{% trans "Jo" %}</th>
+                  <th>{% trans "Vi" %}</th>
+                  <th>{% trans "Sa" %}</th>
+                  <th>{% trans "Du" %}</th>
                 </tr>
               </thead>
               <tbody>
@@ -1117,24 +1125,24 @@
               </tbody>
             </table>
             <div class="month-stats">
-              <strong class="working">Working days: 23</strong> |
-              <strong class="non-working">Non-working days: 8</strong>
+              <strong class="working">{% trans "Zile lucrătoare:" %} 23</strong> |
+              <strong class="non-working">{% trans "Zile nelucrătoare:" %} 8</strong>
             </div>
           </div>
 
           <!-- Noiembrie -->
           <div class="month">
-            <h2 class="month-title">November</h2>
+            <h2 class="month-title">{% trans "Noiembrie" %}</h2>
             <table>
               <thead>
                 <tr>
-                  <th>Mo</th>
-                  <th>Tu</th>
-                  <th>We</th>
-                  <th>Th</th>
-                  <th>Fr</th>
-                  <th>Sa</th>
-                  <th>Su</th>
+                  <th>{% trans "Lu" %}</th>
+                  <th>{% trans "Ma" %}</th>
+                  <th>{% trans "Mi" %}</th>
+                  <th>{% trans "Jo" %}</th>
+                  <th>{% trans "Vi" %}</th>
+                  <th>{% trans "Sa" %}</th>
+                  <th>{% trans "Du" %}</th>
                 </tr>
               </thead>
               <tbody>
@@ -1186,24 +1194,24 @@
               </tbody>
             </table>
             <div class="month-stats">
-              <strong class="working">Working days: 20</strong> |
-              <strong class="non-working">Non-working days: 10</strong>
+              <strong class="working">{% trans "Zile lucrătoare:" %} 20</strong> |
+              <strong class="non-working">{% trans "Zile nelucrătoare:" %} 10</strong>
             </div>
           </div>
 
           <!-- Decembrie -->
           <div class="month">
-            <h2 class="month-title">December</h2>
+            <h2 class="month-title">{% trans "Decembrie" %}</h2>
             <table>
               <thead>
                 <tr>
-                  <th>Mo</th>
-                  <th>Tu</th>
-                  <th>We</th>
-                  <th>Th</th>
-                  <th>Fr</th>
-                  <th>Sa</th>
-                  <th>Su</th>
+                  <th>{% trans "Lu" %}</th>
+                  <th>{% trans "Ma" %}</th>
+                  <th>{% trans "Mi" %}</th>
+                  <th>{% trans "Jo" %}</th>
+                  <th>{% trans "Vi" %}</th>
+                  <th>{% trans "Sa" %}</th>
+                  <th>{% trans "Du" %}</th>
                 </tr>
               </thead>
               <tbody>
@@ -1255,12 +1263,31 @@
               </tbody>
             </table>
             <div class="month-stats">
-              <strong class="working">Working days: 22</strong> |
-              <strong class="non-working">Non-working days: 9</strong>
+              <strong class="working">{% trans "Zile lucrătoare:" %} 22</strong> |
+              <strong class="non-working">{% trans "Zile nelucrătoare:" %} 9</strong>
             </div>
           </div>
         </div>
       </main>
     </div>
+    <script>
+      (function highlightCurrentDay() {
+        const today = new Date();
+        const currentMonthIndex = today.getMonth();
+        const currentDay = String(today.getDate());
+        const monthCards = document.querySelectorAll(".calendar-grid .month");
+        const currentMonthCard = monthCards[currentMonthIndex];
+
+        if (!currentMonthCard) return;
+
+        const dateCells = currentMonthCard.querySelectorAll("table tbody td");
+        for (const cell of dateCells) {
+          if (cell.textContent.trim() === currentDay) {
+            cell.classList.add("today");
+            break;
+          }
+        }
+      })();
+    </script>
   </body>
 </html>

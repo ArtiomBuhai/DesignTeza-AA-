@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="ro">
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Calendar Info - Worker</title>
+  <title>{% trans "Informații concedii" %} - {% trans "Worker" %}</title>
   <style>
     * {
       margin: 0;
@@ -193,15 +195,15 @@
 
   <!-- Sidebar -->
   <aside class="sidebar">
-    <div class="sidebar-logo">Panel</div>
+    <div class="sidebar-logo">{% trans "Panel" %}</div>
 
     <nav class="sidebar-nav">
-      <a href="{% url 'dashboard' %}">Dashboard</a>
-      <a href="{% url 'tasks' %}">Tasks</a>
-      <a href="{% url 'calendar' %}" class="active">Calendar</a>
-      <a href="{% url 'team' %}">Team</a>
-      <a href="{% url 'chat' %}">Chat</a>
-      <a href="{% url 'profile' %}">Profile</a>
+      <a href="{% url 'dashboard' %}">{% trans "Panou" %}</a>
+      <a href="{% url 'tasks' %}">{% trans "Taskuri" %}</a>
+      <a href="{% url 'calendar' %}" class="active">{% trans "Calendar" %}</a>
+      <a href="{% url 'team' %}">{% trans "Echipă" %}</a>
+      <a href="{% url 'chat' %}">{% trans "Chat" %}</a>
+      <a href="{% url 'profile' %}">{% trans "Profil" %}</a>
     </nav>
   </aside>
 
@@ -212,11 +214,12 @@
     <header class="header">
       <div class="header-left">
         <span class="back-arrow" onclick="history.back()">←</span>
-        <h1>Holiday information</h1>
+        <h1>{% trans "Informații concedii" %}</h1>
       </div>
 
       <div class="header-right">
         {% include 'core/_header_search.html' %}
+        {% include 'core/_language_select.html' %}
         <div class="user" style="display:flex; align-items:center; gap:10px;">
           <div class="avatar">
             {% if user.profile.avatar %}
@@ -226,7 +229,7 @@
             {% endif %}
           </div>
           <span>@{{ user.username }}</span>
-          <a href="{% url 'logout' %}" style="margin-left:10px; color:#2563eb; font-weight:600; text-decoration:none;">Logout</a>
+          <a href="{% url 'logout' %}" style="margin-left:10px; color:#2563eb; font-weight:600; text-decoration:none;">{% trans "Ieșire" %}</a>
         </div>
       </div>
     </header>
@@ -234,34 +237,44 @@
     <!-- Conținut -->
     <div class="content-card">
       <p>
+        {% blocktrans trimmed %}
         Având în vedere că suntem în sezonul concediilor de odihnă, am strâns cele mai importante prevederi legale din <strong>Codul Muncii</strong> referitoare la concediul de odihnă anual ca să cunoașteți ce drepturi aveți.
+        {% endblocktrans %}
       </p>
 
-      <h3>Prevederile Codului Muncii</h3>
+      <h3>{% trans "Prevederile Codului Muncii" %}</h3>
       <ul>
-        <li><strong>Concediul de odihnă anual</strong> este un drept garantat pentru toți angajații care lucrează în baza contractului individual de muncă (art. 112 din Codul Muncii).</li>
-        <li>Concediul de odihnă anual este de <strong>28 de zile calendaristice</strong> (art. 115 alin. (1) din Codul Muncii), indiferent de durata timpului de muncă zilnică sau săptămânală.</li>
-        <li>În cazul în care durata concediului anual este mai mare de 28 de zile calendaristice (de exemplu, pentru anumite categorii de angajați – minori, persoane cu dizabilități, profesii cu condiții vătămătoare), concediul se acordă în mărime sporită (art. 115 alin. (2)).</li>
-        <li>Concediul de odihnă se acordă <strong>într-o perioadă neîntreruptă</strong>, cu excepția cazurilor în care, la cererea salariatului și cu acordul angajatorului, concediul poate fi fractionat în părți (art. 119).</li>
-        <li>Angajatorul este obligat să acorde concediul anual de odihnă în anul calendaristic respectiv. Amânarea concediului este permisă doar în cazuri excepționale (art. 120).</li>
-        <li>Concediul de odihnă se plătește cu cel puțin <strong>3 zile calendaristice înainte de începerea acestuia</strong> (art. 118).</li>
-        <li>În cazul în care salariatul se îmbolnăvește în perioada concediului de odihnă, concediul se prelungește sau se reportează pentru perioada de incapacitate temporară de muncă (art. 121).</li>
+        <li>{% blocktrans trimmed %}<strong>Concediul de odihnă anual</strong> este un drept garantat pentru toți angajații care lucrează în baza contractului individual de muncă (art. 112 din Codul Muncii).{% endblocktrans %}</li>
+        <li>{% blocktrans trimmed %}Concediul de odihnă anual este de <strong>28 de zile calendaristice</strong> (art. 115 alin. (1) din Codul Muncii), indiferent de durata timpului de muncă zilnică sau săptămânală.{% endblocktrans %}</li>
+        <li>{% blocktrans trimmed %}În cazul în care durata concediului anual este mai mare de 28 de zile calendaristice (de exemplu, pentru anumite categorii de angajați – minori, persoane cu dizabilități, profesii cu condiții vătămătoare), concediul se acordă în mărime sporită (art. 115 alin. (2)).{% endblocktrans %}</li>
+        <li>{% blocktrans trimmed %}Concediul de odihnă se acordă <strong>într-o perioadă neîntreruptă</strong>, cu excepția cazurilor în care, la cererea salariatului și cu acordul angajatorului, concediul poate fi fractionat în părți (art. 119).{% endblocktrans %}</li>
+        <li>{% blocktrans trimmed %}Angajatorul este obligat să acorde concediul anual de odihnă în anul calendaristic respectiv. Amânarea concediului este permisă doar în cazuri excepționale (art. 120).{% endblocktrans %}</li>
+        <li>{% blocktrans trimmed %}Concediul de odihnă se plătește cu cel puțin <strong>3 zile calendaristice înainte de începerea acestuia</strong> (art. 118).{% endblocktrans %}</li>
+        <li>{% blocktrans trimmed %}În cazul în care salariatul se îmbolnăvește în perioada concediului de odihnă, concediul se prelungește sau se reportează pentru perioada de incapacitate temporară de muncă (art. 121).{% endblocktrans %}</li>
       </ul>
 
       <div class="important">
+        {% blocktrans trimmed %}
         <strong>IMPORTANT!</strong> Este interzisă neacordarea concediului anual de odihnă timp de doi ani consecutivi (art. 120 alin. (2)).
+        {% endblocktrans %}
       </div>
 
       <div class="very-important">
+        {% blocktrans trimmed %}
         !!! Nu se admite neacordarea concediului anual de odihnă timp de doi ani consecutivi – amendă de la 200 la 350 unități convenționale aplicată persoanei juridice.
+        {% endblocktrans %}
       </div>
 
       <div class="very-important">
+        {% blocktrans trimmed %}
         !!! În cazul în care contractul individual de muncă încetează, salariatul are dreptul la compensația bănească pentru concediul anual de odihnă neutilizat (art. 119 alin. (3)).
+        {% endblocktrans %}
       </div>
 
       <p>
+        {% blocktrans trimmed %}
         <strong>Cel mai mare număr de zile de concediu anual de odihnă</strong> în Republica Moldova este de 62 de zile – pentru cadrele didactice din instituțiile de învățământ superior, colegii, gimnazii și școli de cultură generală.
+        {% endblocktrans %}
       </p>
     </div>
 

@@ -5,6 +5,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('i18n/', include('django.conf.urls.i18n')),
     path('accounts/', include('django.contrib.auth.urls')),  # login/logout
     path('', include('core.urls')),  # ← aici se leagă home și team!
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

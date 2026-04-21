@@ -1,9 +1,11 @@
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Profile - Admin</title>
+  <title>{% trans "Profil" %} - {% trans "Admin" %}</title>
   <style>
     :root {
       --primary: #2563eb;
@@ -309,14 +311,14 @@
 
   <!-- Sidebar -->
   <aside class="sidebar">
-    <div class="sidebar-logo">Panel</div>
+    <div class="sidebar-logo">{% trans "Panel" %}</div>
     <nav class="sidebar-nav">
-      <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Dashboard</a>
-      <a href="{% url 'tasks' %}" class="{% if request.resolver_match.url_name == 'tasks' %}active{% endif %}">Tasks</a>
-      <a href="{% url 'calendar' %}" class="{% if request.resolver_match.url_name == 'calendar' %}active{% endif %}">Calendar</a>
-      <a href="{% url 'team' %}" class="{% if request.resolver_match.url_name == 'team' %}active{% endif %}">Team</a>
-      <a href="{% url 'chat' %}" class="{% if request.resolver_match.url_name == 'chat' %}active{% endif %}">Chat</a>
-      <a href="{% url 'profile' %}" class="{% if request.resolver_match.url_name == 'profile' %}active{% endif %}">Profile</a>
+      <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">{% trans "Panou" %}</a>
+      <a href="{% url 'tasks' %}" class="{% if request.resolver_match.url_name == 'tasks' %}active{% endif %}">{% trans "Taskuri" %}</a>
+      <a href="{% url 'calendar' %}" class="{% if request.resolver_match.url_name == 'calendar' %}active{% endif %}">{% trans "Calendar" %}</a>
+      <a href="{% url 'team' %}" class="{% if request.resolver_match.url_name == 'team' %}active{% endif %}">{% trans "Echipă" %}</a>
+      <a href="{% url 'chat' %}" class="{% if request.resolver_match.url_name == 'chat' %}active{% endif %}">{% trans "Chat" %}</a>
+      <a href="{% url 'profile' %}" class="{% if request.resolver_match.url_name == 'profile' %}active{% endif %}">{% trans "Profil" %}</a>
     </nav>
   </aside>
 
@@ -326,10 +328,11 @@
 
     <header class="header">
       <div class="header-left">
-        <h1>Profile</h1>
+        <h1>{% trans "Profil" %}</h1>
       </div>
       <div class="header-right">
         {% include 'core/_header_search.html' %}
+        {% include 'core/_language_select.html' %}
         <div class="user-info">
           <div class="avatar">
             {% if profile and profile.avatar %}
@@ -339,7 +342,7 @@
             {% endif %}
           </div>
           <span>@{{ user.username }}</span>
-          <a class="logout-link" href="{% url 'logout' %}">Logout</a>
+          <a class="logout-link" href="{% url 'logout' %}">{% trans "Ieșire" %}</a>
         </div>
       </div>
     </header>
@@ -356,19 +359,20 @@
         {% if profile.function %}
         <p class="function">{{ profile.function }}</p>
         {% else %}
-        <button class="function-cta" type="button" onclick="openFunctionEditor()">Completează funcția</button>
+        <button class="function-cta" type="button" onclick="openFunctionEditor()">{% trans "Completează funcția" %}</button>
         {% endif %}
       </div>
     </div>
 
     <div class="profile-card">
-      <button class="edit-btn" type="button" onclick="openEditModal()">Edit Profile</button>
+      <button class="edit-btn" type="button" onclick="openEditModal()">{% trans "Editează profilul" %}</button>
 
-      <h2 class="section-title">About</h2>
+      <h2 class="section-title">{% trans "Despre" %}</h2>
+      {% trans "Completează o descriere despre tine." as about_default_text %}
       <p class="about-text">
-        {{ profile.about|default:"Completează o descriere despre tine." }}
+        {{ profile.about|default:about_default_text }}
       </p>
-      <h2 class="section-title">Skills & Languages</h2>
+      <h2 class="section-title">{% trans "Skill-uri și limbi" %}</h2>
       <div class="tag-list">
         {% if skills_list %}
           {% for sk in skills_list %}<span class="tag">{{ sk }}</span>{% endfor %}
@@ -377,7 +381,7 @@
           {% for lg in languages_list %}<span class="tag">{{ lg }}</span>{% endfor %}
         {% endif %}
         {% if not skills_list and not languages_list %}
-          <p class="about-text">Adaugă skill-urile și limbile pe care le cunoști.</p>
+          <p class="about-text">{% trans "Adaugă skill-urile și limbile pe care le cunoști." %}</p>
         {% endif %}
       </div>
     </div>
@@ -393,7 +397,7 @@
     <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="modal-header">
-        <h2 class="modal-title">Edit Profile</h2>
+        <h2 class="modal-title">{% trans "Editează profilul" %}</h2>
         <button class="modal-close" type="button" onclick="closeEditModal()">×</button>
       </div>
 
@@ -403,53 +407,53 @@
         {% else %}
           <div id="previewPhoto" class="current-photo">{{ user.username|first|upper }}</div>
         {% endif %}
-        <label for="photoInput" class="upload-btn">Change Photo</label>
+        <label for="photoInput" class="upload-btn">{% trans "Schimbă fotografia" %}</label>
         <input type="file" name="avatar" id="photoInput" class="file-input" accept="image/*" onchange="previewImage(event)">
       </div>
 
       <div class="form-grid">
         <div>
           <div class="form-group">
-            <label>Full Name</label>
+            <label>{% trans "Nume complet" %}</label>
             <input type="text" name="full_name" value="{{ profile.full_name|default:user.get_full_name|default:user.username }}">
           </div>
           <div class="form-group">
-            <label>Email</label>
+            <label>{% trans "Email" %}</label>
             <input type="email" name="email" value="{{ user.email }}">
           </div>
           <div class="form-group">
-            <label>Function / Position</label>
+            <label>{% trans "Funcție / Poziție" %}</label>
             <input id="functionInput" type="text" name="function" value="{{ profile.function }}">
           </div>
           <div class="form-group">
-            <label>About Me</label>
+            <label>{% trans "Despre mine" %}</label>
             <textarea rows="5" name="about">{{ profile.about }}</textarea>
           </div>
         </div>
 
         <div>
           <div class="form-group">
-            <label>Languages</label>
+            <label>{% trans "Limbi" %}</label>
             <textarea rows="3" name="languages">{{ profile.languages }}</textarea>
           </div>
           <div class="form-group">
-            <label>Skills (comma separated)</label>
+            <label>{% trans "Skill-uri (separate prin virgulă)" %}</label>
             <textarea rows="3" name="skills">{{ profile.skills }}</textarea>
           </div>
           <div class="form-group">
-            <label>Education</label>
+            <label>{% trans "Educație" %}</label>
             <textarea rows="3" name="education">{{ profile.education }}</textarea>
           </div>
           <div class="form-group">
-            <label>Experience</label>
+            <label>{% trans "Experiență" %}</label>
             <textarea rows="4" name="experience">{{ profile.experience }}</textarea>
           </div>
         </div>
       </div>
 
       <div style="margin-top:40px; text-align:right;">
-        <button type="button" onclick="closeEditModal()" style="padding:12px 28px; background:#f1f5f9; color:#64748b; border:none; border-radius:10px; margin-right:16px; cursor:pointer;">Cancel</button>
-        <button type="submit" class="save-btn" style="padding:12px 28px; background:#2563eb; color:white; border:none; border-radius:10px; font-weight:600; cursor:pointer;">Save Changes</button>
+        <button type="button" onclick="closeEditModal()" style="padding:12px 28px; background:#f1f5f9; color:#64748b; border:none; border-radius:10px; margin-right:16px; cursor:pointer;">{% trans "Anulează" %}</button>
+        <button type="submit" class="save-btn" style="padding:12px 28px; background:#2563eb; color:white; border:none; border-radius:10px; font-weight:600; cursor:pointer;">{% trans "Salvează modificările" %}</button>
       </div>
     </form>
   </div>
@@ -488,7 +492,7 @@
   }
 
   function saveProfile() {
-    alert('Profil admin salvat cu succes! (Simulare – în realitate se trimite pe server)');
+    alert('{% trans "Profil admin salvat cu succes! (Simulare – în realitate se trimite pe server)" %}');
     closeEditModal();
   }
 

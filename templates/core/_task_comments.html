@@ -1,3 +1,4 @@
+{% load i18n %}
 <div class="task-comments">
   <div class="task-comments-list">
     {% for c in task.comments.all|slice:":3" %}
@@ -9,13 +10,13 @@
       <div class="task-comment-body">{{ c.body }}</div>
     </div>
     {% empty %}
-    <div class="task-comment-empty">No comments yet.</div>
+    <div class="task-comment-empty">{% trans "Nu există comentarii încă." %}</div>
     {% endfor %}
   </div>
   <form method="post" action="{% url 'tasks' %}" class="task-comment-form">
     {% csrf_token %}
     <input type="hidden" name="comment_task_id" value="{{ task.id }}">
-    <input type="text" name="comment_text" maxlength="600" placeholder="Adaugă comentariu..." required>
-    <button type="submit">Post</button>
+    <input type="text" name="comment_text" maxlength="600" placeholder="{% trans 'Adaugă comentariu...' %}" required>
+    <button type="submit">{% trans "Postează" %}</button>
   </form>
 </div>

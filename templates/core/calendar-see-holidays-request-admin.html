@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html lang="ro">
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>See Holidays Request - Admin</title>
+  <title>{% trans "Concedii curente" %} - {% trans "Admin" %}</title>
   <style>
     * {
       margin: 0;
@@ -259,14 +261,14 @@
 
   <!-- Sidebar -->
   <aside class="sidebar">
-    <div class="sidebar-logo">Panel</div>
+    <div class="sidebar-logo">{% trans "Panel" %}</div>
     <nav class="sidebar-nav">
-      <a href="{% url 'dashboard' %}">Dashboard</a>
-      <a href="{% url 'tasks' %}">Tasks</a>
-      <a href="{% url 'calendar' %}" class="active">Calendar</a>
-      <a href="{% url 'team' %}">Team</a>
-      <a href="{% url 'chat' %}">Chat</a>
-      <a href="{% url 'profile' %}">Profile</a>
+      <a href="{% url 'dashboard' %}">{% trans "Panou" %}</a>
+      <a href="{% url 'tasks' %}">{% trans "Taskuri" %}</a>
+      <a href="{% url 'calendar' %}" class="active">{% trans "Calendar" %}</a>
+      <a href="{% url 'team' %}">{% trans "Echipă" %}</a>
+      <a href="{% url 'chat' %}">{% trans "Chat" %}</a>
+      <a href="{% url 'profile' %}">{% trans "Profil" %}</a>
     </nav>
   </aside>
 
@@ -276,16 +278,17 @@
     <!-- Header -->
     <header class="header">
       <div class="header-left">
-        <h1>Today</h1>
+        <h1>{% trans "Astăzi" %}</h1>
         <p class="date">{% now "l, d F, Y" %}</p>
       </div>
 
       <div class="header-right">
         {% include 'core/_header_search.html' %}
+        {% include 'core/_language_select.html' %}
         <div class="user">
           <div class="avatar">{{ user.username|first|upper }}</div>
           <span>@{{ user.username }}</span>
-          <a href="{% url 'logout' %}" style="margin-left:10px; color:#2563eb; font-weight:600; text-decoration:none;">Logout</a>
+          <a href="{% url 'logout' %}" style="margin-left:10px; color:#2563eb; font-weight:600; text-decoration:none;">{% trans "Ieșire" %}</a>
         </div>
       </div>
     </header>
@@ -294,10 +297,11 @@
     <div class="sections">
 
       <!-- Need to go soon -->
+      {% trans "Membru" as member_label %}
       <div class="section">
         <div class="section-header">
-          <h2 class="section-title">Need to go soon <span class="count-badge">{{ upcoming_requests|length }}</span></h2>
-          <button class="see-current-btn" onclick="window.location.href='{% url 'calendar_holiday_requests_admin' %}'">See requests</button>
+          <h2 class="section-title">{% trans "Urmează să plece" %} <span class="count-badge">{{ upcoming_requests|length }}</span></h2>
+          <button class="see-current-btn" onclick="window.location.href='{% url 'calendar_holiday_requests_admin' %}'">{% trans "Vezi cereri" %}</button>
         </div>
 
         {% if upcoming_requests %}
@@ -306,21 +310,21 @@
             <div class="request-avatar"></div>
             <div class="request-info">
               <div class="request-name">{{ r.user.get_full_name|default:r.user.username }}</div>
-              <div class="request-function">{{ r.user.profile.function|default:'Member' }}</div>
+              <div class="request-function">{{ r.user.profile.function|default:member_label }}</div>
               <div class="request-type">{{ r.get_holiday_type_display }}</div>
               <div class="request-period">{{ r.start_date }} - {{ r.end_date }}</div>
             </div>
           </div>
           {% endfor %}
         {% else %}
-          <p style="color:#94a3b8;">Nu există concedii programate în următoarele 14 zile.</p>
+          <p style="color:#94a3b8;">{% trans "Nu există concedii programate în următoarele 14 zile." %}</p>
         {% endif %}
       </div>
 
       <!-- On holiday -->
       <div class="section">
         <div class="section-header">
-          <h2 class="section-title">On holiday <span class="count-badge">{{ current_requests|length }}</span></h2>
+          <h2 class="section-title">{% trans "În concediu" %} <span class="count-badge">{{ current_requests|length }}</span></h2>
         </div>
 
         {% if current_requests %}
@@ -329,14 +333,14 @@
             <div class="request-avatar"></div>
             <div class="request-info">
               <div class="request-name">{{ r.user.get_full_name|default:r.user.username }}</div>
-              <div class="request-function">{{ r.user.profile.function|default:'Member' }}</div>
+              <div class="request-function">{{ r.user.profile.function|default:member_label }}</div>
               <div class="request-type">{{ r.get_holiday_type_display }}</div>
               <div class="request-period">{{ r.start_date }} - {{ r.end_date }}</div>
             </div>
           </div>
           {% endfor %}
         {% else %}
-          <p style="color:#94a3b8;">Nimeni nu este acum în concediu.</p>
+          <p style="color:#94a3b8;">{% trans "Nimeni nu este acum în concediu." %}</p>
         {% endif %}
 
       </div>

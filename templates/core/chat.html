@@ -1,10 +1,11 @@
-{% load static %}
+{% load static i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Messages - Panel</title>
+  <title>{% trans "Mesaje" %} - {% trans "Panel" %}</title>
   <style>
     :root {
       --bg: #f8fbff;
@@ -582,16 +583,16 @@
   <!-- Sidebar -->
   <aside class="sidebar">
     <a class="sidebar-logo" href="{% url 'home' %}">
-      Panel
+      {% trans "Panel" %}
     </a>
 
     <nav class="sidebar-nav">
-      <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Dashboard</a>
-      <a href="{% url 'tasks' %}" class="{% if request.resolver_match.url_name == 'tasks' %}active{% endif %}">Tasks</a>
-      <a href="{% url 'calendar' %}" class="{% if request.resolver_match.url_name == 'calendar' %}active{% endif %}">Calendar</a>
-      <a href="{% url 'team' %}" class="{% if request.resolver_match.url_name == 'team' %}active{% endif %}">Team</a>
-      <a href="{% url 'chat' %}" class="{% if request.resolver_match.url_name == 'chat' %}active{% endif %}">Chat</a>
-      <a href="{% url 'profile' %}" class="{% if request.resolver_match.url_name == 'profile' %}active{% endif %}">Profile</a>
+      <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">{% trans "Panou" %}</a>
+      <a href="{% url 'tasks' %}" class="{% if request.resolver_match.url_name == 'tasks' %}active{% endif %}">{% trans "Taskuri" %}</a>
+      <a href="{% url 'calendar' %}" class="{% if request.resolver_match.url_name == 'calendar' %}active{% endif %}">{% trans "Calendar" %}</a>
+      <a href="{% url 'team' %}" class="{% if request.resolver_match.url_name == 'team' %}active{% endif %}">{% trans "Echipă" %}</a>
+      <a href="{% url 'chat' %}" class="{% if request.resolver_match.url_name == 'chat' %}active{% endif %}">{% trans "Chat" %}</a>
+      <a href="{% url 'profile' %}" class="{% if request.resolver_match.url_name == 'profile' %}active{% endif %}">{% trans "Profil" %}</a>
     </nav>
   </aside>
 
@@ -600,12 +601,13 @@
     <!-- Header -->
     <header class="header">
       <div class="header-left">
-        <h2>Today</h2>
+        <h2>{% trans "Astăzi" %}</h2>
         <p class="date">{% now "l, d F, Y" %}</p>
       </div>
 
       <div class="header-right">
         {% include 'core/_header_search.html' %}
+        {% include 'core/_language_select.html' %}
         <div class="user-info">
           <div class="avatar">
             {% if user.profile.avatar %}
@@ -615,7 +617,7 @@
             {% endif %}
           </div>
           <span>@{{ user.username }}</span>
-          <a class="logout-link" href="{% url 'logout' %}">Logout</a>
+          <a class="logout-link" href="{% url 'logout' %}">{% trans "Ieșire" %}</a>
         </div>
       </div>
     </header>
@@ -624,7 +626,7 @@
     <div class="chat-container">
       <!-- Lista conversații -->
       <div class="chat-list">
-      <input id="chatListSearch" type="text" placeholder="Search people" style="width:100%;margin-bottom:14px;padding:10px 12px;border:1px solid var(--border);border-radius:12px;font-size:1rem;">
+      <input id="chatListSearch" type="text" placeholder="{% trans 'Caută persoane' %}" style="width:100%;margin-bottom:14px;padding:10px 12px;border:1px solid var(--border);border-radius:12px;font-size:1rem;">
       <div id="chatListItems">
       {% for t in threads %}
       <a class="chat-item {% if current_thread.id == t.thread.id %}active{% endif %}"
@@ -636,7 +638,7 @@
         <div class="chat-info">
           <div class="chat-name">{% if t.is_group %}{{ t.label }}{% else %}@{{ t.label }}{% endif %}</div>
           <div class="chat-last-msg">
-            {% if t.last_text %}{{ t.last_text }}{% else %}No messages yet{% endif %}
+            {% if t.last_text %}{{ t.last_text }}{% else %}{% trans "Niciun mesaj încă" %}{% endif %}
           </div>
         </div>
         <div class="chat-time">
@@ -645,7 +647,7 @@
         </div>
       </a>
       {% empty %}
-      <p style="padding:10px;color:#94a3b8;">No threads</p>
+      <p style="padding:10px;color:#94a3b8;">{% trans "Nicio conversație" %}</p>
       {% endfor %}
       </div>
     </div>
@@ -658,7 +660,8 @@
             <div class="chat-header-top">
               <h3>
                 {% if current_thread.thread_type == 'group' %}
-                  {{ current_thread.name|default:'Team Chat' }}
+                  {% trans "Chat de echipă" as team_chat_label %}
+                  {{ current_thread.name|default:team_chat_label }}
                 {% else %}
                   @{{ current_dm_user.username }}
                 {% endif %}
@@ -668,13 +671,13 @@
                 <input type="hidden" name="action" value="set_mute">
                 <input type="hidden" name="thread_id" value="{{ current_thread.id }}">
                 <select name="mute_duration" class="mute-select">
-                  <option value="0" {% if thread_mute_value == '0' %}selected{% endif %}>Unmute</option>
-                  <option value="1h" {% if thread_mute_value == '1h' %}selected{% endif %}>Mute 1h</option>
-                  <option value="8h" {% if thread_mute_value == '8h' %}selected{% endif %}>Mute 8h</option>
-                  <option value="24h" {% if thread_mute_value == '24h' %}selected{% endif %}>Mute 24h</option>
-                  <option value="forever" {% if thread_mute_value == 'forever' %}selected{% endif %}>Mute forever</option>
+                  <option value="0" {% if thread_mute_value == '0' %}selected{% endif %}>{% trans "Activ" %}</option>
+                  <option value="1h" {% if thread_mute_value == '1h' %}selected{% endif %}>{% trans "Mut 1h" %}</option>
+                  <option value="8h" {% if thread_mute_value == '8h' %}selected{% endif %}>{% trans "Mut 8h" %}</option>
+                  <option value="24h" {% if thread_mute_value == '24h' %}selected{% endif %}>{% trans "Mut 24h" %}</option>
+                  <option value="forever" {% if thread_mute_value == 'forever' %}selected{% endif %}>{% trans "Mut permanent" %}</option>
                 </select>
-                <button type="submit" class="mute-btn">Apply</button>
+                <button type="submit" class="mute-btn">{% trans "Aplică" %}</button>
               </form>
             </div>
             <div class="status" id="chatHeaderStatus">{{ current_status_text }}</div>
@@ -701,12 +704,13 @@
             <div class="chat-time" style="margin-left:0;margin-top:6px;display:flex;gap:8px;align-items:center;">
               {{ msg.created_at|date:"H:i" }}
               {% if msg.sender_id == user.id %}
-                <span style="font-size:0.85rem;color:#94a3b8;" class="msg-status" data-msg-created="{{ msg.created_at|date:'c' }}">{{ msg.read_label|default:'Delivered' }}</span>
+                {% trans "Livrat" as delivered_label %}
+                <span style="font-size:0.85rem;color:#94a3b8;" class="msg-status" data-msg-created="{{ msg.created_at|date:'c' }}">{{ msg.read_label|default:delivered_label }}</span>
               {% endif %}
             </div>
           </div>
           {% empty %}
-          <p style="color:#94a3b8;">No messages yet.</p>
+          <p style="color:#94a3b8;">{% trans "Niciun mesaj încă." %}</p>
           {% endfor %}
         </div>
 
@@ -725,9 +729,9 @@
           </div>
           <label class="action-btn" style="cursor:pointer;" for="fileInput">📎</label>
           <input id="fileInput" name="file" type="file" style="display:none" onchange="showFileName(this)">
-          <input type="text" id="messageInput" name="content" placeholder="Type your message...">
+          <input type="text" id="messageInput" name="content" placeholder="{% trans 'Scrie mesajul...' %}">
           <span id="fileName" style="font-size:0.9rem;color:#64748b;"></span>
-          <button class="send-btn" type="submit">Send</button>
+          <button class="send-btn" type="submit">{% trans "Trimite" %}</button>
         </form>
       </div>
     </div>
@@ -865,6 +869,10 @@
         if (!item || !item.last_read_at) return;
         readMap[String(item.user_id)] = Date.parse(item.last_read_at);
       });
+      const statusSeen = "{% trans 'Văzut' %}";
+      const statusDelivered = "{% trans 'Livrat' %}";
+      const statusSeenByAll = "{% trans 'Văzut de toți' %}";
+      const statusSeenBy = "{% trans 'Văzut de' %}";
 
       sentStatusEls.forEach(el => {
         const msgTs = Date.parse(el.dataset.msgCreated || '');
@@ -876,17 +884,17 @@
         });
 
         if (threadType === 'dm') {
-          el.textContent = seenCount > 0 ? 'Seen' : 'Delivered';
+          el.textContent = seenCount > 0 ? statusSeen : statusDelivered;
           return;
         }
         if (!recipients.length) {
-          el.textContent = 'Delivered';
+          el.textContent = statusDelivered;
         } else if (seenCount >= recipients.length) {
-          el.textContent = 'Seen by all';
+          el.textContent = statusSeenByAll;
         } else if (seenCount > 0) {
-          el.textContent = `Seen by ${seenCount}`;
+          el.textContent = `${statusSeenBy} ${seenCount}`;
         } else {
-          el.textContent = 'Delivered';
+          el.textContent = statusDelivered;
         }
       });
     }

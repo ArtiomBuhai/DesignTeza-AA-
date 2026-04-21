@@ -1,10 +1,11 @@
-{% load static %}
+{% load static i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 <!doctype html>
-<html lang="ro">
+<html lang="{{ LANGUAGE_CODE }}">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}Panel{% endblock %}</title>
+    <title>{% block title %}{% trans "Panel" %}{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <link rel="stylesheet" href="{% static 'css/sidebar.css' %}" />
     <style>
@@ -22,6 +23,24 @@
         display: flex;
         align-items: center;
         gap: 14px;
+      }
+      .lang-form {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .lang-select {
+        border: 1px solid rgba(255,255,255,0.45);
+        background: rgba(255,255,255,0.12);
+        color: #fff;
+        border-radius: 10px;
+        padding: 6px 10px;
+        font-size: 0.88rem;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .lang-select option {
+        color: #0f172a;
       }
       .user-info {
         display: flex;
@@ -252,37 +271,37 @@
 </head>
   <body>
     <aside class="sidebar">
-      <a class="sidebar-logo" href="{% url 'home' %}">Panel</a>
+      <a class="sidebar-logo" href="{% url 'home' %}">{% trans "Panel" %}</a>
       <nav class="sidebar-nav">
         <a
           href="{% url 'home' %}"
           class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}"
-          >Dashboard</a
+          >{% trans "Panou" %}</a
         >
         <a
           href="{% url 'tasks' %}"
           class="{% if request.resolver_match.url_name == 'tasks' %}active{% endif %}"
-          >Tasks</a
+          >{% trans "Taskuri" %}</a
         >
         <a
           href="{% url 'calendar' %}"
           class="{% if request.resolver_match.url_name == 'calendar' %}active{% endif %}"
-          >Calendar</a
+          >{% trans "Calendar" %}</a
         >
         <a
           href="{% url 'team' %}"
           class="{% if request.resolver_match.url_name == 'team' %}active{% endif %}"
-          >Team</a
+          >{% trans "Echipă" %}</a
         >
         <a
           href="{% url 'chat' %}"
           class="{% if request.resolver_match.url_name == 'chat' %}active{% endif %}"
-          >Chat</a
+          >{% trans "Chat" %}</a
         >
         <a
           href="{% url 'profile' %}"
           class="{% if request.resolver_match.url_name == 'profile' %}active{% endif %}"
-          >Profile</a
+          >{% trans "Profil" %}</a
         >
       </nav>
     </aside>
@@ -291,6 +310,7 @@
       {% if user.is_authenticated %}
       <div class="header-right">
         {% include 'core/_header_search.html' %}
+        {% include 'core/_language_select.html' %}
         <div class="user-info">
           <div class="avatar">
             {% if user.profile.avatar %}
@@ -303,12 +323,12 @@
           <span class="username">@{{ user.username }}</span>
         </div>
         <a href="{% url 'logout' %}" style="color: white; font-weight: 700"
-          >Logout</a
+          >{% trans "Ieșire" %}</a
         >
       </div>
       {% else %}
       <a href="{% url 'login' %}" style="color: white; font-weight: 600"
-        >Login</a
+        >{% trans "Autentificare" %}</a
       >
       {% endif %}
     </header>
@@ -319,29 +339,29 @@
     <div class="bot-widget">
       <div id="botPanel" class="bot-panel">
         <div class="bot-header">
-          <span>Asistent</span>
+          <span>{% trans "Asistent" %}</span>
           <button id="botClose" class="bot-close" type="button">×</button>
         </div>
         <div class="bot-suggestions">
-          <button class="bot-suggestion" data-msg="Cum adaug task?">Taskuri</button>
-          <button class="bot-suggestion" data-msg="Cum adaug meeting?">Meeting</button>
-          <button class="bot-suggestion" data-msg="Unde sunt notificarile?">Notificari</button>
-          <button class="bot-suggestion" data-msg="Cum trimit submission?">Submission</button>
-          <button class="bot-suggestion" data-msg="Rezumat azi">Rezumat azi</button>
-          <button class="bot-suggestion" data-msg="Taskuri intarziate">Taskuri intarziate</button>
-          <button class="bot-suggestion" data-msg="Prioritate mare">Prioritate mare</button>
-          <button class="bot-suggestion" data-msg="Cine e in concediu acum?">Concedii acum</button>
-          <button class="bot-suggestion" data-msg="Urmatorul deadline">Deadline</button>
-          <button class="bot-suggestion" data-msg="Cauta task design">Cauta task</button>
-          <button class="bot-suggestion" data-msg="Aminteste-mi peste 2 ore sa trimit raportul">Reminder</button>
+          <button class="bot-suggestion" data-msg="{% trans 'Cum adaug task?' %}">{% trans "Taskuri" %}</button>
+          <button class="bot-suggestion" data-msg="{% trans 'Cum adaug meeting?' %}">{% trans "Meeting" %}</button>
+          <button class="bot-suggestion" data-msg="{% trans 'Unde sunt notificările?' %}">{% trans "Notificări" %}</button>
+          <button class="bot-suggestion" data-msg="{% trans 'Cum trimit predarea?' %}">{% trans "Predare" %}</button>
+          <button class="bot-suggestion" data-msg="{% trans 'Rezumat azi' %}">{% trans "Rezumat azi" %}</button>
+          <button class="bot-suggestion" data-msg="{% trans 'Taskuri întârziate' %}">{% trans "Taskuri întârziate" %}</button>
+          <button class="bot-suggestion" data-msg="{% trans 'Prioritate mare' %}">{% trans "Prioritate mare" %}</button>
+          <button class="bot-suggestion" data-msg="{% trans 'Cine e în concediu acum?' %}">{% trans "Concedii acum" %}</button>
+          <button class="bot-suggestion" data-msg="{% trans 'Următorul deadline' %}">{% trans "Deadline" %}</button>
+          <button class="bot-suggestion" data-msg="{% trans 'Caută task design' %}">{% trans "Caută task" %}</button>
+          <button class="bot-suggestion" data-msg="{% trans 'Amintește-mi peste 2 ore să trimit raportul' %}">{% trans "Reminder" %}</button>
         </div>
         <div id="botMessages" class="bot-messages"></div>
         <form id="botForm" class="bot-form">
-          <input id="botInput" class="bot-input" type="text" placeholder="Scrie o intrebare..." autocomplete="off" />
-          <button class="bot-send" type="submit">Trimite</button>
+          <input id="botInput" class="bot-input" type="text" placeholder="{% trans 'Scrie o întrebare...' %}" autocomplete="off" />
+          <button class="bot-send" type="submit">{% trans "Trimite" %}</button>
         </form>
       </div>
-      <button id="botToggle" class="bot-toggle" type="button">Asistent</button>
+      <button id="botToggle" class="bot-toggle" type="button">{% trans "Asistent" %}</button>
     </div>
     {% endif %}
 
@@ -356,6 +376,10 @@
         const suggestionWrap = document.querySelector('.bot-suggestions');
         const suggestionBtns = document.querySelectorAll('.bot-suggestion');
         if(!toggle || !panel || !form || !input || !messages) return;
+
+        const botWelcome = "{% trans 'Salut! Pot ajuta cu taskuri, meeting-uri, chat, notificări, concedii și export CSV.' %}";
+        const botNoUnderstand = "{% trans 'Nu am înțeles. Încearcă o întrebare mai scurtă.' %}";
+        const botError = "{% trans 'Eroare temporară. Încearcă din nou.' %}";
 
         function addMessage(text, who, time){
           const el = document.createElement('div');
@@ -382,10 +406,10 @@
                 addMessage(m.content, m.role === 'user' ? 'user' : 'bot', m.time);
               });
             }else{
-              addMessage('Salut! Pot ajuta cu taskuri, meeting-uri, chat, notificari, concedii si export CSV.', 'bot');
+              addMessage(botWelcome, 'bot');
             }
           }catch(err){
-            addMessage('Salut! Pot ajuta cu taskuri, meeting-uri, chat, notificari, concedii si export CSV.', 'bot');
+            addMessage(botWelcome, 'bot');
           }
         }
         loadHistory();
@@ -432,7 +456,7 @@
             });
             const data = await res.json();
             typingEl.remove();
-            addMessage((data && data.reply) ? data.reply : 'Nu am inteles. Incearca o intrebare mai scurta.', 'bot',
+            addMessage((data && data.reply) ? data.reply : botNoUnderstand, 'bot',
               new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}));
             if(suggestionWrap && data && data.suggestions){
               suggestionWrap.innerHTML = data.suggestions.map(s => 
@@ -442,7 +466,7 @@
             }
           }catch(err){
             typingEl.remove();
-            addMessage('Eroare temporara. Incearca din nou.', 'bot',
+            addMessage(botError, 'bot',
               new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}));
           }
         });

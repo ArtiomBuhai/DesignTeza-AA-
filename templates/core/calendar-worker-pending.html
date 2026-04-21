@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-{% load static %}
-<html lang="ro">
+{% load static i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Calendar - Worker - Pending</title>
+  <title>{% trans "Calendar" %} - {% trans "Worker" %}</title>
   <style>
     * {
       margin: 0;
@@ -414,15 +415,15 @@
 
   <!-- Sidebar -->
   <aside class="sidebar">
-    <div class="sidebar-logo">Panel</div>
+    <div class="sidebar-logo">{% trans "Panel" %}</div>
 
     <nav class="sidebar-nav">
-      <a href="{% url 'dashboard' %}">Dashboard</a>
-      <a href="{% url 'tasks' %}">Tasks</a>
-      <a href="{% url 'calendar' %}" class="active">Calendar</a>
-      <a href="{% url 'team' %}">Team</a>
-      <a href="{% url 'chat' %}">Chat</a>
-      <a href="{% url 'profile' %}">Profile</a>
+      <a href="{% url 'dashboard' %}">{% trans "Panou" %}</a>
+      <a href="{% url 'tasks' %}">{% trans "Taskuri" %}</a>
+      <a href="{% url 'calendar' %}" class="active">{% trans "Calendar" %}</a>
+      <a href="{% url 'team' %}">{% trans "Echipă" %}</a>
+      <a href="{% url 'chat' %}">{% trans "Chat" %}</a>
+      <a href="{% url 'profile' %}">{% trans "Profil" %}</a>
     </nav>
   </aside>
 
@@ -433,10 +434,11 @@
     <header class="header" style="padding-right:12px;">
       <div class="header-left">
         <span class="back-arrow" onclick="history.back()">←</span>
-        <h1>Choose your holiday</h1>
+        <h1>{% trans "Alege concediul" %}</h1>
       </div>
       <div class="header-right">
         {% include 'core/_header_search.html' %}
+        {% include 'core/_language_select.html' %}
         <div class="user" style="display:flex; align-items:center; gap:10px;">
           <div class="avatar">
             {% if user.profile.avatar %}
@@ -446,7 +448,7 @@
             {% endif %}
           </div>
           <span>@{{ user.username }}</span>
-          <a href="{% url 'logout' %}" style="margin-left:10px; color:#2563eb; font-weight:600; text-decoration:none;">Logout</a>
+          <a href="{% url 'logout' %}" style="margin-left:10px; color:#2563eb; font-weight:600; text-decoration:none;">{% trans "Ieșire" %}</a>
         </div>
       </div>
     </header>
@@ -457,7 +459,7 @@
 
       <!-- Tip concediu - listă stânga -->
       <div class="holiday-type">
-        <h2>Type of holiday</h2>
+        <h2>{% trans "Tip concediu" %}</h2>
         {% for code,label in holiday_choices %}
           {% if holiday_type %}
             <label class="type-item {% if holiday_type == code %}active{% endif %}">
@@ -476,7 +478,7 @@
       <!-- Calendar + date picker -->
       <div class="calendar-section">
         <div class="calendar-header">
-          <h2 class="calendar-title">Choose dates</h2>
+          <h2 class="calendar-title">{% trans "Alege datele" %}</h2>
           <div class="month-nav">
             <button type="button" onclick="window.location='?y={{ prev_y }}&m={{ prev_m }}'">‹</button>
             <span>{{ month_name }} {{ year }}</span>
@@ -486,19 +488,19 @@
 
         <div class="leave-balance-inline">
           <div class="chip">
-            <div class="k">Alocate</div>
+            <div class="k">{% trans "Alocate" %}</div>
             <div class="v">{{ leave_balance.allocated }}</div>
           </div>
           <div class="chip">
-            <div class="k">Aprobate</div>
+            <div class="k">{% trans "Aprobate" %}</div>
             <div class="v">{{ leave_balance.approved }}</div>
           </div>
           <div class="chip">
-            <div class="k">Pending</div>
+            <div class="k">{% trans "În așteptare" %}</div>
             <div class="v">{{ leave_balance.pending }}</div>
           </div>
           <div class="chip">
-            <div class="k">Disponibile</div>
+            <div class="k">{% trans "Disponibile" %}</div>
             <div class="v">{{ leave_balance.requestable }}</div>
           </div>
         </div>
@@ -510,7 +512,7 @@
         <table>
           <thead>
             <tr>
-              <th>MON</th><th>TUE</th><th>WED</th><th>THU</th><th>FRI</th><th>SAT</th><th>SUN</th>
+              <th>{% trans "LUN" %}</th><th>{% trans "MAR" %}</th><th>{% trans "MIE" %}</th><th>{% trans "JOI" %}</th><th>{% trans "VIN" %}</th><th>{% trans "SÂM" %}</th><th>{% trans "DUM" %}</th>
             </tr>
           </thead>
           <tbody>
@@ -531,17 +533,17 @@
         <input type="hidden" name="start_date" id="start_date" value="{% if start_sel %}{{ start_sel|date:'Y-m-d' }}{% endif %}">
         <input type="hidden" name="end_date" id="end_date" value="{% if end_sel %}{{ end_sel|date:'Y-m-d' }}{% endif %}">
 
-        <label style="display:block; font-weight:600; margin:16px 0 6px;">Comment (optional)</label>
-        <textarea name="comment" rows="3" placeholder="Add any note for your manager..." style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:12px;"></textarea>
+        <label style="display:block; font-weight:600; margin:16px 0 6px;">{% trans "Comentariu (opțional)" %}</label>
+        <textarea name="comment" rows="3" placeholder="{% trans 'Adaugă o notă pentru manager...' %}" style="width:100%; padding:12px; border:1px solid #d1d5db; border-radius:12px;"></textarea>
 
         <div style="display:flex; justify-content:flex-end; margin-top:16px;">
-          <button class="btn btn-primary" type="submit" style="padding:12px 18px; background:#2563eb; color:white; border:none; border-radius:10px; font-weight:700; cursor:pointer;">Send request</button>
+          <button class="btn btn-primary" type="submit" style="padding:12px 18px; background:#2563eb; color:white; border:none; border-radius:10px; font-weight:700; cursor:pointer;">{% trans "Trimite cererea" %}</button>
         </div>
       </div>
 
       <!-- Cererile mele -->
       <div class="workers-on-holiday">
-        <h2>My holiday requests</h2>
+        <h2>{% trans "Cererile mele de concediu" %}</h2>
         <div class="worker-list">
           {% for req in my_requests %}
           <div class="worker-item">
@@ -555,7 +557,7 @@
               </div>
               {% if req.admin_note %}
               <div style="color:#6b7280; font-size:0.95rem; margin-top:4px;">
-                Motiv: {{ req.admin_note }}
+                {% trans "Motiv" %}: {{ req.admin_note }}
               </div>
               {% endif %}
             </div>
@@ -563,7 +565,7 @@
           {% empty %}
           <div class="worker-item">
             <div class="worker-info">
-              <div class="worker-date" style="color:#94a3b8;">Nu ai cereri încă.</div>
+              <div class="worker-date" style="color:#94a3b8;">{% trans "Nu ai cereri încă." %}</div>
             </div>
           </div>
           {% endfor %}

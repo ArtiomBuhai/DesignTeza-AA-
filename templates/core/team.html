@@ -1,6 +1,6 @@
 {% extends 'core/base.html' %}
-{% load static %}
-{% block title %}Team - Panel{% endblock %}
+{% load static i18n %}
+{% block title %}{% trans "Echipă" %} - {% trans "Panel" %}{% endblock %}
 {% block content %}
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
@@ -346,16 +346,16 @@
   <div class="team-page">
   <div class="team-hero">
     <div class="hero-left">
-      <h1>Echipa ta</h1>
+      <h1>{% trans "Echipa ta" %}</h1>
       <div class="hero-meta">{% now "l, d F, Y" %}</div>
     </div>
     <div class="hero-actions">
       <div class="search-container hero-search">
         <span class="search-icon">🔍</span>
-        <input id="teamSearch" class="search-input" type="text" placeholder="Caută după nume / rol / user" oninput="filterMembers()" />
+        <input id="teamSearch" class="search-input" type="text" placeholder="{% trans 'Caută după nume / rol / user' %}" oninput="filterMembers()" />
       </div>
-      <button class="cta-btn" onclick="showMembers('all')">👥 Toți membrii</button>
-      <button id="filterBtn" type="button" class="ghost-btn" onclick="openFilterPanel()">🔍 Filtrează</button>
+      <button class="cta-btn" onclick="showMembers('all')">👥 {% trans "Toți membrii" %}</button>
+      <button id="filterBtn" type="button" class="ghost-btn" onclick="openFilterPanel()">🔍 {% trans "Filtrează" %}</button>
     </div>
   </div>
 
@@ -363,30 +363,30 @@
     <div class="top-bar">
       <div class="toolbar">
         <select id="sortSelect" class="select-sort" onchange="filterMembers()">
-          <option value="name">Sortează: Nume (A-Z)</option>
-          <option value="role">Sortează: Rol</option>
-          <option value="recent">Sortează: Random</option>
+          <option value="name">{% trans "Sortează: Nume (A-Z)" %}</option>
+          <option value="role">{% trans "Sortează: Rol" %}</option>
+          <option value="recent">{% trans "Sortează: Random" %}</option>
         </select>
-        <button id="viewCards" class="pill-btn active" onclick="setView('cards')">Cards</button>
-        <button id="viewList" class="pill-btn" onclick="setView('list')">Listă</button>
+        <button id="viewCards" class="pill-btn active" onclick="setView('cards')">{% trans "Carduri" %}</button>
+        <button id="viewList" class="pill-btn" onclick="setView('list')">{% trans "Listă" %}</button>
       </div>
     </div>
 
     <div class="metrics">
       <div class="metric-card">
-        <div class="metric-label">Membri totali</div>
+        <div class="metric-label">{% trans "Membri totali" %}</div>
         <div class="metric-value" id="metricMembers">0</div>
-        <div class="metric-sub">toți colegii din platformă</div>
+        <div class="metric-sub">{% trans "toți colegii din platformă" %}</div>
       </div>
       <div class="metric-card secondary">
-        <div class="metric-label">Specialități</div>
+        <div class="metric-label">{% trans "Specialități" %}</div>
         <div class="metric-value" id="metricSpecs">0</div>
-        <div class="metric-sub">domenii diferite</div>
+        <div class="metric-sub">{% trans "domenii diferite" %}</div>
       </div>
       <div class="metric-card neutral">
-        <div class="metric-label">Rezultate căutare</div>
+        <div class="metric-label">{% trans "Rezultate căutare" %}</div>
         <div class="metric-value" id="metricResults">0</div>
-        <div class="metric-sub">după filtrele curente</div>
+        <div class="metric-sub">{% trans "după filtrele curente" %}</div>
       </div>
     </div>
 
@@ -394,12 +394,12 @@
 
     <div class="layout">
       <section class="specialties-section">
-        <p class="specialties-title">Alege specialitatea</p>
+        <p class="specialties-title">{% trans "Alege specialitatea" %}</p>
         <div class="specialty-list" id="specialtyList"></div>
       </section>
 
       <section class="members-section">
-        <p class="members-title">Membri</p>
+        <p class="members-title">{% trans "Membri" %}</p>
         <div id="members-container" class="member-grid"></div>
       </section>
     </div>
@@ -410,22 +410,22 @@
 <div id="filterOverlay" onclick="closeFilterPanel()"></div>
 <div id="filterPanel">
   <div class="filter-header">
-    <h2 class="filter-title">Filtrează echipa</h2>
+    <h2 class="filter-title">{% trans "Filtrează echipa" %}</h2>
     <button class="filter-close" onclick="closeFilterPanel()">×</button>
   </div>
 
   <div class="filter-group">
-    <label class="filter-label">Nume</label>
-    <input type="text" class="filter-input" placeholder="Ana Maria..." id="filterName" />
+    <label class="filter-label">{% trans "Nume" %}</label>
+    <input type="text" class="filter-input" placeholder="{% trans 'Ana Maria...' %}" id="filterName" />
   </div>
 
   <div class="filter-group">
-    <label class="filter-label">Specialitate</label>
+    <label class="filter-label">{% trans "Specialitate" %}</label>
     <div class="filter-checkboxes" id="filterSpecialties"></div>
   </div>
 
   <div class="filter-group">
-    <label class="filter-label">Tehnologii (exemplu)</label>
+    <label class="filter-label">{% trans "Tehnologii (exemplu)" %}</label>
     <div class="filter-checkboxes">
       <label><input type="checkbox" /> React</label>
       <label><input type="checkbox" /> Node.js</label>
@@ -435,19 +435,25 @@
     </div>
   </div>
 
-  <button class="filter-btn" onclick="applyFilter()">Aplică filtre</button>
+  <button class="filter-btn" onclick="applyFilter()">{% trans "Aplică filtre" %}</button>
 </div>
 
+{% trans "Membru" as member_label %}
+{% trans "General" as general_label %}
 <script>
   // --- Data ---
+  const otherLabel = "{% trans 'Altele' %}";
+  const txtNoMemberFound = "{% trans 'Niciun membru găsit.' %}";
+  const txtMessage = "{% trans 'Mesaj' %}";
+  const txtProfile = "{% trans 'Profil' %}";
   const membersData = [
     {% for m in members %}
     {
       id: {{ m.user.id }},
       name: "{{ m.full_name|default_if_none:''|default:m.user.get_full_name|default:m.user.username|escapejs }}",
-      role: "{{ m.function|default:'Member'|escapejs }}",
+      role: "{{ m.function|default:member_label|escapejs }}",
       avatar: "{% if m.avatar %}{{ m.avatar.url }}{% else %}https://ui-avatars.com/api/?name={{ m.full_name|default:m.user.username|urlencode }}&background=2563eb&color=fff{% endif %}",
-      specialty: "{{ m.function|default:'General'|escapejs }}",
+      specialty: "{{ m.function|default:general_label|escapejs }}",
       username: "{{ m.user.username|escapejs }}",
       email: "{{ m.user.email|default:''|escapejs }}"
     }{% if not forloop.last %},{% endif %}
@@ -485,13 +491,13 @@
     const list = document.getElementById("specialtyList");
     const filterList = document.getElementById("filterSpecialties");
     const chipsRow = document.getElementById("chipsRow");
-    const specs = Array.from(new Set(membersData.map((m) => m.specialty || "Other"))).sort();
+    const specs = Array.from(new Set(membersData.map((m) => m.specialty || otherLabel))).sort();
 
     const addSpecButton = (label, target) => {
       const item = document.createElement("div");
       item.className = target === "list" ? "specialty-item" : "chip";
       item.dataset.specialty = label;
-      item.textContent = label === "all" ? "Toate" : label;
+      item.textContent = label === "all" ? "{% trans 'Toate' %}" : label;
       item.onclick = () => showMembers(label);
       target === "list" ? list.appendChild(item) : chipsRow.appendChild(item);
     };
@@ -531,7 +537,7 @@
     const container = document.getElementById("members-container");
     if (!list.length) {
       container.innerHTML =
-        '<p style="text-align:center; color:#64748b; padding:80px 0; font-size:1.05rem;">Niciun membru găsit.</p>';
+        `<p style="text-align:center; color:#64748b; padding:80px 0; font-size:1.05rem;">${txtNoMemberFound}</p>`;
       document.getElementById("metricResults").textContent = 0;
       return;
     }
@@ -549,8 +555,8 @@
           </div>
         </div>
         <div class="member-actions">
-          <a class="action-btn primary" href="/chat/?dm=${member.id}">Mesaj</a>
-          <a class="action-btn" href="/team/member/${member.id}/">Profil</a>
+          <a class="action-btn primary" href="/chat/?dm=${member.id}">${txtMessage}</a>
+          <a class="action-btn" href="/team/member/${member.id}/">${txtProfile}</a>
         </div>
       `;
       container.appendChild(card);
@@ -580,7 +586,7 @@
         m.name.toLowerCase().includes(term) ||
         m.role.toLowerCase().includes(term) ||
         (m.username || "").toLowerCase().includes(term);
-      const specVal = (m.specialty || "Other");
+      const specVal = (m.specialty || otherLabel);
       const specOkCurrent = currentSpecialty === "all" || specVal === currentSpecialty;
       const specOkFilter = !filterSpecs.length || filterSpecs.includes(specVal);
       const matchesSpec = specOkCurrent && specOkFilter;
@@ -628,7 +634,7 @@
   // --- Metrics ---
   function updateMetrics() {
     document.getElementById("metricMembers").textContent = membersData.length;
-    const specs = new Set(membersData.map((m) => m.specialty || "Other"));
+    const specs = new Set(membersData.map((m) => m.specialty || otherLabel));
     document.getElementById("metricSpecs").textContent = specs.size;
   }
 
