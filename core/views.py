@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.db import models, DatabaseError
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.messages import get_messages
 from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
@@ -170,7 +171,7 @@ def _openai_ready():
     enabled = str(getattr(settings, 'OPENAI_ENABLED', '') or '').strip().lower()
     if enabled not in {'1', 'true', 'yes', 'on'}:
         return False
-    key, _, _ = _openai_config()
+    key, _model_name, _base_url = _openai_config()
     return bool(key)
 
 
@@ -225,6 +226,168 @@ def _openai_request(prompt, instructions=None):
         return json.loads(raw), None
     except Exception:
         return None, 'invalid_json'
+
+
+def _to_int(value, default):
+    try:
+        return int(value)
+    except Exception:
+        return default
+
+
+def _to_float(value, default):
+    try:
+        return float(value)
+    except Exception:
+        return default
+
+
+def _ai_provider():
+    provider = str(getattr(settings, 'AI_PROVIDER', 'local') or 'local').strip().lower()
+    if provider in {'local', 'openai', 'ollama', 'auto'}:
+        return provider
+    return 'local'
+
+
+def _ollama_config():
+    base = str(getattr(settings, 'OLLAMA_BASE_URL', '') or 'http://127.0.0.1:11434').strip()
+    if base.endswith('/'):
+        base = base[:-1]
+    model = str(getattr(settings, 'OLLAMA_MODEL', '') or '').strip()
+    timeout = _to_int(getattr(settings, 'OLLAMA_TIMEOUT', 35), 35)
+    temperature = _to_float(getattr(settings, 'OLLAMA_TEMPERATURE', 0.2), 0.2)
+    return base, model, max(timeout, 5), temperature
+
+
+def _ollama_ready():
+    enabled = str(getattr(settings, 'OLLAMA_ENABLED', '1') or '1').strip().lower()
+    if enabled in {'0', 'false', 'no', 'off'}:
+        return False
+    base, model, _timeout_sec, _temp = _ollama_config()
+    return bool(base and model)
+
+
+def _ollama_extract_text(payload):
+    if not payload:
+        return ''
+    text = payload.get('response')
+    if isinstance(text, str) and text.strip():
+        return text.strip()
+
+    message_obj = payload.get('message') or {}
+    if isinstance(message_obj, dict):
+        msg_text = message_obj.get('content')
+        if isinstance(msg_text, str) and msg_text.strip():
+            return msg_text.strip()
+    return ''
+
+
+def _ollama_request(prompt, instructions=None):
+    base, model, timeout_sec, temperature = _ollama_config()
+    if not model:
+        return None, 'missing_model'
+
+    payload = {
+        'model': model,
+        'prompt': prompt,
+        'stream': False,
+        'options': {
+            'temperature': temperature,
+        },
+    }
+    if instructions:
+        payload['system'] = instructions
+
+    req = urllib.request.Request(
+        f'{base}/api/generate',
+        data=json.dumps(payload).encode('utf-8'),
+        headers={'Content-Type': 'application/json'},
+        method='POST',
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=timeout_sec) as resp:
+            raw = resp.read().decode('utf-8') or '{}'
+    except urllib.error.HTTPError as exc:
+        err_body = exc.read().decode('utf-8', errors='ignore')
+        err_msg = err_body[:220]
+        try:
+            err_json = json.loads(err_body)
+            err_msg = (err_json.get('error') or err_msg)[:220]
+        except Exception:
+            pass
+        return None, f'http_error_{exc.code}: {err_msg}'
+    except Exception as exc:
+        return None, f'error: {exc}'
+
+    try:
+        return json.loads(raw), None
+    except Exception:
+        return None, 'invalid_json'
+
+
+def _bot_language_instruction(request):
+    lang = (
+        str(getattr(request, 'LANGUAGE_CODE', '') or '')
+        .strip()
+        .lower()
+        .split('-', 1)[0]
+    )
+    if lang == 'ru':
+        return 'Raspunde doar in limba rusa.'
+    if lang == 'en':
+        return 'Respond only in English.'
+    return 'Raspunde doar in limba romana.'
+
+
+def _bot_ai_prompt(message, request, local_reply):
+    context_txt = _bot_context_summary(request.user) if request and request.user.is_authenticated else ''
+    return (
+        "Intrebarea utilizatorului:\n"
+        f"{message}\n\n"
+        "Context aplicatie:\n"
+        f"{context_txt}\n\n"
+        "Raspuns local de fallback (daca e util):\n"
+        f"{local_reply}\n\n"
+        "Genereaza un raspuns util si practic pentru utilizator."
+    )
+
+
+def _bot_ai_system_instructions(request):
+    return (
+        "You are an assistant embedded in a project management web app. "
+        "Be concise and practical. Use only app-related scope: tasks, meetings, chat, notifications, submissions, leave, CSV export. "
+        "If action requires a specific page, mention exact page/steps. "
+        f"{_bot_language_instruction(request)}"
+    )
+
+
+def _bot_reply_with_provider(message, request, local_reply):
+    provider = _ai_provider()
+    if provider == 'local':
+        return local_reply
+
+    prompt = _bot_ai_prompt(message, request, local_reply)
+    instructions = _bot_ai_system_instructions(request)
+
+    if provider in {'ollama', 'auto'} and _ollama_ready():
+        payload, err = _ollama_request(prompt, instructions=instructions)
+        if not err:
+            ai_text = _ollama_extract_text(payload)
+            if ai_text:
+                return ai_text
+        if provider == 'ollama':
+            return f"{local_reply}\n\n(AI fallback local: Ollama indisponibil temporar: {err})"
+
+    if provider in {'openai', 'auto'} and _openai_ready():
+        payload, err = _openai_request(prompt, instructions=instructions)
+        if not err:
+            ai_text = _openai_extract_text(payload)
+            if ai_text:
+                return ai_text
+        if provider == 'openai':
+            return f"{local_reply}\n\n(AI fallback local: OpenAI indisponibil temporar: {err})"
+
+    return local_reply
 
 
 def _bot_context_summary(user):
@@ -740,7 +903,7 @@ def _bot_answer(text, request=None):
 def _ensure_profile(user):
     prof = getattr(user, 'profile', None)
     if prof is None:
-        prof, _ = Profile.objects.get_or_create(user=user)
+        prof, _created_profile = Profile.objects.get_or_create(user=user)
     if not getattr(prof, 'calendar_feed_token', None):
         prof.calendar_feed_token = uuid.uuid4()
         prof.save(update_fields=['calendar_feed_token'])
@@ -1272,10 +1435,14 @@ def delete_meeting(request, meeting_id):
     if request.method != 'POST':
         return redirect('dashboard')
 
-    meeting = get_object_or_404(Meeting, pk=meeting_id)
-    can_delete = (meeting.created_by_id == request.user.id) or _is_admin_user(request.user)
-    if not can_delete:
-        messages.error(request, _("Nu ai permisiunea să ștergi acest meeting."))
+    # Evită 404 dacă meeting-ul a fost deja șters sau ID-ul nu mai este valid.
+    if _is_admin_user(request.user):
+        meeting = Meeting.objects.filter(pk=meeting_id).first()
+    else:
+        meeting = Meeting.objects.filter(pk=meeting_id, created_by=request.user).first()
+
+    if not meeting:
+        messages.warning(request, _("Meeting-ul nu a fost găsit sau a fost deja șters."))
         return redirect('dashboard')
 
     meeting_title = meeting.title
@@ -1298,7 +1465,7 @@ def delete_meeting(request, meeting_id):
         pass
 
     if google_event_id:
-        ok, _ = _delete_meeting_from_google(meeting_owner, google_event_id)
+        ok, delete_status = _delete_meeting_from_google(meeting_owner, google_event_id)
         if not ok:
             messages.warning(request, _('Meeting șters local, dar ștergerea din Google Calendar a eșuat.'))
 
@@ -1402,7 +1569,7 @@ def google_calendar_connect(request):
         messages.error(request, _('Google Calendar nu este configurat pe server.'))
         return redirect(next_url)
 
-    client_id, _ = _google_oauth_credentials()
+    client_id, _client_secret = _google_oauth_credentials()
     redirect_uri = _google_redirect_uri(request)
     state = uuid.uuid4().hex
     request.session['google_oauth_state'] = state
@@ -1466,7 +1633,7 @@ def google_calendar_callback(request):
         messages.error(request, _('Conectarea Google a eșuat: nu a fost returnat access token.'))
         return redirect(next_url)
 
-    conn, _ = GoogleCalendarConnection.objects.get_or_create(user=request.user)
+    conn, _created_conn = GoogleCalendarConnection.objects.get_or_create(user=request.user)
     if refresh_token:
         conn.refresh_token = refresh_token
     elif not conn.refresh_token:
@@ -1488,7 +1655,7 @@ def google_calendar_callback(request):
         date__gte=timezone.localdate() - timedelta(days=30),
     ).order_by('date', 'time', 'id')[:200]
     for mt in future_meetings:
-        ok, _ = _sync_meeting_to_google(mt)
+        ok, _sync_status = _sync_meeting_to_google(mt)
         if ok:
             synced += 1
         else:
@@ -1588,7 +1755,7 @@ def profile_public(request, user_id):
     target_user = get_object_or_404(User, pk=user_id)
     prof = getattr(target_user, 'profile', None)
     if prof is None:
-        prof, _ = Profile.objects.get_or_create(user=target_user)
+        prof, _created_profile = Profile.objects.get_or_create(user=target_user)
 
     can_edit_function = (_is_admin_user(request.user) or request.user.id == target_user.id)
     if request.method == 'POST':
@@ -1754,8 +1921,8 @@ def bot_api(request):
         message = ''
     if not message:
         message = (request.POST.get('message') or '').strip()
-    # Use OpenAI if configured, otherwise fallback to local bot.
-    reply = _bot_answer(message, request=request)
+    local_reply = _bot_answer(message, request=request)
+    reply = _bot_reply_with_provider(message, request, local_reply)
 
     # persist conversation
     try:
@@ -1793,7 +1960,20 @@ def _unique_username(base_username):
     return username
 
 
+def _consume_pending_messages(request):
+    """
+    Golește mesajele rămase în sesiune (stale) ca să nu apară pe pagini fără legătură.
+    """
+    storage = get_messages(request)
+    for _msg in storage:
+        pass
+
+
 def signup(request):
+    # Pagina de signup nu trebuie să afișeze mesaje vechi din alte fluxuri
+    # (ex: meeting salvat), de aceea curățăm coada la intrare.
+    _consume_pending_messages(request)
+
     if request.method == 'POST':
         first = request.POST.get('first_name', '').strip()
         last = request.POST.get('last_name', '').strip()
@@ -1843,10 +2023,8 @@ def signup(request):
         auth_user = authenticate(username=username, password=password1)
         if auth_user:
             login(request, auth_user)
-            messages.success(request, _("Cont creat și autentificat cu succes."))
             return redirect('team')
 
-        messages.success(request, _("Cont creat. Autentifică-te."))
         return redirect('login')
 
     return render(request, 'core/index.html')
@@ -1876,7 +2054,7 @@ def team(request):
 def profile(request):
     prof = getattr(request.user, 'profile', None)
     if prof is None:
-        prof, _ = Profile.objects.get_or_create(user=request.user)
+        prof, _created_profile = Profile.objects.get_or_create(user=request.user)
     fn = (prof.function or '').lower() if prof else ''
     admin_labels = {'admin', 'administrator', 'manager', 'owner'}
     is_admin = request.user.is_superuser or request.user.is_staff or fn in admin_labels
@@ -2346,7 +2524,7 @@ def chat(request):
     except DatabaseError:
         pass
 
-    group_thread, _ = ChatThread.objects.get_or_create(
+    group_thread, _group_thread_created = ChatThread.objects.get_or_create(
         thread_type='group',
         name='Team Chat',
         defaults={'created_by': request.user},
@@ -2356,7 +2534,7 @@ def chat(request):
     dm_threads = []
     for u in users:
         name = f"dm-{min(u.id, request.user.id)}-{max(u.id, request.user.id)}"
-        thread, _ = ChatThread.objects.get_or_create(thread_type='dm', name=name)
+        thread, _dm_thread_created = ChatThread.objects.get_or_create(thread_type='dm', name=name)
         thread.participants.set([request.user, u])
         dm_threads.append((u, thread))
 
@@ -2368,7 +2546,7 @@ def chat(request):
         try:
             other = User.objects.get(id=dm_user_id)
             name = f"dm-{min(other.id, request.user.id)}-{max(other.id, request.user.id)}"
-            current_thread, _ = ChatThread.objects.get_or_create(thread_type='dm', name=name)
+            current_thread, _current_dm_created = ChatThread.objects.get_or_create(thread_type='dm', name=name)
             current_thread.participants.set([request.user, other])
         except User.DoesNotExist:
             current_thread = group_thread

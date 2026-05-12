@@ -43,6 +43,20 @@ def _load_local_env():
 
 _load_local_env()
 
+
+def _env_int(name, default):
+    try:
+        return int(str(os.getenv(name, default)).strip())
+    except Exception:
+        return default
+
+
+def _env_float(name, default):
+    try:
+        return float(str(os.getenv(name, default)).strip())
+    except Exception:
+        return default
+
 # ... alte setări ...
 
 STATIC_URL = '/static/'
@@ -183,6 +197,15 @@ GOOGLE_CLIENT_SECRET = os.getenv('GOOGLE_CLIENT_SECRET', '')
 GOOGLE_REDIRECT_URI = os.getenv('GOOGLE_REDIRECT_URI', '')
 
 # OpenAI (chatbot)
+AI_PROVIDER = str(os.getenv('AI_PROVIDER', 'local') or 'local').strip().lower()
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY', '')
 OPENAI_MODEL = os.getenv('OPENAI_MODEL', 'gpt-4o-mini')
 OPENAI_API_BASE = os.getenv('OPENAI_API_BASE', 'https://api.openai.com/v1')
+OPENAI_ENABLED = os.getenv('OPENAI_ENABLED', '')
+
+# Ollama (local AI)
+OLLAMA_ENABLED = os.getenv('OLLAMA_ENABLED', '1')
+OLLAMA_BASE_URL = os.getenv('OLLAMA_BASE_URL', 'http://127.0.0.1:11434')
+OLLAMA_MODEL = os.getenv('OLLAMA_MODEL', 'llama3.1:8b')
+OLLAMA_TIMEOUT = _env_int('OLLAMA_TIMEOUT', 35)
+OLLAMA_TEMPERATURE = _env_float('OLLAMA_TEMPERATURE', 0.2)
