@@ -1922,6 +1922,7 @@ def bot_api(request):
     if not message:
         message = (request.POST.get('message') or '').strip()
     local_reply = _bot_answer(message, request=request)
+    # Provider chain keeps local fallback as safety if external/local AI is unavailable.
     reply = _bot_reply_with_provider(message, request, local_reply)
 
     # persist conversation
