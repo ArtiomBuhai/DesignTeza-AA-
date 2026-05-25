@@ -195,13 +195,20 @@
       }
       .request-row .request-actions {
         display: flex;
-        flex-wrap: wrap;
-        align-items: center;
+        flex-direction: column;
+        align-items: flex-start;
         justify-content: flex-start;
-        gap: 10px;
+        gap: 8px;
         justify-self: start;
         min-width: 0;
-        width: auto;
+        width: 100%;
+      }
+      .request-actions-row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
       }
       .request-row .request-actions form {
         margin: 0;
@@ -280,10 +287,11 @@
       }
 
       .request-actions {
-        display: inline-flex;
-        gap: 12px;
-        align-items: center;
-        justify-content: flex-end;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+        justify-content: flex-start;
       }
       /* Modal */
       #declineModal {
@@ -356,15 +364,15 @@
         transform: translateY(-1px);
       }
       .note-badge {
-        display: inline-block;
+        display: block;
         background: #fef2f2;
         color: #b91c1c;
         border: 1px dashed #fecdd3;
         border-radius: 10px;
         padding: 6px 10px;
-        font-size: 0.9rem;
+        font-size: 0.84rem;
         text-align: left;
-        max-width: 100%;
+        width: 100%;
         line-height: 1.3;
         white-space: normal;
         overflow-wrap: anywhere;
@@ -374,16 +382,22 @@
       .decline-btn,
       .accept-btn {
         flex: 0 0 auto;
-        padding: 12px 18px;
-        border-radius: 12px;
-        font-size: 0.95rem;
+        padding: 8px 14px;
+        border-radius: 10px;
+        font-size: 0.88rem;
         font-weight: 700;
         cursor: pointer;
         transition: all 0.2s;
-        min-width: 110px;
-        box-shadow: 0 6px 14px rgba(15, 23, 42, 0.12);
+        min-width: 96px;
+        box-shadow: 0 4px 10px rgba(15, 23, 42, 0.1);
         border: 1px solid transparent;
         text-align: center;
+      }
+
+      .request-status {
+        padding: 5px 9px;
+        border-radius: 9px;
+        font-size: 0.84rem;
       }
 
       .decline-btn {
@@ -465,7 +479,13 @@
             {% include 'core/_header_search.html' %}
             {% include 'core/_language_select.html' %}
             <div class="user">
-              <div class="avatar">{{ user.username|first|upper }}</div>
+              <div class="avatar">
+                {% if user.profile.avatar %}
+                <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+                {% else %}
+                {{ user.username|first|upper }}
+                {% endif %}
+              </div>
               <span>@{{ user.username }}</span>
               <a href="{% url 'logout' %}" style="margin-left:10px; color:#2563eb; font-weight:600; text-decoration:none;">{% trans "Ieșire" %}</a>
             </div>
@@ -504,29 +524,31 @@
               <div>{{ r.get_holiday_type_display }}</div>
               <div>{{ r.start_date }} → {{ r.end_date }}</div>
               <div class="request-actions">
-                <div
-                  class="request-status {% if r.status == 'pending' %}status-pending{% elif r.status == 'approved' %}status-approved{% else %}status-rejected{% endif %}"
-                >
-                  {{ r.get_status_display }}
+                <div class="request-actions-row">
+                  <div
+                    class="request-status {% if r.status == 'pending' %}status-pending{% elif r.status == 'approved' %}status-approved{% else %}status-rejected{% endif %}"
+                  >
+                    {{ r.get_status_display }}
+                  </div>
+                  <form
+                    method="post"
+                    action="{% url 'calendar_holiday_requests_admin' %}"
+                    style="margin: 0"
+                  >
+                    {% csrf_token %}
+                    <input type="hidden" name="req_id" value="{{ r.id }}" />
+                    <input type="hidden" name="action" value="approved" />
+                    <input type="hidden" name="admin_note" value="" />
+                    <button class="accept-btn" type="submit">{% trans "Aprobă" %}</button>
+                  </form>
+                  <button
+                    class="decline-btn"
+                    type="button"
+                    onclick="openDeclineModal('{{ r.id }}')"
+                  >
+                    {% trans "Respinge" %}
+                  </button>
                 </div>
-                <form
-                  method="post"
-                  action="{% url 'calendar_holiday_requests_admin' %}"
-                  style="margin: 0"
-                >
-                  {% csrf_token %}
-                  <input type="hidden" name="req_id" value="{{ r.id }}" />
-                  <input type="hidden" name="action" value="approved" />
-                  <input type="hidden" name="admin_note" value="" />
-                  <button class="accept-btn" type="submit">{% trans "Aprobă" %}</button>
-                </form>
-                <button
-                  class="decline-btn"
-                  type="button"
-                  onclick="openDeclineModal('{{ r.id }}')"
-                >
-                  {% trans "Respinge" %}
-                </button>
                 {% if r.admin_note %}
                 <div class="note-badge">
                   <strong>{% trans "Motiv admin:" %}</strong> {{ r.admin_note }}

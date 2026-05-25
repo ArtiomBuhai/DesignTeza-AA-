@@ -6,6 +6,11 @@
     --panel-sidebar-text: #5f728e;
     --panel-sidebar-active-bg: #e9f0ff;
     --panel-sidebar-active-text: #255fdb;
+    --panel-ui-base-font-size: 80%;
+  }
+
+  html {
+    font-size: var(--panel-ui-base-font-size) !important;
   }
 
   body:not([data-theme="dark"]) {
@@ -136,7 +141,11 @@
   .header-right,
   .user-info,
   .user {
+    display: flex !important;
+    align-items: center !important;
     gap: 10px !important;
+    min-width: 0;
+    white-space: nowrap;
   }
 
   .lang-form {

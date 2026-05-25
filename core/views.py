@@ -6,9 +6,14 @@ from django.contrib.messages import get_messages
 from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from django.core.cache import cache
+from django.core.mail import send_mail
 from django.urls import reverse
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
 from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.http import JsonResponse, HttpResponse, Http404
@@ -1328,11 +1333,21 @@ def home(request):
     # leave requests / vacation placeholder
     vacation_people = []
 
+    employees_count = None
+    if _is_admin_user(request.user):
+        employees_count = (
+            User.objects
+            .filter(is_active=True)
+            .exclude(is_superuser=True)
+            .count()
+        )
+
     context = {
         'total_tasks': total_tasks,
         'todo_count': todo_count,
         'revision_count': revision_count,
         'done_count': done_count,
+        'employees_count': employees_count,
         'unread_messages': unread_messages,
         'upcoming_meetings': upcoming_meetings,
         'weekly_activity': weekly_activity,
@@ -1970,6 +1985,178 @@ def _consume_pending_messages(request):
         pass
 
 
+def _client_ip(request):
+    forwarded = (request.META.get('HTTP_X_FORWARDED_FOR') or '').strip()
+    if forwarded:
+        return forwarded.split(',')[0].strip() or 'unknown'
+    return (request.META.get('REMOTE_ADDR') or 'unknown').strip() or 'unknown'
+
+
+def _login_limit_config():
+    max_attempts = max(1, _to_int(getattr(settings, 'LOGIN_RATE_LIMIT_ATTEMPTS', 5), 5))
+    window_seconds = max(60, _to_int(getattr(settings, 'LOGIN_RATE_LIMIT_WINDOW_SECONDS', 900), 900))
+    lock_seconds = max(60, _to_int(getattr(settings, 'LOGIN_RATE_LIMIT_LOCK_SECONDS', 900), 900))
+    return max_attempts, window_seconds, lock_seconds
+
+
+def _login_limit_keys(ip, username):
+    uname = (username or '').strip().lower() or '_'
+    return {
+        'user_count': f'login:count:user:{ip}:{uname}',
+        'user_lock': f'login:lock:user:{ip}:{uname}',
+        'ip_count': f'login:count:ip:{ip}',
+        'ip_lock': f'login:lock:ip:{ip}',
+    }
+
+
+def _login_block_state(request, username):
+    ip = _client_ip(request)
+    keys = _login_limit_keys(ip, username)
+    now_ts = int(timezone.now().timestamp())
+    max_wait = 0
+    for lock_key in (keys['user_lock'], keys['ip_lock']):
+        until_ts = cache.get(lock_key)
+        if until_ts and until_ts > now_ts:
+            max_wait = max(max_wait, int(until_ts - now_ts))
+    return max_wait > 0, max_wait
+
+
+def _login_register_failure(request, username):
+    ip = _client_ip(request)
+    max_attempts, window_seconds, lock_seconds = _login_limit_config()
+    keys = _login_limit_keys(ip, username)
+    now_ts = int(timezone.now().timestamp())
+
+    new_user_count = int(cache.get(keys['user_count']) or 0) + 1
+    cache.set(keys['user_count'], new_user_count, timeout=window_seconds)
+    new_ip_count = int(cache.get(keys['ip_count']) or 0) + 1
+    cache.set(keys['ip_count'], new_ip_count, timeout=window_seconds)
+
+    if new_user_count >= max_attempts:
+        cache.set(keys['user_lock'], now_ts + lock_seconds, timeout=lock_seconds)
+    if new_ip_count >= max_attempts:
+        cache.set(keys['ip_lock'], now_ts + lock_seconds, timeout=lock_seconds)
+
+
+def _login_clear_limit(request, username):
+    ip = _client_ip(request)
+    keys = _login_limit_keys(ip, username)
+    cache.delete_many([
+        keys['user_count'],
+        keys['user_lock'],
+        keys['ip_count'],
+        keys['ip_lock'],
+    ])
+
+
+def _send_activation_email(request, user):
+    uid = urlsafe_base64_encode(force_bytes(user.pk))
+    token = default_token_generator.make_token(user)
+    activation_url = request.build_absolute_uri(
+        reverse('verify_email', kwargs={'uidb64': uid, 'token': token})
+    )
+    subject = _("Activează contul tău")
+    body = _(
+        "Salut %(name)s,\n\n"
+        "Contul tău a fost creat. Pentru activare, accesează linkul de mai jos:\n"
+        "%(url)s\n\n"
+        "Dacă nu ai cerut acest cont, ignoră acest email."
+    ) % {
+        'name': user.get_full_name() or user.username,
+        'url': activation_url,
+    }
+    send_mail(
+        subject=subject,
+        message=body,
+        from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', ''),
+        recipient_list=[user.email],
+        fail_silently=False,
+    )
+    return activation_url
+
+
+def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+
+    next_url = request.GET.get('next') or request.POST.get('next') or reverse('dashboard')
+    username_input = (request.POST.get('username') or '').strip() if request.method == 'POST' else ''
+
+    if request.method == 'POST':
+        blocked, wait_seconds = _login_block_state(request, username_input)
+        if blocked:
+            wait_minutes = max(1, (wait_seconds + 59) // 60)
+            messages.error(
+                request,
+                _("Prea multe încercări de autentificare. Încearcă din nou peste %(minutes)s minute.") % {
+                    'minutes': wait_minutes
+                },
+            )
+            return render(request, 'registration/login.html', {'next': next_url, 'login_username': username_input})
+
+        password = request.POST.get('password') or ''
+        user = authenticate(request, username=username_input, password=password)
+        if not user and '@' in username_input:
+            user_by_email = User.objects.filter(email__iexact=username_input).only('username').first()
+            if user_by_email:
+                user = authenticate(request, username=user_by_email.username, password=password)
+
+        if not user:
+            candidate = None
+            if '@' in username_input:
+                candidate = User.objects.filter(email__iexact=username_input).first()
+            else:
+                candidate = User.objects.filter(username=username_input).first()
+            if candidate and (not candidate.is_active) and candidate.check_password(password):
+                messages.error(request, _("Contul nu este activat. Verifică emailul pentru linkul de activare."))
+                return render(request, 'registration/login.html', {'next': next_url, 'login_username': username_input})
+
+        if user:
+            if not user.is_active:
+                messages.error(request, _("Contul nu este activat. Verifică emailul pentru linkul de activare."))
+                return render(request, 'registration/login.html', {'next': next_url, 'login_username': username_input})
+            login(request, user)
+            _login_clear_limit(request, username_input)
+            _login_clear_limit(request, user.username)
+            return redirect(next_url)
+
+        _login_register_failure(request, username_input)
+        blocked, wait_seconds = _login_block_state(request, username_input)
+        if blocked:
+            wait_minutes = max(1, (wait_seconds + 59) // 60)
+            messages.error(
+                request,
+                _("Prea multe încercări de autentificare. Încearcă din nou peste %(minutes)s minute.") % {
+                    'minutes': wait_minutes
+                },
+            )
+        else:
+            messages.error(request, _("Username sau parolă greșită."))
+
+    return render(request, 'registration/login.html', {'next': next_url, 'login_username': username_input})
+
+
+def verify_email(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.filter(pk=uid).first()
+    except Exception:
+        user = None
+
+    if not user or not default_token_generator.check_token(user, token):
+        messages.error(request, _("Link de activare invalid sau expirat."))
+        return redirect('login')
+
+    if user.is_active:
+        messages.success(request, _("Contul este deja activ. Te poți autentifica."))
+        return redirect('login')
+
+    user.is_active = True
+    user.save(update_fields=['is_active'])
+    messages.success(request, _("Cont activat cu succes. Te poți autentifica."))
+    return redirect('login')
+
+
 def signup(request):
     # Pagina de signup nu trebuie să afișeze mesaje vechi din alte fluxuri
     # (ex: meeting salvat), de aceea curățăm coada la intrare.
@@ -2005,12 +2192,15 @@ def signup(request):
                 messages.error(request, err)
             return render(request, 'core/index.html')
 
+        verification_required = bool(getattr(settings, 'EMAIL_VERIFICATION_REQUIRED', True))
+
         user = User.objects.create_user(
             username=username,
             email=email,
             password=password1,
             first_name=first,
             last_name=last,
+            is_active=not verification_required,
         )
 
         # completează profilul
@@ -2020,12 +2210,25 @@ def signup(request):
             profile.function = "Admin" if role == 'admin' else "Worker"
             profile.save()
 
-        # login automat
-        auth_user = authenticate(username=username, password=password1)
+        if verification_required:
+            try:
+                activation_url = _send_activation_email(request, user)
+                messages.success(request, _("Cont creat. Verifică emailul și activează contul înainte de autentificare."))
+                if settings.DEBUG:
+                    messages.info(request, _("Link activare (dev): %(url)s") % {'url': activation_url})
+            except Exception:
+                messages.warning(
+                    request,
+                    _("Cont creat, dar emailul de activare nu a putut fi trimis. Contactează administratorul."),
+                )
+            return redirect('login')
+
+        auth_user = authenticate(request, username=username, password=password1)
         if auth_user:
             login(request, auth_user)
             return redirect('team')
 
+        messages.success(request, _("Cont creat. Autentifică-te."))
         return redirect('login')
 
     return render(request, 'core/index.html')

@@ -2612,3 +2612,46 @@ msgstr "новое сообщение"
 
 msgid "%(sender)s: %(preview)s"
 msgstr "%(sender)s: %(preview)s"
+
+# Auth security
+msgid "Prea multe încercări de autentificare. Încearcă din nou peste %(minutes)s minute."
+msgstr "Слишком много попыток входа. Попробуйте снова через %(minutes)s мин."
+
+msgid "Contul nu este activat. Verifică emailul pentru linkul de activare."
+msgstr "Аккаунт не активирован. Проверьте почту и перейдите по ссылке активации."
+
+msgid "Activează contul tău"
+msgstr "Активируйте ваш аккаунт"
+
+msgid ""
+"Salut %(name)s,\n"
+"\n"
+"Contul tău a fost creat. Pentru activare, accesează linkul de mai jos:\n"
+"%(url)s\n"
+"\n"
+"Dacă nu ai cerut acest cont, ignoră acest email."
+msgstr ""
+"Здравствуйте, %(name)s,\n"
+"\n"
+"Ваш аккаунт создан. Для активации перейдите по ссылке ниже:\n"
+"%(url)s\n"
+"\n"
+"Если вы не запрашивали этот аккаунт, просто проигнорируйте это письмо."
+
+msgid "Link de activare invalid sau expirat."
+msgstr "Ссылка активации недействительна или истекла."
+
+msgid "Contul este deja activ. Te poți autentifica."
+msgstr "Аккаунт уже активирован. Вы можете войти."
+
+msgid "Cont activat cu succes. Te poți autentifica."
+msgstr "Аккаунт успешно активирован. Теперь вы можете войти."
+
+msgid "Cont creat. Verifică emailul și activează contul înainte de autentificare."
+msgstr "Аккаунт создан. Проверьте почту и активируйте аккаунт перед входом."
+
+msgid "Link activare (dev): %(url)s"
+msgstr "Ссылка активации (dev): %(url)s"
+
+msgid "Cont creat, dar emailul de activare nu a putut fi trimis. Contactează administratorul."
+msgstr "Аккаунт создан, но письмо активации не удалось отправить. Обратитесь к администратору."

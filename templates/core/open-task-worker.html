@@ -331,8 +331,15 @@
         </div>
         {% include 'core/_language_select.html' %}
         <div class="user-info">
-          <div class="avatar">A</div>
-          <span>@AdeliUser</span>
+          <div class="avatar">
+            {% if user.profile.avatar %}
+            <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
+            {% else %}
+            {{ user.username|first|upper }}
+            {% endif %}
+          </div>
+          <span>@{{ user.username }}</span>
+          <a href="{% url 'logout' %}" style="margin-left:10px; color:#2563eb; font-weight:600; text-decoration:none;">{% trans "Ieșire" %}</a>
         </div>
       </div>
     </header>

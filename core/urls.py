@@ -6,6 +6,7 @@ urlpatterns = [
     path('search-user/', views.search_user, name='search_user'),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('signup/', views.signup, name='signup'),
+    path('accounts/verify-email/<uidb64>/<token>/', views.verify_email, name='verify_email'),
     path('team/', views.team, name='team'),
     path('tasks/', views.tasks, name='tasks'),
     path('tasks/export/csv/', views.export_tasks_csv, name='export_tasks_csv'),

@@ -375,6 +375,20 @@
         </div>
       </div>
 
+      {% if employees_count is not None %}
+      <div class="stat-card">
+        <div class="stat-icon">👥</div>
+        <div class="stat-content">
+          <h3>
+            {% if LANGUAGE_CODE|slice:":2" == 'ru' %}Активные сотрудники
+            {% elif LANGUAGE_CODE|slice:":2" == 'en' %}Active employees
+            {% else %}Angajați activi{% endif %}
+          </h3>
+          <p class="big-number">{{ employees_count }}</p>
+        </div>
+      </div>
+      {% endif %}
+
       <div class="stat-card">
         <div class="stat-icon">✈️</div>
         <div class="stat-content">

@@ -2393,3 +2393,46 @@ msgstr "new message"
 
 msgid "%(sender)s: %(preview)s"
 msgstr "%(sender)s: %(preview)s"
+
+# Auth security
+msgid "Prea multe încercări de autentificare. Încearcă din nou peste %(minutes)s minute."
+msgstr "Too many login attempts. Try again in %(minutes)s minutes."
+
+msgid "Contul nu este activat. Verifică emailul pentru linkul de activare."
+msgstr "Your account is not activated. Check your email for the activation link."
+
+msgid "Activează contul tău"
+msgstr "Activate your account"
+
+msgid ""
+"Salut %(name)s,\n"
+"\n"
+"Contul tău a fost creat. Pentru activare, accesează linkul de mai jos:\n"
+"%(url)s\n"
+"\n"
+"Dacă nu ai cerut acest cont, ignoră acest email."
+msgstr ""
+"Hi %(name)s,\n"
+"\n"
+"Your account has been created. To activate it, open the link below:\n"
+"%(url)s\n"
+"\n"
+"If you did not request this account, please ignore this email."
+
+msgid "Link de activare invalid sau expirat."
+msgstr "Invalid or expired activation link."
+
+msgid "Contul este deja activ. Te poți autentifica."
+msgstr "This account is already active. You can sign in."
+
+msgid "Cont activat cu succes. Te poți autentifica."
+msgstr "Account activated successfully. You can sign in."
+
+msgid "Cont creat. Verifică emailul și activează contul înainte de autentificare."
+msgstr "Account created. Check your email and activate your account before signing in."
+
+msgid "Link activare (dev): %(url)s"
+msgstr "Activation link (dev): %(url)s"
+
+msgid "Cont creat, dar emailul de activare nu a putut fi trimis. Contactează administratorul."
+msgstr "Account created, but the activation email could not be sent. Contact the administrator."
