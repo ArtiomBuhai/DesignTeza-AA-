@@ -59,6 +59,7 @@ def _env_float(name, default):
 
 # ... alte setări ...
 
+
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
@@ -78,7 +79,8 @@ SECRET_KEY = 'django-insecure-gb#dx#@fqho0j+zwwlta)lqrpky%g))0)cw9@n2^)@zeyxk*#p
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['gestionare-concedii-ang.onrender.com',
+                 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -193,20 +195,25 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # Auth hardening (login throttling + email verification)
 LOGIN_RATE_LIMIT_ATTEMPTS = _env_int('LOGIN_RATE_LIMIT_ATTEMPTS', 5)
-LOGIN_RATE_LIMIT_WINDOW_SECONDS = _env_int('LOGIN_RATE_LIMIT_WINDOW_SECONDS', 15 * 60)
-LOGIN_RATE_LIMIT_LOCK_SECONDS = _env_int('LOGIN_RATE_LIMIT_LOCK_SECONDS', 15 * 60)
+LOGIN_RATE_LIMIT_WINDOW_SECONDS = _env_int(
+    'LOGIN_RATE_LIMIT_WINDOW_SECONDS', 15 * 60)
+LOGIN_RATE_LIMIT_LOCK_SECONDS = _env_int(
+    'LOGIN_RATE_LIMIT_LOCK_SECONDS', 15 * 60)
 
 EMAIL_VERIFICATION_REQUIRED = str(os.getenv('EMAIL_VERIFICATION_REQUIRED', '1') or '1').strip().lower() not in {
     '0', 'false', 'no', 'off'
 }
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@panel.local')
-EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
+EMAIL_BACKEND = os.getenv(
+    'EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
 EMAIL_HOST = os.getenv('EMAIL_HOST', '')
 EMAIL_PORT = _env_int('EMAIL_PORT', 587)
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
-EMAIL_USE_TLS = str(os.getenv('EMAIL_USE_TLS', '1') or '1').strip().lower() in {'1', 'true', 'yes', 'on'}
-EMAIL_USE_SSL = str(os.getenv('EMAIL_USE_SSL', '0') or '0').strip().lower() in {'1', 'true', 'yes', 'on'}
+EMAIL_USE_TLS = str(os.getenv('EMAIL_USE_TLS', '1') or '1').strip().lower() in {
+    '1', 'true', 'yes', 'on'}
+EMAIL_USE_SSL = str(os.getenv('EMAIL_USE_SSL', '0') or '0').strip().lower() in {
+    '1', 'true', 'yes', 'on'}
 
 # Google Calendar OAuth (set via environment variables)
 GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID', '')
